@@ -1,22 +1,266 @@
-// State
-let queue = [];       // shuffled question queue
+// ── Filter Configuration ──
+
+const SORT_OPTIONS = [
+    { value: 'least-familiar', label: 'Most unfamiliar' },
+    { value: 'random', label: 'Random' },
+    { value: 'most-familiar', label: 'Most familiar' },
+    { value: 'least-seen', label: 'Least seen' },
+];
+
+// ── Derived Data ──
+
+const ALL_SUBJECTS = [...new Set(ALL_QUESTIONS.map(q => q.subject))].sort();
+const ALL_LABELS = [...new Set(ALL_QUESTIONS.flatMap(q => q.labels))].sort();
+
+// ── Filter State ──
+
+const filterState = {
+    subjects: new Set(ALL_SUBJECTS),  // all selected by default
+    labels: [],                        // active label filters (intersection)
+};
+
+// ── Populate Controls ──
+
+function populateFilters() {
+    // Sort order dropdown
+    const sortSelect = document.getElementById('sort-order');
+    for (const opt of SORT_OPTIONS) {
+        const el = document.createElement('option');
+        el.value = opt.value;
+        el.textContent = opt.label;
+        sortSelect.appendChild(el);
+    }
+
+    // Subject checkboxes
+    const container = document.getElementById('subject-checkboxes');
+    for (const subj of ALL_SUBJECTS) {
+        const label = document.createElement('label');
+        label.className = 'subject-checkbox';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = subj;
+        cb.checked = true;
+        cb.addEventListener('change', () => {
+            if (cb.checked) filterState.subjects.add(subj);
+            else filterState.subjects.delete(subj);
+            updateSubjectButtonLabel();
+            reshuffleAndReset();
+        });
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(' ' + subj));
+        container.appendChild(label);
+    }
+}
+
+function updateSubjectButtonLabel() {
+    const btn = document.getElementById('subject-dropdown-btn');
+    const n = filterState.subjects.size;
+    const total = ALL_SUBJECTS.length;
+    if (n === total) btn.textContent = 'Subjects (all)';
+    else if (n === 0) btn.textContent = 'Subjects (none)';
+    else btn.textContent = `Subjects (${n}/${total})`;
+}
+
+// ── Subject Dropdown Toggle ──
+
+function initSubjectDropdown() {
+    const btn = document.getElementById('subject-dropdown-btn');
+    const panel = document.getElementById('subject-dropdown-panel');
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        panel.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!document.getElementById('subject-dropdown').contains(e.target)) {
+            panel.classList.add('hidden');
+        }
+    });
+
+    document.getElementById('select-all-subjects').addEventListener('click', (e) => {
+        e.preventDefault();
+        filterState.subjects = new Set(ALL_SUBJECTS);
+        document.querySelectorAll('#subject-checkboxes input').forEach(cb => cb.checked = true);
+        updateSubjectButtonLabel();
+        reshuffleAndReset();
+    });
+
+    document.getElementById('deselect-all-subjects').addEventListener('click', (e) => {
+        e.preventDefault();
+        filterState.subjects.clear();
+        document.querySelectorAll('#subject-checkboxes input').forEach(cb => cb.checked = false);
+        updateSubjectButtonLabel();
+        reshuffleAndReset();
+    });
+}
+
+// ── Label Filtering ──
+
+function addLabelFilter(label) {
+    if (filterState.labels.includes(label)) return;
+    filterState.labels.push(label);
+    renderActiveLabels();
+    reshuffleAndReset();
+}
+
+function removeLabelFilter(label) {
+    filterState.labels = filterState.labels.filter(l => l !== label);
+    renderActiveLabels();
+    reshuffleAndReset();
+}
+
+function renderActiveLabels() {
+    const container = document.getElementById('active-labels');
+    const hint = document.getElementById('label-filter-hint');
+    container.innerHTML = '';
+
+    if (filterState.labels.length === 0) {
+        hint.style.display = '';
+        return;
+    }
+    hint.style.display = 'none';
+
+    for (const label of filterState.labels) {
+        const pill = document.createElement('span');
+        pill.className = 'label-pill active';
+        pill.innerHTML = label + ' <button class="pill-x">&times;</button>';
+        pill.querySelector('.pill-x').addEventListener('click', () => removeLabelFilter(label));
+        container.appendChild(pill);
+    }
+}
+
+// ── Search ──
+
+function stripLatex(str) {
+    return str
+        .replace(/\$\$([^$]*)\$\$/g, '$1')
+        .replace(/\$([^$]*)\$/g, '$1')
+        .replace(/\\[a-zA-Z]+/g, '')
+        .replace(/[{}\\^_]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function initSearch() {
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    input.addEventListener('input', () => {
+        const query = input.value.trim().toLowerCase();
+        if (!query) {
+            results.classList.add('hidden');
+            results.innerHTML = '';
+            return;
+        }
+
+        results.innerHTML = '';
+        results.classList.remove('hidden');
+
+        // Matching labels
+        const matchingLabels = ALL_LABELS.filter(l => l.toLowerCase().includes(query));
+        if (matchingLabels.length > 0) {
+            const section = document.createElement('div');
+            section.className = 'search-section';
+            section.innerHTML = '<div class="search-section-title">Labels</div>';
+            for (const label of matchingLabels.slice(0, 10)) {
+                const item = document.createElement('div');
+                item.className = 'search-item search-label';
+                item.innerHTML = `<span class="label-pill">${label}</span>`;
+                const addBtn = document.createElement('button');
+                addBtn.className = 'btn btn-add-label';
+                addBtn.textContent = '+';
+                addBtn.title = 'Add to label filter';
+                addBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    addLabelFilter(label);
+                    input.value = '';
+                    results.classList.add('hidden');
+                });
+                item.appendChild(addBtn);
+                section.appendChild(item);
+            }
+            results.appendChild(section);
+        }
+
+        // Matching flashcards
+        const matchingCards = ALL_QUESTIONS.filter(q => {
+            const searchable = (q.name + ' ' + stripLatex(q.question) + ' ' + stripLatex(q.answer)).toLowerCase();
+            return searchable.includes(query);
+        });
+        if (matchingCards.length > 0) {
+            const section = document.createElement('div');
+            section.className = 'search-section';
+            section.innerHTML = '<div class="search-section-title">Flashcards</div>';
+            for (const card of matchingCards.slice(0, 15)) {
+                const item = document.createElement('div');
+                item.className = 'search-item search-card';
+                item.innerHTML = `<span class="search-card-preview">${card.name}</span>`;
+                renderMath(item);
+                item.addEventListener('click', () => {
+                    jumpToQuestion(card);
+                    input.value = '';
+                    results.classList.add('hidden');
+                });
+                section.appendChild(item);
+            }
+            results.appendChild(section);
+        }
+
+        if (matchingLabels.length === 0 && matchingCards.length === 0) {
+            results.innerHTML = '<div class="search-item search-empty">No results</div>';
+        }
+    });
+
+    // Close search on outside click
+    document.addEventListener('click', (e) => {
+        if (!document.getElementById('search-container').contains(e.target)) {
+            results.classList.add('hidden');
+        }
+    });
+
+    // Re-open on focus if there's a query
+    input.addEventListener('focus', () => {
+        if (input.value.trim()) {
+            input.dispatchEvent(new Event('input'));
+        }
+    });
+}
+
+function jumpToQuestion(questionObj) {
+    // Find in current queue
+    const idx = queue.findIndex(q => q.name === questionObj.name);
+    if (idx >= 0) {
+        currentIndex = idx;
+        displayQuestion();
+        return;
+    }
+    // If not in queue (filtered out), add temporarily by adjusting filters
+    // For simplicity, just rebuild with all filters and jump
+    queue.push(questionObj);
+    currentIndex = queue.length - 1;
+    displayQuestion();
+}
+
+// ── State ──
+
+let queue = [];
 let currentIndex = 0;
 let sessionRight = 0;
 let sessionWrong = 0;
 let sessionUnsure = 0;
 
-// DOM
-const categoryFilter = document.getElementById('category-filter');
-const difficultyFilter = document.getElementById('difficulty-filter');
-const familiarityFilter = document.getElementById('familiarity-filter');
+// ── DOM ──
+
 const sortOrder = document.getElementById('sort-order');
 const shuffleBtn = document.getElementById('shuffle-btn');
 const counterEl = document.getElementById('counter');
 const categoryBadge = document.getElementById('category-badge');
-const difficultyBadge = document.getElementById('difficulty-badge');
+const difficultyIndicator = document.getElementById('difficulty-indicator');
 const familiarityBadge = document.getElementById('familiarity-badge');
 const sessionScore = document.getElementById('session-score');
 const questionText = document.getElementById('question-text');
+const questionLabelsEl = document.getElementById('question-labels');
 const answerSection = document.getElementById('answer-section');
 const answerText = document.getElementById('answer-text');
 const explanationText = document.getElementById('explanation-text');
@@ -24,13 +268,17 @@ const showAnswerBtn = document.getElementById('show-answer-btn');
 const showAnswerContainer = document.getElementById('show-answer-container');
 const gradeContainer = document.getElementById('grade-container');
 const statsBar = document.getElementById('stats-bar');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
 
 // ── LocalStorage ──
 
 function getHistory() {
     try {
         const raw = localStorage.getItem('quiz-history');
-        return raw ? JSON.parse(raw) : [];
+        const arr = raw ? JSON.parse(raw) : [];
+        // Only keep entries with name field (discard old format)
+        return arr.filter(h => h.name);
     } catch {
         return [];
     }
@@ -39,45 +287,37 @@ function getHistory() {
 function saveResult(questionObj, grade) {
     const history = getHistory();
     history.push({
-        question: questionObj.question,
-        subject: questionObj.subject,
-        subtopic: questionObj.subtopic,
-        difficulty: questionObj.difficulty,
+        name: questionObj.name,
         grade: grade,
         timestamp: new Date().toISOString(),
     });
     localStorage.setItem('quiz-history', JSON.stringify(history));
 }
 
-// ── Filtering & shuffling ──
+// ── Familiarity ──
 
-// ── Familiarity Parameters ──
-
-// Familiarity scoring constants
-const FAM_TAU = 48; // exponential decay time constant in hours
+const FAM_TAU = 48;
 const FAM_SCORES = { right: 1, unsure: 0.3, wrong: 0 };
 
 function buildFamiliarityMap() {
     const history = getHistory();
     const now = Date.now();
-    // Group answers by question, preserving chronological order
     const answersBy = {};
     for (const h of history) {
-        if (!answersBy[h.question]) answersBy[h.question] = [];
-        answersBy[h.question].push({ grade: h.grade, time: new Date(h.timestamp).getTime() });
+        if (!answersBy[h.name]) answersBy[h.name] = [];
+        answersBy[h.name].push({ grade: h.grade, time: new Date(h.timestamp).getTime() });
     }
-    // Compute weighted score for each question
     const map = {};
-    for (const [q, entries] of Object.entries(answersBy)) {
+    for (const [name, entries] of Object.entries(answersBy)) {
         let weightedSum = 0;
         let weightSum = 0;
         for (const entry of entries) {
-            const t = (now - entry.time) / 3600000; // hours since answer
+            const t = (now - entry.time) / 3600000;
             const w = Math.exp(-t / FAM_TAU);
             weightedSum += (FAM_SCORES[entry.grade] ?? 0) * w;
             weightSum += w;
         }
-        map[q] = {
+        map[name] = {
             score: weightSum > 0 ? weightedSum / weightSum : 0,
             attempts: entries.length,
         };
@@ -93,23 +333,21 @@ function getFamiliarityLabel(score) {
     return { text: Math.round(score * 100) + '%', cls: 'fam-strong' };
 }
 
+// ── Filtering & Shuffling ──
+
 function getFilteredPool() {
     let pool = ALL_QUESTIONS;
-    const cat = categoryFilter.value;
-    const diff = difficultyFilter.value;
-    const fam = familiarityFilter.value;
-    if (cat !== 'all') pool = pool.filter(q => q.subject === cat);
-    if (diff !== 'all') pool = pool.filter(q => q.difficulty === diff);
 
-    if (fam !== 'all') {
-        const famMap = buildFamiliarityMap();
-        pool = pool.filter(q => {
-            const record = famMap[q.question];
-            if (fam === 'unseen') return !record;
-            if (fam === 'weak') return record && record.score < 0.5;
-            if (fam === 'strong') return record && record.score >= 0.7;
-            return true;
-        });
+    // Subject filter (union: show if subject is in selected set)
+    if (filterState.subjects.size < ALL_SUBJECTS.length) {
+        pool = pool.filter(q => filterState.subjects.has(q.subject));
+    }
+
+    // Label filter (intersection: must have ALL selected labels)
+    if (filterState.labels.length > 0) {
+        pool = pool.filter(q =>
+            filterState.labels.every(label => q.labels.includes(label))
+        );
     }
 
     return pool;
@@ -134,50 +372,40 @@ function buildQueue() {
     const order = sortOrder.value;
 
     if (order === 'random') {
-        // Weight: questions previously missed or unsure appear more often
         const history = getHistory();
         const recentWrong = new Set(
             history
                 .filter(h => h.grade === 'wrong' || h.grade === 'unsure')
                 .slice(-200)
-                .map(h => h.question)
+                .map(h => h.name)
         );
 
         const weighted = [];
         for (const q of pool) {
             weighted.push(q);
-            if (recentWrong.has(q.question)) {
-                weighted.push(q); // double weight
-            }
+            if (recentWrong.has(q.name)) weighted.push(q);
         }
 
-        // Shuffle and deduplicate
         const shuffled = shuffle(weighted);
         const seen = new Set();
         queue = [];
         for (const q of shuffled) {
-            if (!seen.has(q.question)) {
-                seen.add(q.question);
+            if (!seen.has(q.name)) {
+                seen.add(q.name);
                 queue.push(q);
             }
         }
-    } else if (order === 'easiest') {
-        const diffRank = { basic: 0, intermediate: 1, advanced: 2 };
-        queue = shuffle([...pool]).sort((a, b) => {
-            return (diffRank[a.difficulty] ?? 1) - (diffRank[b.difficulty] ?? 1);
-        });
     } else {
-        // Sort by familiarity score
         const famMap = buildFamiliarityMap();
-        queue = [...pool].sort((a, b) => {
-            const sa = famMap[a.question]?.score ?? -1; // unseen = -1 (lowest)
-            const sb = famMap[b.question]?.score ?? -1;
-            if (order === 'least-familiar') return sa - sb;        // weakest first
-            if (order === 'most-familiar') return sb - sa;         // strongest first
+        queue = shuffle([...pool]).sort((a, b) => {
+            const sa = famMap[a.name]?.score ?? -1;
+            const sb = famMap[b.name]?.score ?? -1;
+            if (order === 'least-familiar') return sa - sb;
+            if (order === 'most-familiar') return sb - sa;
             if (order === 'least-seen') {
-                const aa = famMap[a.question]?.attempts ?? 0;
-                const ab = famMap[b.question]?.attempts ?? 0;
-                return aa - ab; // fewest attempts first
+                const aa = famMap[a.name]?.attempts ?? 0;
+                const ab = famMap[b.name]?.attempts ?? 0;
+                return aa - ab;
             }
             return 0;
         });
@@ -193,6 +421,26 @@ function reshuffleAndReset() {
     displayQuestion();
 }
 
+// ── Navigation ──
+
+function goNext() {
+    if (queue.length === 0) return;
+    if (currentIndex < queue.length - 1) {
+        currentIndex++;
+    } else {
+        buildQueue();
+        currentIndex = 0;
+    }
+    displayQuestion();
+}
+
+function goPrev() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        displayQuestion();
+    }
+}
+
 // ── Display ──
 
 function displayQuestion() {
@@ -203,34 +451,55 @@ function displayQuestion() {
         gradeContainer.classList.add('hidden');
         counterEl.textContent = '';
         categoryBadge.textContent = '';
-        difficultyBadge.textContent = '';
+        difficultyIndicator.innerHTML = '';
         familiarityBadge.textContent = '';
         familiarityBadge.className = 'familiarity-indicator';
+        questionLabelsEl.innerHTML = '';
+        renderQueueList();
         return;
     }
 
-    // Wrap around if we've gone through all questions
     if (currentIndex >= queue.length) {
-        // Reshuffle for another pass
         buildQueue();
         currentIndex = 0;
     }
 
     const q = queue[currentIndex];
     counterEl.textContent = `Question ${currentIndex + 1} of ${queue.length}`;
-    categoryBadge.textContent = q.subject.replace(/-/g, ' ');
-    difficultyBadge.textContent = q.difficulty;
+    categoryBadge.textContent = q.subject;
 
-    // Color the difficulty badge
-    difficultyBadge.className = 'badge diff-' + q.difficulty;
+    // Difficulty indicator (bars)
+    const DIFFICULTY_LEVELS = ['basic', 'intermediate', 'advanced'];
+    const diff = q.labels.find(l => DIFFICULTY_LEVELS.includes(l));
+    const diffLevel = diff ? DIFFICULTY_LEVELS.indexOf(diff) + 1 : 0;
+    const diffTitle = diff || 'unrated';
+    difficultyIndicator.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const bar = document.createElement('span');
+        bar.className = 'diff-bar' + (i < diffLevel ? ' active' : '');
+        difficultyIndicator.appendChild(bar);
+    }
+    difficultyIndicator.title = diffTitle;
 
     // Familiarity badge
     const famMap = buildFamiliarityMap();
-    const famRecord = famMap[q.question];
+    const famRecord = famMap[q.name];
     const famScore = famRecord ? famRecord.score : null;
     const famLabel = getFamiliarityLabel(famScore);
     familiarityBadge.textContent = famLabel.text;
     familiarityBadge.className = 'familiarity-indicator ' + famLabel.cls;
+
+    // Question labels (exclude difficulty since it's shown as bars)
+    questionLabelsEl.innerHTML = '';
+    for (const label of q.labels) {
+        if (DIFFICULTY_LEVELS.includes(label)) continue;
+        const pill = document.createElement('span');
+        pill.className = 'label-pill small';
+        pill.textContent = label;
+        pill.title = 'Click to filter by this label';
+        pill.addEventListener('click', () => addLabelFilter(label));
+        questionLabelsEl.appendChild(pill);
+    }
 
     questionText.innerHTML = q.question;
     answerText.innerHTML = q.answer;
@@ -240,8 +509,12 @@ function displayQuestion() {
     showAnswerContainer.classList.remove('hidden');
     gradeContainer.classList.add('hidden');
 
+    // Nav button states
+    prevBtn.disabled = currentIndex === 0;
+
     renderMath(questionText);
     updateScore();
+    renderQueueList();
 }
 
 function renderMath(container) {
@@ -271,8 +544,7 @@ function gradeQuestion(grade) {
     else if (grade === 'unsure') sessionUnsure++;
     else sessionWrong++;
 
-    currentIndex++;
-    displayQuestion();
+    goNext();
     updateStats();
 
     // Auto-push to Gist if connected
@@ -287,7 +559,7 @@ function updateScore() {
         sessionScore.textContent = '';
         return;
     }
-    sessionScore.textContent = `${sessionRight}✓  ${sessionUnsure}~  ${sessionWrong}✗`;
+    sessionScore.textContent = `${sessionRight}\u2713  ${sessionUnsure}~  ${sessionWrong}\u2717`;
 }
 
 function updateStats() {
@@ -314,6 +586,90 @@ function getStats() {
     return { total, right, sessions };
 }
 
+// ── Queue Display ──
+
+function renderDifficultyBars(level) {
+    let html = '<span class="difficulty-indicator">';
+    for (let i = 0; i < 3; i++) {
+        html += `<span class="diff-bar${i < level ? ' active' : ''}"></span>`;
+    }
+    return html + '</span>';
+}
+
+function renderFamiliarityBar(score) {
+    // score: null (unseen), 0..1
+    if (score === null) {
+        return '<span class="fam-bar-wrap" title="unseen"><span class="fam-bar fam-bar-empty"></span></span>';
+    }
+    const pct = Math.round(score * 100);
+    const cls = score < 0.3 ? 'fam-weak' : score < 0.6 ? 'fam-shaky' : score < 0.85 ? 'fam-decent' : 'fam-strong';
+    return `<span class="fam-bar-wrap" title="${pct}%"><span class="fam-bar"><span class="fam-bar-fill ${cls}" style="width:${pct}%"></span></span></span>`;
+}
+
+function renderQueueList() {
+    const list = document.getElementById('queue-list');
+    list.innerHTML = '';
+
+    if (queue.length === 0) return;
+
+    const DIFFICULTY_LEVELS = ['basic', 'intermediate', 'advanced'];
+    const famMap = buildFamiliarityMap();
+
+    // Show a window of items around current index
+    const WINDOW = 20;
+    const start = Math.max(0, currentIndex - 3);
+    const end = Math.min(queue.length, start + WINDOW);
+
+    for (let i = start; i < end; i++) {
+        const q = queue[i];
+        const item = document.createElement('div');
+        item.className = 'queue-item' + (i === currentIndex ? ' current' : '');
+
+        // Difficulty
+        const diff = q.labels.find(l => DIFFICULTY_LEVELS.includes(l));
+        const diffLevel = diff ? DIFFICULTY_LEVELS.indexOf(diff) + 1 : 0;
+
+        // Familiarity
+        const famRecord = famMap[q.name];
+        const famScore = famRecord ? famRecord.score : null;
+
+        item.innerHTML =
+            `<span class="queue-num">${i + 1}</span>` +
+            `<span class="queue-preview">${q.name}</span>` +
+            `<span class="queue-indicators">` +
+                renderFamiliarityBar(famScore) +
+                renderDifficultyBars(diffLevel) +
+            `</span>`;
+        renderMath(item);
+        item.addEventListener('click', () => {
+            currentIndex = i;
+            displayQuestion();
+        });
+        list.appendChild(item);
+    }
+
+    if (end < queue.length) {
+        const more = document.createElement('div');
+        more.className = 'queue-item queue-more';
+        more.textContent = `... ${queue.length - end} more`;
+        list.appendChild(more);
+    }
+
+    // Scroll current item into view within the list only
+    const currentItem = list.querySelector('.queue-item.current');
+    if (currentItem) {
+        const listTop = list.scrollTop;
+        const listHeight = list.clientHeight;
+        const itemTop = currentItem.offsetTop - list.offsetTop;
+        const itemHeight = currentItem.offsetHeight;
+        if (itemTop < listTop) {
+            list.scrollTop = itemTop;
+        } else if (itemTop + itemHeight > listTop + listHeight) {
+            list.scrollTop = itemTop + itemHeight - listHeight;
+        }
+    }
+}
+
 // ── Events ──
 
 showAnswerBtn.addEventListener('click', showAnswer);
@@ -323,16 +679,18 @@ document.querySelectorAll('[data-grade]').forEach(btn => {
 });
 
 shuffleBtn.addEventListener('click', reshuffleAndReset);
-categoryFilter.addEventListener('change', reshuffleAndReset);
-difficultyFilter.addEventListener('change', reshuffleAndReset);
-familiarityFilter.addEventListener('change', reshuffleAndReset);
 sortOrder.addEventListener('change', reshuffleAndReset);
+prevBtn.addEventListener('click', goPrev);
+nextBtn.addEventListener('click', goNext);
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
+    // Don't capture if typing in search
+    if (e.target.tagName === 'INPUT') return;
+
     if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
-        if (!answerSection.classList.contains('hidden')) return; // already showing
+        if (!answerSection.classList.contains('hidden')) return;
         showAnswer();
     }
     if (!gradeContainer.classList.contains('hidden')) {
@@ -340,12 +698,13 @@ document.addEventListener('keydown', (e) => {
         if (e.key === '2') gradeQuestion('unsure');
         if (e.key === '3') gradeQuestion('right');
     }
+    if (e.key === 'ArrowLeft') goPrev();
+    if (e.key === 'ArrowRight') goNext();
 });
 
 // ── Gist Sync ──
 
 const GIST_FILENAME = 'quiz-history.json';
-const syncBar = document.getElementById('sync-bar');
 const syncLoggedOut = document.getElementById('sync-logged-out');
 const syncLoggedIn = document.getElementById('sync-logged-in');
 const syncStatus = document.getElementById('sync-status');
@@ -403,7 +762,6 @@ function showTokenModal() {
         overlay.querySelector('#modal-connect').disabled = true;
 
         try {
-            // Verify token by listing gists and looking for an existing quiz gist
             const res = await fetch('https://api.github.com/gists', {
                 headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
             });
@@ -411,7 +769,6 @@ function showTokenModal() {
 
             setGistToken(token);
 
-            // Search for existing quiz gist
             const gists = await res.json();
             const existing = gists.find(g => g.files && g.files[GIST_FILENAME]);
             if (existing) {
@@ -446,7 +803,6 @@ async function gistPush(auto = false) {
 
     try {
         if (gistId) {
-            // Update existing gist
             const res = await fetch(`https://api.github.com/gists/${gistId}`, {
                 method: 'PATCH',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
@@ -455,7 +811,6 @@ async function gistPush(auto = false) {
             if (!res.ok) throw new Error('Failed to update Gist');
             syncStatus.textContent = auto ? 'Gist updated' : `Pushed ${history.length} records`;
         } else {
-            // Create new private gist
             const res = await fetch('https://api.github.com/gists', {
                 method: 'POST',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
@@ -504,29 +859,28 @@ async function gistPull() {
         const remoteHistory = JSON.parse(file.content);
         const localHistory = getHistory();
 
-        // Merge: combine both, deduplicate by question+timestamp
+        // Merge: combine both, deduplicate by id+timestamp
         const seen = new Set();
         const merged = [];
         for (const h of [...localHistory, ...remoteHistory]) {
-            const key = h.question + '|' + h.timestamp;
+            if (!h.name) continue; // skip old format entries
+            const key = h.name + '|' + h.timestamp;
             if (!seen.has(key)) {
                 seen.add(key);
                 merged.push(h);
             }
         }
-        // Sort by timestamp
         merged.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 
         localStorage.setItem('quiz-history', JSON.stringify(merged));
 
         const fromRemote = merged.length - localHistory.length;
         const localOnly = merged.length - remoteHistory.length;
-        let msg = `Merged: ${localHistory.length} local + ${remoteHistory.length} remote → ${merged.length} total`;
+        let msg = `Merged: ${localHistory.length} local + ${remoteHistory.length} remote = ${merged.length} total`;
         if (fromRemote > 0) msg += ` (${fromRemote} new from Gist)`;
         if (localOnly > 0) msg += ` — push to upload ${localOnly} local-only`;
         syncStatus.textContent = msg;
 
-        // Refresh the quiz state
         buildQueue();
         currentIndex = 0;
         displayQuestion();
@@ -550,18 +904,24 @@ gistPushBtn.addEventListener('click', () => gistPush(false));
 gistPullBtn.addEventListener('click', gistPull);
 gistLogoutBtn.addEventListener('click', gistLogout);
 
-// ── Familiarity Settings UI ──
-
-
 // ── Init ──
+
+populateFilters();
+initSubjectDropdown();
+initSearch();
 buildQueue();
 displayQuestion();
 updateStats();
+updateSyncUI();
 
-// Re-render math once KaTeX loads (it may not be ready on first displayQuestion)
-document.addEventListener('DOMContentLoaded', () => renderMath());
+// Re-render everything once KaTeX loads (scripts are deferred, so app.js runs first)
+function renderAllMath() {
+    renderMath(); // question card
+    document.querySelectorAll('.queue-item').forEach(el => renderMath(el));
+    document.querySelectorAll('.search-item').forEach(el => renderMath(el));
+}
+document.addEventListener('DOMContentLoaded', renderAllMath);
 if (typeof renderMathInElement === 'undefined') {
     const katexScript = document.querySelector('script[src*="auto-render"]');
-    if (katexScript) katexScript.addEventListener('load', () => renderMath());
+    if (katexScript) katexScript.addEventListener('load', renderAllMath);
 }
-updateSyncUI();
