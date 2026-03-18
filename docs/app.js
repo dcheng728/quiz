@@ -519,8 +519,12 @@ async function gistPull() {
 
         localStorage.setItem('quiz-history', JSON.stringify(merged));
 
-        const added = merged.length - localHistory.length;
-        syncStatus.textContent = `Pulled. ${merged.length} total records` + (added > 0 ? ` (+${added} new)` : '');
+        const fromRemote = merged.length - localHistory.length;
+        const localOnly = merged.length - remoteHistory.length;
+        let msg = `Merged: ${localHistory.length} local + ${remoteHistory.length} remote → ${merged.length} total`;
+        if (fromRemote > 0) msg += ` (${fromRemote} new from Gist)`;
+        if (localOnly > 0) msg += ` — push to upload ${localOnly} local-only`;
+        syncStatus.textContent = msg;
 
         // Refresh the quiz state
         buildQueue();

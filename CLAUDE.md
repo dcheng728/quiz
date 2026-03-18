@@ -20,14 +20,14 @@ A static flashcard quiz app for GitHub Pages that helps a theoretical physics st
 ## File Structure
 
 ```
-index.html          — main page
-style.css           — light theme styles
-app.js              — quiz logic, localStorage, rendering
-questions.js        — all 145 questions bundled as JS (not JSON, to avoid fetch/CORS issues with file://)
-questions/          — original JSON files per subject (kept for reference/editing)
+docs/
+  index.html          — main page
+  style.css           — light theme styles
+  app.js              — quiz logic, localStorage, rendering
+  questions.js        — all 154 questions bundled as JS (not JSON, to avoid fetch/CORS issues with file://)
 ```
 
-## Question Bank (145 questions)
+## Question Bank (189 questions)
 
 Each question has: `question`, `answer`, `explanation`, `subject`, `subtopic`, `difficulty`.
 
@@ -35,18 +35,21 @@ All text uses LaTeX notation (`$...$` inline, `$$...$$` display) rendered by KaT
 
 | Subject                        | Count |
 |--------------------------------|-------|
-| Math — Calculus                | 36    |
+| Math — Calculus                | 38    |
 | Math — Linear Algebra          | 10    |
-| Math — Differential Equations  | 10    |
-| Math — Complex Analysis        | 8     |
+| Math — Differential Equations  | 11    |
+| Math — Complex Analysis        | 9     |
 | Math — Discrete                | 5     |
 | Math — Probability             | 12    |
 | Math — Trigonometry            | 5     |
+| Math — Special Functions       | 12    |
 | Classical Mechanics            | 12    |
-| Electromagnetism               | 12    |
-| Quantum Mechanics              | 15    |
-| Statistical Mechanics          | 10    |
+| Electromagnetism               | 13    |
+| Quantum Mechanics              | 17    |
+| Statistical Mechanics          | 12    |
 | Relativity                     | 10    |
+| Quantum Field Theory           | 12    |
+| Group Theory                   | 11    |
 
 ## Deployment
 
