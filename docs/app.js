@@ -557,4 +557,11 @@ gistLogoutBtn.addEventListener('click', gistLogout);
 buildQueue();
 displayQuestion();
 updateStats();
+
+// Re-render math once KaTeX loads (it may not be ready on first displayQuestion)
+document.addEventListener('DOMContentLoaded', () => renderMath());
+if (typeof renderMathInElement === 'undefined') {
+    const katexScript = document.querySelector('script[src*="auto-render"]');
+    if (katexScript) katexScript.addEventListener('load', () => renderMath());
+}
 updateSyncUI();
