@@ -1,0 +1,98 @@
+[
+  {
+    "question": "State Newton's second law in its most general form (not assuming constant mass).",
+    "answer": "F = dp/dt, where p is the momentum of the body.",
+    "explanation": "The familiar F = ma is a special case when mass is constant. The general form is the time derivative of momentum.",
+    "subject": "classical-mechanics",
+    "subtopic": "newtons-laws",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the Euler-Lagrange equation for a system with generalized coordinate q and Lagrangian L(q, q-dot, t)?",
+    "answer": "d/dt (partial L / partial q-dot) - partial L / partial q = 0.",
+    "explanation": "Derived from Hamilton's principle (stationary action). This is the foundational equation of Lagrangian mechanics.",
+    "subject": "classical-mechanics",
+    "subtopic": "lagrangian-mechanics",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the relationship between the Lagrangian L and the Hamiltonian H?",
+    "answer": "H = sum_i (p_i * q-dot_i) - L, where p_i = partial L / partial q-dot_i are the conjugate momenta.",
+    "explanation": "This is the Legendre transformation from (q, q-dot) to (q, p). For many systems H equals the total energy T + V.",
+    "subject": "classical-mechanics",
+    "subtopic": "hamiltonian-mechanics",
+    "difficulty": "basic"
+  },
+  {
+    "question": "State Noether's theorem and give two examples of symmetry-conservation pairs.",
+    "answer": "Every continuous symmetry of the action corresponds to a conserved quantity. Time translation symmetry gives conservation of energy; spatial translation symmetry gives conservation of momentum.",
+    "explanation": "Rotational symmetry gives conservation of angular momentum as a third classic example.",
+    "subject": "classical-mechanics",
+    "subtopic": "noethers-theorem",
+    "difficulty": "basic"
+  },
+  {
+    "question": "For a central force problem, what two quantities are conserved and why?",
+    "answer": "Energy (time-translation invariance) and angular momentum (rotational symmetry about the force center).",
+    "explanation": "Conservation of angular momentum confines the orbit to a plane. The effective 1D potential is V_eff(r) = V(r) + L^2/(2mr^2).",
+    "subject": "classical-mechanics",
+    "subtopic": "central-force",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the definition of the Poisson bracket {f, g} for two phase-space functions f and g?",
+    "answer": "{f, g} = sum_i (partial f/partial q_i * partial g/partial p_i - partial f/partial p_i * partial g/partial q_i).",
+    "explanation": "Poisson brackets encode the symplectic structure of phase space and are the classical analogue of quantum commutators (up to a factor of i*hbar).",
+    "subject": "classical-mechanics",
+    "subtopic": "poisson-brackets",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What are Hamilton's equations of motion?",
+    "answer": "q-dot_i = partial H / partial p_i and p-dot_i = -partial H / partial q_i.",
+    "explanation": "These are 2N first-order ODEs equivalent to the N second-order Euler-Lagrange equations.",
+    "subject": "classical-mechanics",
+    "subtopic": "hamiltonian-mechanics",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the physical significance of the Hamilton-Jacobi equation, and what is its form?",
+    "answer": "H(q_i, partial S/partial q_i, t) + partial S/partial t = 0, where S is Hamilton's principal function. Solving it yields a complete solution to the equations of motion via a canonical transformation to constant coordinates and momenta.",
+    "explanation": "The Hamilton-Jacobi method transforms the problem so that the new Hamiltonian is zero. S is related to the classical action.",
+    "subject": "classical-mechanics",
+    "subtopic": "hamilton-jacobi",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "What is the moment of inertia tensor, and when can you describe rotation with a single scalar moment of inertia?",
+    "answer": "The moment of inertia tensor I_ij = sum_a m_a (r_a^2 delta_ij - r_a,i * r_a,j). A single scalar suffices when the body rotates about a principal axis.",
+    "explanation": "The principal axes diagonalize the inertia tensor. For a symmetric top, two principal moments are equal.",
+    "subject": "classical-mechanics",
+    "subtopic": "rigid-body",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What are normal modes of a coupled oscillator system?",
+    "answer": "Normal modes are independent patterns of oscillation in which all parts of the system move sinusoidally at the same frequency. They are the eigenvectors of the matrix M^{-1}K, where M is the mass matrix and K is the stiffness matrix.",
+    "explanation": "Any motion of the system can be expressed as a superposition of its normal modes.",
+    "subject": "classical-mechanics",
+    "subtopic": "normal-modes",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "Write the Lagrangian for a free particle in special relativity.",
+    "answer": "L = -mc^2 * sqrt(1 - v^2/c^2).",
+    "explanation": "The action is -mc^2 integral of d(tau), where tau is proper time. This Lagrangian reproduces relativistic momentum p = gamma*m*v.",
+    "subject": "classical-mechanics",
+    "subtopic": "lagrangian-mechanics",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "State Liouville's theorem in classical mechanics.",
+    "answer": "The phase-space distribution function is constant along the trajectories of the system; equivalently, phase-space volume is preserved under Hamiltonian time evolution.",
+    "explanation": "Mathematically, d(rho)/dt = partial rho/partial t + {rho, H} = 0. This is foundational for statistical mechanics.",
+    "subject": "classical-mechanics",
+    "subtopic": "hamiltonian-mechanics",
+    "difficulty": "intermediate"
+  }
+]

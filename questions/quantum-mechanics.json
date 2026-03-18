@@ -1,0 +1,122 @@
+[
+  {
+    "question": "What is the canonical commutation relation between position x and momentum p?",
+    "answer": "[x, p] = i*hbar.",
+    "explanation": "This is the foundational commutation relation of quantum mechanics, from which the uncertainty principle follows directly.",
+    "subject": "quantum-mechanics",
+    "subtopic": "commutation-relations",
+    "difficulty": "basic"
+  },
+  {
+    "question": "Write the time-dependent Schrodinger equation.",
+    "answer": "i*hbar * partial psi/partial t = H * psi, where H is the Hamiltonian operator.",
+    "explanation": "For a single particle in a potential, H = -hbar^2/(2m) nabla^2 + V(r). The time-independent version is H*psi = E*psi.",
+    "subject": "quantum-mechanics",
+    "subtopic": "schrodinger-equation",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What are the energy eigenvalues of the quantum harmonic oscillator?",
+    "answer": "E_n = hbar*omega*(n + 1/2), for n = 0, 1, 2, ...",
+    "explanation": "The equally spaced energy levels and nonzero ground state energy (1/2 hbar*omega) are hallmarks of the quantum harmonic oscillator. Solved elegantly via creation and annihilation operators.",
+    "subject": "quantum-mechanics",
+    "subtopic": "harmonic-oscillator",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What are the energy levels of the hydrogen atom (nonrelativistic, ignoring fine structure)?",
+    "answer": "E_n = -13.6 eV / n^2, for n = 1, 2, 3, ...",
+    "explanation": "The degeneracy of each level is n^2 (ignoring spin) or 2n^2 (including spin). This follows from the Coulomb potential and the accidental SO(4) symmetry.",
+    "subject": "quantum-mechanics",
+    "subtopic": "hydrogen-atom",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What are the eigenvalues of the angular momentum operators L^2 and L_z?",
+    "answer": "L^2 has eigenvalues hbar^2 * l*(l+1) for l = 0, 1, 2, ... and L_z has eigenvalues hbar*m for m = -l, -l+1, ..., l-1, l.",
+    "explanation": "These follow from the commutation relations [L_i, L_j] = i*hbar*epsilon_{ijk}*L_k and [L^2, L_i] = 0.",
+    "subject": "quantum-mechanics",
+    "subtopic": "angular-momentum",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the spin of an electron, and what are the possible measurement outcomes of S_z?",
+    "answer": "The electron has spin 1/2. The possible outcomes of S_z are +hbar/2 and -hbar/2.",
+    "explanation": "Spin is an intrinsic angular momentum with no classical analogue. The spin-1/2 operators are represented by hbar/2 times the Pauli matrices.",
+    "subject": "quantum-mechanics",
+    "subtopic": "spin",
+    "difficulty": "basic"
+  },
+  {
+    "question": "State the generalized uncertainty principle for two observables A and B.",
+    "answer": "sigma_A * sigma_B >= (1/2)|<[A, B]>|.",
+    "explanation": "For x and p, this gives sigma_x * sigma_p >= hbar/2, the Heisenberg uncertainty principle.",
+    "subject": "quantum-mechanics",
+    "subtopic": "uncertainty-principle",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the first-order energy correction in non-degenerate perturbation theory?",
+    "answer": "E_n^(1) = <n^(0)| H' |n^(0)>, the expectation value of the perturbation H' in the unperturbed state.",
+    "explanation": "The first-order correction to the state is |n^(1)> = sum_{m != n} <m^(0)|H'|n^(0)> / (E_n^(0) - E_m^(0)) |m^(0)>.",
+    "subject": "quantum-mechanics",
+    "subtopic": "perturbation-theory",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is Fermi's golden rule?",
+    "answer": "The transition rate from state |i> to state |f> under a time-dependent perturbation is Gamma_{i->f} = (2*pi/hbar) |<f|H'|i>|^2 * rho(E_f), where rho(E_f) is the density of final states.",
+    "explanation": "This is derived from first-order time-dependent perturbation theory in the long-time limit.",
+    "subject": "quantum-mechanics",
+    "subtopic": "perturbation-theory",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the WKB approximation for the allowed energies of a bound state in one dimension?",
+    "answer": "The Bohr-Sommerfeld quantization condition: integral from a to b of p(x) dx = (n + 1/2) * pi * hbar, where a and b are the classical turning points and p(x) = sqrt(2m(E - V(x))).",
+    "explanation": "WKB is a semiclassical approximation valid when the potential varies slowly compared to the de Broglie wavelength.",
+    "subject": "quantum-mechanics",
+    "subtopic": "wkb",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the difference between bosons and fermions regarding identical particles?",
+    "answer": "Bosons have symmetric wavefunctions under particle exchange and obey Bose-Einstein statistics (integer spin). Fermions have antisymmetric wavefunctions and obey Fermi-Dirac statistics (half-integer spin). Fermions satisfy the Pauli exclusion principle.",
+    "explanation": "The spin-statistics theorem connects spin to exchange symmetry. It is proven rigorously in relativistic quantum field theory.",
+    "subject": "quantum-mechanics",
+    "subtopic": "identical-particles",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the Feynman path integral expression for the quantum propagator?",
+    "answer": "K(x_f, t_f; x_i, t_i) = integral over all paths of exp(i*S[path]/hbar) D[path], where S is the classical action along the path.",
+    "explanation": "Every path contributes with a phase proportional to its action. Classical paths dominate in the limit hbar -> 0 due to stationary phase.",
+    "subject": "quantum-mechanics",
+    "subtopic": "path-integrals",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "What are the Pauli matrices?",
+    "answer": "sigma_x = [[0,1],[1,0]], sigma_y = [[0,-i],[i,0]], sigma_z = [[1,0],[0,-1]].",
+    "explanation": "They satisfy {sigma_i, sigma_j} = 2*delta_{ij}*I and [sigma_i, sigma_j] = 2i*epsilon_{ijk}*sigma_k. The spin operators are S_i = (hbar/2)*sigma_i.",
+    "subject": "quantum-mechanics",
+    "subtopic": "spin",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the variational principle (Rayleigh-Ritz) in quantum mechanics?",
+    "answer": "For any normalized trial wavefunction |psi_trial>, the expectation value <psi_trial|H|psi_trial> >= E_0, the true ground state energy. Equality holds only when |psi_trial> is the exact ground state.",
+    "explanation": "This gives an upper bound on the ground state energy and is the basis for variational methods.",
+    "subject": "quantum-mechanics",
+    "subtopic": "variational-method",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the addition rule for angular momenta j_1 and j_2? What total angular momentum values j are possible?",
+    "answer": "j ranges from |j_1 - j_2| to j_1 + j_2 in integer steps.",
+    "explanation": "The coupled states |j, m> are related to the uncoupled states |j_1, m_1; j_2, m_2> by Clebsch-Gordan coefficients.",
+    "subject": "quantum-mechanics",
+    "subtopic": "angular-momentum",
+    "difficulty": "intermediate"
+  }
+]

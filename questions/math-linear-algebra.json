@@ -1,0 +1,82 @@
+[
+  {
+    "question": "What are the eigenvalues of a Hermitian (self-adjoint) matrix guaranteed to be?",
+    "answer": "Real",
+    "explanation": "If A = A^dagger, then <v|A|v> = <v|A^dagger|v>* = <v|A|v>*, so eigenvalues equal their complex conjugates.",
+    "subject": "math-linear-algebra",
+    "subtopic": "hermitian-matrices",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the trace of a matrix?",
+    "answer": "The sum of its diagonal elements, equivalently the sum of its eigenvalues.",
+    "explanation": "Tr(A) = sum of A_ii. The trace is invariant under similarity transformations: Tr(P^{-1}AP) = Tr(A).",
+    "subject": "math-linear-algebra",
+    "subtopic": "traces",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the determinant of a matrix in terms of its eigenvalues?",
+    "answer": "The product of all its eigenvalues.",
+    "explanation": "det(A) = product of lambda_i. A matrix is singular (non-invertible) if and only if at least one eigenvalue is zero.",
+    "subject": "math-linear-algebra",
+    "subtopic": "determinants",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What does it mean for eigenvectors of a Hermitian matrix corresponding to distinct eigenvalues?",
+    "answer": "They are orthogonal.",
+    "explanation": "If A|v> = a|v> and A|w> = b|w> with a != b, then (a-b)<v|w> = 0 implies <v|w> = 0.",
+    "subject": "math-linear-algebra",
+    "subtopic": "hermitian-matrices",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the spectral theorem for Hermitian matrices?",
+    "answer": "Any Hermitian matrix can be diagonalized by a unitary transformation: A = U D U^dagger, where D is diagonal with real eigenvalues and U is unitary.",
+    "explanation": "This is why observables in quantum mechanics (Hermitian operators) have real eigenvalues and orthogonal eigenstates forming a complete basis.",
+    "subject": "math-linear-algebra",
+    "subtopic": "decompositions",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is a unitary matrix?",
+    "answer": "A matrix U such that U^dagger U = U U^dagger = I (its inverse is its conjugate transpose).",
+    "explanation": "Unitary matrices preserve inner products: <Uv|Uw> = <v|w>. In quantum mechanics, time evolution operators are unitary.",
+    "subject": "math-linear-algebra",
+    "subtopic": "special-matrices",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What are the eigenvalues of a unitary matrix constrained to be?",
+    "answer": "They lie on the unit circle in the complex plane: |lambda| = 1, i.e., lambda = e^(i*theta).",
+    "explanation": "If U|v> = lambda|v> and U is unitary, then |lambda|^2 <v|v> = <Uv|Uv> = <v|v>, so |lambda| = 1.",
+    "subject": "math-linear-algebra",
+    "subtopic": "special-matrices",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the Cayley-Hamilton theorem?",
+    "answer": "Every square matrix satisfies its own characteristic equation: if p(lambda) = det(A - lambda I), then p(A) = 0.",
+    "explanation": "For a 2x2 matrix with characteristic polynomial lambda^2 - Tr(A) lambda + det(A) = 0, this gives A^2 - Tr(A) A + det(A) I = 0.",
+    "subject": "math-linear-algebra",
+    "subtopic": "theorems",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the rank-nullity theorem?",
+    "answer": "For a linear map A from R^n to R^m: rank(A) + nullity(A) = n (the dimension of the domain).",
+    "explanation": "rank = dimension of image, nullity = dimension of kernel. The domain splits into the kernel and a complement mapped bijectively onto the image.",
+    "subject": "math-linear-algebra",
+    "subtopic": "theorems",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the commutator [A, B] of two matrices, and when can A and B be simultaneously diagonalized?",
+    "answer": "[A, B] = AB - BA. Two Hermitian matrices can be simultaneously diagonalized if and only if they commute: [A, B] = 0.",
+    "explanation": "In quantum mechanics, commuting observables share a common eigenbasis and can be measured simultaneously without uncertainty.",
+    "subject": "math-linear-algebra",
+    "subtopic": "commutators",
+    "difficulty": "intermediate"
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "question": "Write down the Lorentz transformation for coordinates (t, x) between two inertial frames with relative velocity v along the x-axis.",
+    "answer": "t' = gamma*(t - v*x/c^2), x' = gamma*(x - v*t), where gamma = 1/sqrt(1 - v^2/c^2).",
+    "explanation": "y and z are unchanged. These reduce to the Galilean transformation in the limit v << c.",
+    "subject": "relativity",
+    "subtopic": "lorentz-transformations",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the spacetime interval in special relativity and why is it important?",
+    "answer": "ds^2 = -c^2*dt^2 + dx^2 + dy^2 + dz^2 (in the -+++ convention). It is invariant under Lorentz transformations, meaning all observers agree on its value.",
+    "explanation": "Timelike intervals (ds^2 < 0) connect causally related events; spacelike intervals (ds^2 > 0) connect causally unrelated events; null intervals (ds^2 = 0) describe light signals.",
+    "subject": "relativity",
+    "subtopic": "metric-tensor",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the equivalence principle?",
+    "answer": "The effects of gravity are locally indistinguishable from the effects of acceleration. Equivalently, inertial mass equals gravitational mass.",
+    "explanation": "This is the foundational physical principle of general relativity. It implies that gravity is described by the geometry of spacetime.",
+    "subject": "relativity",
+    "subtopic": "equivalence-principle",
+    "difficulty": "basic"
+  },
+  {
+    "question": "Write the Einstein field equations.",
+    "answer": "G_{mu nu} = R_{mu nu} - (1/2)*g_{mu nu}*R = (8*pi*G/c^4) * T_{mu nu}, where G_{mu nu} is the Einstein tensor, R_{mu nu} is the Ricci tensor, R is the Ricci scalar, and T_{mu nu} is the stress-energy tensor.",
+    "explanation": "The left side encodes spacetime geometry; the right side encodes matter and energy content. Sometimes a cosmological constant term Lambda*g_{mu nu} is added.",
+    "subject": "relativity",
+    "subtopic": "einstein-field-equations",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the geodesic equation?",
+    "answer": "d^2 x^mu / d tau^2 + Gamma^mu_{alpha beta} (dx^alpha/d tau)(dx^beta/d tau) = 0, where Gamma^mu_{alpha beta} are the Christoffel symbols and tau is proper time.",
+    "explanation": "This describes the motion of a free particle in curved spacetime. Geodesics extremize the proper time between two events.",
+    "subject": "relativity",
+    "subtopic": "geodesic-equation",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the Schwarzschild metric?",
+    "answer": "ds^2 = -(1 - 2GM/(c^2*r))*c^2*dt^2 + (1 - 2GM/(c^2*r))^{-1}*dr^2 + r^2*(d theta^2 + sin^2 theta * d phi^2).",
+    "explanation": "This is the unique spherically symmetric vacuum solution to the Einstein field equations (Birkhoff's theorem). The coordinate singularity at r = 2GM/c^2 is the event horizon.",
+    "subject": "relativity",
+    "subtopic": "schwarzschild-solution",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is a four-vector? Give three examples.",
+    "answer": "A four-vector is a quantity with four components that transforms as a vector under Lorentz transformations. Examples: four-position (ct, x, y, z), four-momentum (E/c, p_x, p_y, p_z), four-velocity (gamma*c, gamma*v_x, gamma*v_y, gamma*v_z).",
+    "explanation": "Four-vectors are elements of Minkowski spacetime. Their Lorentz-invariant norm is computed using the metric: A_mu A^mu.",
+    "subject": "relativity",
+    "subtopic": "four-vectors",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the stress-energy tensor for a perfect fluid?",
+    "answer": "T^{mu nu} = (rho + P/c^2)*u^mu*u^nu + P*g^{mu nu}, where rho is the energy density, P is the pressure, and u^mu is the four-velocity of the fluid.",
+    "explanation": "In the rest frame of the fluid, T^{00} = rho*c^2, T^{ii} = P (no sum), and all off-diagonal components vanish.",
+    "subject": "relativity",
+    "subtopic": "stress-energy-tensor",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the relativistic energy-momentum relation?",
+    "answer": "E^2 = (pc)^2 + (mc^2)^2, where E is total energy, p is the magnitude of three-momentum, and m is the rest mass.",
+    "explanation": "For massless particles (m = 0), E = pc. For particles at rest (p = 0), E = mc^2. This is the Lorentz-invariant norm of the four-momentum.",
+    "subject": "relativity",
+    "subtopic": "four-vectors",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is gravitational time dilation in the Schwarzschild geometry?",
+    "answer": "A clock at radial coordinate r runs slower than a clock at infinity by a factor sqrt(1 - 2GM/(c^2*r)). That is, d tau = sqrt(1 - 2GM/(c^2*r)) * dt.",
+    "explanation": "Clocks closer to a gravitational source run slower. At the event horizon r = 2GM/c^2, a distant observer sees time stop. This has been confirmed experimentally.",
+    "subject": "relativity",
+    "subtopic": "schwarzschild-solution",
+    "difficulty": "intermediate"
+  }
+]

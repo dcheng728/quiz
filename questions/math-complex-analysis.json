@@ -1,0 +1,66 @@
+[
+  {
+    "question": "State Cauchy's integral theorem.",
+    "answer": "If f(z) is analytic (holomorphic) inside and on a simple closed contour C, then the contour integral of f(z) dz around C is zero.",
+    "explanation": "Analytic functions have zero 'circulation.' This is the complex-variable analog of a conservative field having zero line integral around a closed loop.",
+    "subject": "math-complex-analysis",
+    "subtopic": "cauchy-theorem",
+    "difficulty": "basic"
+  },
+  {
+    "question": "State the residue theorem.",
+    "answer": "The contour integral of f(z) dz around a closed curve C equals 2 pi i times the sum of residues of f at its poles enclosed by C.",
+    "explanation": "oint_C f(z) dz = 2 pi i sum Res(f, z_k). The primary tool for evaluating difficult real integrals by extending to the complex plane.",
+    "subject": "math-complex-analysis",
+    "subtopic": "residues",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the residue of f(z) = 1/(z - z0)^n at z = z0 for n = 1?",
+    "answer": "1",
+    "explanation": "For a simple pole, Res(f, z0) = lim_{z->z0} (z - z0) f(z). For 1/(z - z0), this gives 1.",
+    "subject": "math-complex-analysis",
+    "subtopic": "residues",
+    "difficulty": "basic"
+  },
+  {
+    "question": "How do you compute the residue at a simple pole z0 of f(z) = g(z)/h(z) where h(z0) = 0 and h'(z0) != 0?",
+    "answer": "Res(f, z0) = g(z0) / h'(z0)",
+    "explanation": "This follows from L'Hopital-style reasoning: (z - z0)/h(z) -> 1/h'(z0) as z -> z0.",
+    "subject": "math-complex-analysis",
+    "subtopic": "residues",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is a branch cut, and why is it needed for functions like log(z) or z^(1/2)?",
+    "answer": "A branch cut is a curve in the complex plane across which a multi-valued function is discontinuous, chosen so the function becomes single-valued on the cut plane.",
+    "explanation": "log(z) = ln|z| + i*arg(z) is multi-valued because arg(z) changes by 2 pi around the origin. The standard branch cut for log(z) is the negative real axis.",
+    "subject": "math-complex-analysis",
+    "subtopic": "branch-cuts",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What are the Cauchy-Riemann equations?",
+    "answer": "For f(z) = u(x,y) + i v(x,y) to be analytic: du/dx = dv/dy and du/dy = -dv/dx.",
+    "explanation": "These are the necessary and sufficient conditions (given continuity of partials) for complex differentiability. They imply both u and v are harmonic: nabla^2 u = nabla^2 v = 0.",
+    "subject": "math-complex-analysis",
+    "subtopic": "analyticity",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is analytic continuation?",
+    "answer": "The process of extending the domain of an analytic function beyond its original region of convergence, using the identity theorem: an analytic function is uniquely determined by its values on any set with an accumulation point.",
+    "explanation": "Classic example: the Riemann zeta function zeta(s) = sum n^(-s) converges for Re(s)>1 but can be analytically continued to the entire complex plane (with a pole at s=1).",
+    "subject": "math-complex-analysis",
+    "subtopic": "analytic-continuation",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the integral of e^(iz)/(z^2 + a^2) dz from -infinity to +infinity (a > 0)?",
+    "answer": "(pi/a) e^(-a)",
+    "explanation": "Close the contour in the upper half-plane (since e^(iz) decays there). The pole at z = ia is enclosed. Res = e^(-a)/(2ia). Result: 2 pi i * e^(-a)/(2ia) = pi e^(-a)/a.",
+    "subject": "math-complex-analysis",
+    "subtopic": "contour-integrals",
+    "difficulty": "intermediate"
+  }
+]

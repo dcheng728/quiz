@@ -1,0 +1,122 @@
+[
+  {
+    "question": "What is the derivative of sin(x)?",
+    "answer": "cos(x)",
+    "explanation": "Follows directly from the limit definition or from the Taylor series of sin(x).",
+    "subject": "math-calculus",
+    "subtopic": "derivatives",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the derivative of e^(ax)?",
+    "answer": "a e^(ax)",
+    "explanation": "The exponential function is its own derivative, scaled by the chain rule factor a.",
+    "subject": "math-calculus",
+    "subtopic": "derivatives",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the derivative of ln(x)?",
+    "answer": "1/x",
+    "explanation": "Follows from the inverse function theorem applied to e^x.",
+    "subject": "math-calculus",
+    "subtopic": "derivatives",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the Gaussian integral: integral from -infinity to +infinity of e^(-x^2) dx?",
+    "answer": "sqrt(pi)",
+    "explanation": "Classic trick: square the integral, convert to polar coordinates, and evaluate the resulting r integral.",
+    "subject": "math-calculus",
+    "subtopic": "integrals",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the integral of 1/x dx?",
+    "answer": "ln|x| + C",
+    "explanation": "This is the antiderivative definition of the natural logarithm.",
+    "subject": "math-calculus",
+    "subtopic": "integrals",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the integral from 0 to infinity of x^(n-1) e^(-x) dx?",
+    "answer": "Gamma(n) = (n-1)! for positive integers n",
+    "explanation": "This defines the Gamma function, which generalizes the factorial to non-integer arguments.",
+    "subject": "math-calculus",
+    "subtopic": "integrals",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "State the divergence theorem (Gauss's theorem).",
+    "answer": "The volume integral of div(F) equals the surface integral of F dot dA over the closed boundary surface: integral_V (nabla . F) dV = integral_S F . dA",
+    "explanation": "Converts a volume integral of a divergence into a flux integral over the enclosing surface. Fundamental in electrostatics (Gauss's law).",
+    "subject": "math-calculus",
+    "subtopic": "vector-calculus",
+    "difficulty": "basic"
+  },
+  {
+    "question": "State Stokes' theorem.",
+    "answer": "The surface integral of curl(F) dot dA equals the line integral of F dot dl around the boundary curve: integral_S (nabla x F) . dA = oint_C F . dl",
+    "explanation": "Relates the curl of a vector field over a surface to its circulation around the boundary. Underlies Faraday's law and Ampere's law.",
+    "subject": "math-calculus",
+    "subtopic": "vector-calculus",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is div(curl(F)) for any smooth vector field F?",
+    "answer": "Zero",
+    "explanation": "nabla . (nabla x F) = 0 identically. This is why magnetic monopoles are absent in Maxwell's equations: div(B) = 0 follows from B = curl(A).",
+    "subject": "math-calculus",
+    "subtopic": "vector-calculus",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is curl(grad(f)) for any smooth scalar field f?",
+    "answer": "Zero",
+    "explanation": "nabla x (nabla f) = 0 identically. This is why conservative forces have zero curl: if F = -grad(V), then curl(F) = 0.",
+    "subject": "math-calculus",
+    "subtopic": "vector-calculus",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the Taylor series of e^x around x=0?",
+    "answer": "Sum from n=0 to infinity of x^n / n!",
+    "explanation": "All derivatives of e^x are e^x, which equals 1 at x=0, giving coefficients 1/n!.",
+    "subject": "math-calculus",
+    "subtopic": "series",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the Maclaurin series for 1/(1-x)?",
+    "answer": "Sum from n=0 to infinity of x^n, valid for |x| < 1",
+    "explanation": "The geometric series. Extremely useful for generating perturbative expansions in physics.",
+    "subject": "math-calculus",
+    "subtopic": "series",
+    "difficulty": "basic"
+  },
+  {
+    "question": "What is the Laplacian (nabla^2) in spherical coordinates acting on a function that depends only on r?",
+    "answer": "(1/r^2) d/dr (r^2 df/dr)",
+    "explanation": "The angular parts vanish for spherically symmetric functions. Equivalently, (1/r) d^2/dr^2 (r f).",
+    "subject": "math-calculus",
+    "subtopic": "multivariable",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What is the gradient in spherical coordinates (r, theta, phi)?",
+    "answer": "grad(f) = (df/dr) r_hat + (1/r)(df/dtheta) theta_hat + (1/(r sin(theta)))(df/dphi) phi_hat",
+    "explanation": "The scale factors 1, r, and r sin(theta) come from the metric of spherical coordinates.",
+    "subject": "math-calculus",
+    "subtopic": "multivariable",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "What does the Leibniz integral rule (differentiation under the integral sign) state?",
+    "answer": "d/dt integral_a^b f(x,t) dx = integral_a^b (df/dt) dx, when the limits are constant. With variable limits: d/dt integral_{a(t)}^{b(t)} f(x,t) dx = integral_a^b (df/dt) dx + f(b,t) b'(t) - f(a,t) a'(t)",
+    "explanation": "Feynman's favorite trick. Allows you to differentiate with respect to a parameter inside an integral.",
+    "subject": "math-calculus",
+    "subtopic": "integrals",
+    "difficulty": "intermediate"
+  }
+]

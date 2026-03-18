@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics & Math Daily Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="top-bar">
+            <h1>Physics & Math Daily Quiz</h1>
+            <div class="top-controls">
+                <select id="category-filter" title="Filter by subject">
+                    <option value="all">All subjects</option>
+                    <option value="math-calculus">Calculus</option>
+                    <option value="math-linear-algebra">Linear Algebra</option>
+                    <option value="math-differential-equations">Diff. Equations</option>
+                    <option value="math-complex-analysis">Complex Analysis</option>
+                    <option value="math-discrete">Discrete Math</option>
+                    <option value="math-probability">Probability</option>
+                    <option value="math-trigonometry">Trigonometry</option>
+                    <option value="classical-mechanics">Classical Mech.</option>
+                    <option value="electromagnetism">E&M</option>
+                    <option value="quantum-mechanics">Quantum Mech.</option>
+                    <option value="statistical-mechanics">Stat. Mech.</option>
+                    <option value="relativity">Relativity</option>
+                </select>
+                <select id="difficulty-filter" title="Filter by difficulty">
+                    <option value="all">All levels</option>
+                    <option value="basic">Basic</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+                <select id="familiarity-filter" title="Filter by familiarity">
+                    <option value="all">All familiarity</option>
+                    <option value="weak">Weak spots</option>
+                    <option value="unseen">Unseen</option>
+                    <option value="strong">Strong</option>
+                </select>
+                <select id="sort-order" title="Question order">
+                    <option value="least-familiar">Most unfamiliar</option>
+                    <option value="random">Random</option>
+                    <option value="easiest">Easiest first</option>
+                    <option value="most-familiar">Most familiar</option>
+                    <option value="least-seen">Least seen</option>
+                </select>
+                <button id="shuffle-btn" class="btn btn-shuffle" title="Reshuffle questions">Shuffle</button>
+            </div>
+        </div>
+
+        <div class="counter-bar">
+            <span id="counter">Question 1</span>
+            <span id="category-badge" class="badge"></span>
+            <span id="difficulty-badge" class="badge"></span>
+            <span id="session-score" class="score"></span>
+        </div>
+
+        <div class="card" id="question-card">
+            <div class="familiarity-indicator" id="familiarity-badge"></div>
+            <div class="question" id="question-text"></div>
+            <div class="answer hidden" id="answer-section">
+                <hr>
+                <div id="answer-text"></div>
+                <div id="explanation-text" class="explanation"></div>
+            </div>
+        </div>
+
+        <div id="show-answer-container">
+            <button id="show-answer-btn" class="btn btn-secondary">Show Answer</button>
+        </div>
+
+        <div id="grade-container" class="hidden">
+            <p>How did you do?</p>
+            <div class="grade-buttons">
+                <button class="btn btn-wrong" data-grade="wrong">Missed it <kbd>1</kbd></button>
+                <button class="btn btn-unsure" data-grade="unsure">Not sure <kbd>2</kbd></button>
+                <button class="btn btn-right" data-grade="right">Got it <kbd>3</kbd></button>
+            </div>
+        </div>
+
+        <div class="stats-bar" id="stats-bar"></div>
+
+        <div class="sync-bar" id="sync-bar">
+            <div id="sync-logged-out">
+                <button id="gist-login-btn" class="btn btn-sync" title="Connect GitHub Gist for cross-device sync">Sync with Gist</button>
+            </div>
+            <div id="sync-logged-in" class="hidden">
+                <span id="sync-status" class="sync-status"></span>
+                <button id="gist-push-btn" class="btn btn-sync" title="Upload local history to Gist">Push to Gist</button>
+                <button id="gist-pull-btn" class="btn btn-sync" title="Download history from Gist">Pull from Gist</button>
+                <button id="gist-logout-btn" class="btn btn-sync btn-sync-danger" title="Disconnect Gist">Disconnect</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-art" id="footer-art" aria-hidden="true"></div>
+    <script>
+      fetch('https://raw.githubusercontent.com/dcheng728/dcheng728.github.io/main/_includes/footer-art.html')
+        .then(r => r.text())
+        .then(html => { document.getElementById('footer-art').innerHTML = html; })
+        .catch(() => {});
+    </script>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
