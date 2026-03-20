@@ -16,8 +16,8 @@ const CONFIG = {
     // Auto-detects provider from key: sk-ant-* → Anthropic, otherwise → OpenRouter
     // Override with provider: 'anthropic' or 'openrouter'
     ai: {
-        provider: 'openrouter',
-        model: 'google/gemini-2.5-flash',
+        provider: 'github',
+        model: 'gpt-4o',
         maxTokens: 512,
         questionsPerBatch: 15,
     },

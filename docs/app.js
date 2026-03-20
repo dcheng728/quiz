@@ -364,13 +364,7 @@ function shuffle(arr) {
     return a;
 }
 
-function buildQueue() {
-    const pool = getFilteredPool();
-    if (pool.length === 0) {
-        queue = [];
-        return;
-    }
-
+function sortQueue(items) {
     const order = sortOrder.value;
 
     if (order === 'random') {
@@ -383,23 +377,24 @@ function buildQueue() {
         );
 
         const weighted = [];
-        for (const q of pool) {
+        for (const q of items) {
             weighted.push(q);
             if (recentWrong.has(q.name)) weighted.push(q);
         }
 
         const shuffled = shuffle(weighted);
         const seen = new Set();
-        queue = [];
+        const result = [];
         for (const q of shuffled) {
             if (!seen.has(q.name)) {
                 seen.add(q.name);
-                queue.push(q);
+                result.push(q);
             }
         }
+        return result;
     } else {
         const famMap = buildFamiliarityMap();
-        queue = shuffle([...pool]).sort((a, b) => {
+        return shuffle([...items]).sort((a, b) => {
             const sa = famMap[a.name]?.score ?? -1;
             const sb = famMap[b.name]?.score ?? -1;
             if (order === 'least-familiar') return sa - sb;
@@ -412,6 +407,15 @@ function buildQueue() {
             return 0;
         });
     }
+}
+
+function buildQueue() {
+    const pool = getFilteredPool();
+    if (pool.length === 0) {
+        queue = [];
+        return;
+    }
+    queue = sortQueue(pool);
 }
 
 function reshuffleAndReset() {
@@ -675,7 +679,12 @@ document.querySelectorAll('[data-grade]').forEach(btn => {
 });
 
 shuffleBtn.addEventListener('click', reshuffleAndReset);
-sortOrder.addEventListener('change', reshuffleAndReset);
+sortOrder.addEventListener('change', () => {
+    queue = sortQueue(queue);
+    currentIndex = 0;
+    displayQuestion();
+    renderQueueList();
+});
 prevBtn.addEventListener('click', goPrev);
 nextBtn.addEventListener('click', goNext);
 
@@ -914,7 +923,6 @@ function buildQuestionSummary() {
             name: q.name,
             subject: q.subject,
             difficulty: q.difficulty,
-            labels: q.labels,
             familiarity: rec ? rec.score.toFixed(2) : 'unseen',
             attempts: rec ? rec.attempts : 0,
         };
@@ -924,30 +932,25 @@ function buildQuestionSummary() {
 function buildAIPrompt(topic) {
     const summaries = buildQuestionSummary();
 
+    // Compact format: "name"|subject|difficulty|fam|attempts
     const summaryText = summaries.map(s => {
         const safeName = s.name.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-        return `- "${safeName}" [${s.subject}, ${s.difficulty}] fam=${s.familiarity}, attempts=${s.attempts}`;
+        return `"${safeName}"|${s.subject}|${s.difficulty}|${s.familiarity}|${s.attempts}`;
     }).join('\n');
 
-    return `You are a study coach for a theoretical physics student. Your job is to select and order existing flashcard questions into an optimal study queue.
+    return `Select ${CONFIG.ai.questionsPerBatch} flashcard questions for a physics student. Return ONLY a JSON array of question name strings.
 
-Here is the full question bank with the student's familiarity scores (0 = unfamiliar, 1 = mastered, "unseen" = never attempted):
-
+Questions (name|subject|difficulty|familiarity|attempts):
 ${summaryText}
 
 ${topic
-    ? `The student wants to focus on: ${topic}
-
-Select questions DIRECTLY relevant to this topic. Do NOT pad with prerequisites or fundamentals from other subjects unless the student explicitly asks for review. Prioritize questions that the student would need to know cold for this topic. Order from most essential to least.`
-    : `The student wants a personalized review session.
-
-Prioritize questions with low familiarity or that are unseen. Mix subjects to keep it engaging, but cluster related questions together.`}
-
-Return a JSON array of question names (strings) in the order they should be studied. Select ${CONFIG.ai.questionsPerBatch} questions. Return ONLY the JSON array, no other text.`;
+    ? `Focus: ${topic}. Pick questions DIRECTLY relevant. Do NOT pad with prerequisites. Order from most essential to least.`
+    : `Personalized review. Prioritize low familiarity and unseen. Mix subjects but cluster related questions.`}`;
 }
 
 function detectProvider(key) {
     if (key.startsWith('sk-or-')) return 'openrouter';
+    if (key.startsWith('ghp_') || key.startsWith('github_pat_')) return 'github';
     // sk-ant-* and sk-* are both Anthropic key formats
     return 'anthropic';
 }
@@ -957,73 +960,80 @@ async function callAI(prompt) {
     if (!token) throw new Error('No API key');
 
     const provider = CONFIG.ai.provider || detectProvider(token);
-    let res;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 30000);
 
-    if (provider === 'anthropic') {
-        res = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'x-api-key': token,
-                'anthropic-version': '2023-06-01',
-                'anthropic-dangerous-direct-browser-access': 'true',
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
+    try {
+        let res;
+
+        if (provider === 'anthropic') {
+            res = await fetch('https://api.anthropic.com/v1/messages', {
+                signal: controller.signal,
+                method: 'POST',
+                headers: {
+                    'x-api-key': token,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true',
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: CONFIG.ai.model,
+                    max_tokens: CONFIG.ai.maxTokens,
+                    messages: [{ role: 'user', content: prompt }],
+                }),
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.error?.message || `API error ${res.status}`);
+            }
+
+            const data = await res.json();
+            const text = data.content[0].text;
+            const match = text.match(/\[[\s\S]*\]/);
+            if (!match) throw new Error('No JSON array found in response');
+            return JSON.parse(match[0]);
+
+        } else {
+            // OpenAI-compatible providers: OpenRouter, GitHub Models
+            const endpoint = provider === 'github'
+                ? 'https://models.inference.ai.azure.com/chat/completions'
+                : 'https://openrouter.ai/api/v1/chat/completions';
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            };
+            if (provider === 'openrouter') headers['HTTP-Referer'] = window.location.href;
+            const body = JSON.stringify({
                 model: CONFIG.ai.model,
                 max_tokens: CONFIG.ai.maxTokens,
                 messages: [{ role: 'user', content: prompt }],
-            }),
-        });
+            });
+            console.log('AI request:', { provider, model: CONFIG.ai.model, tokenPrefix: token.substring(0, 8) + '...' });
+            res = await fetch(endpoint, { signal: controller.signal, method: 'POST', headers, body });
 
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.error?.message || `API error ${res.status}`);
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.error?.message || `API error ${res.status}`);
+            }
+
+            const data = await res.json();
+            const text = data.choices[0].message.content;
+            const match = text.match(/\[[\s\S]*\]/);
+            if (!match) throw new Error('No JSON array found in response');
+            let jsonStr = match[0];
+            try {
+                return JSON.parse(jsonStr);
+            } catch {
+                jsonStr = jsonStr.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+                return JSON.parse(jsonStr);
+            }
         }
-
-        const data = await res.json();
-        const text = data.content[0].text;
-        const match = text.match(/\[[\s\S]*\]/);
-        if (!match) throw new Error('No JSON array found in response');
-        return JSON.parse(match[0]);
-
-    } else {
-        // OpenRouter (OpenAI-compatible)
-        const headers = {
-            'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.href,
-        };
-        headers['Authorization'] = 'Bearer ' + token;
-        const body = JSON.stringify({
-            model: CONFIG.ai.model,
-            max_tokens: CONFIG.ai.maxTokens,
-            messages: [{ role: 'user', content: prompt }],
-        });
-        console.log('AI request:', { provider: 'openrouter', model: CONFIG.ai.model, tokenPrefix: token.substring(0, 8) + '...' });
-        res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers,
-            body,
-        });
-
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.error?.message || `API error ${res.status}`);
-        }
-
-        const data = await res.json();
-        const text = data.choices[0].message.content;
-        const match = text.match(/\[[\s\S]*\]/);
-        if (!match) throw new Error('No JSON array found in response');
-        // The AI may return names with LaTeX backslashes that aren't properly escaped
-        // Fix common JSON issues: unescape LaTeX in strings
-        let jsonStr = match[0];
-        try {
-            return JSON.parse(jsonStr);
-        } catch {
-            // Try fixing unescaped backslashes (e.g. \sin -> \\sin)
-            jsonStr = jsonStr.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
-            return JSON.parse(jsonStr);
-        }
+    } catch (e) {
+        if (e.name === 'AbortError') throw new Error('Request timed out (30s)');
+        throw e;
+    } finally {
+        clearTimeout(timer);
     }
 }
 
@@ -1037,8 +1047,8 @@ function showAIModal() {
             <h2>AI Study Queue</h2>
             ${!token ? `
                 <div id="ai-key-section">
-                    <p>Enter your Anthropic API key (stored locally, sent only to Anthropic's API).</p>
-                    <input type="password" id="ai-key-input" placeholder="sk-ant-..." autocomplete="off">
+                    <p>Enter an API key (stored locally). Supports Anthropic, OpenRouter, or GitHub PAT with <code>models:read</code> scope.</p>
+                    <input type="password" id="ai-key-input" placeholder="ghp_..., sk-or-..., or sk-ant-..." autocomplete="off">
                     <button class="btn btn-ai" id="ai-key-save">Save key</button>
                 </div>
             ` : `
