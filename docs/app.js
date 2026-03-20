@@ -902,6 +902,29 @@ gistLogoutBtn.addEventListener('click', gistLogout);
 
 // ── Familiarity Info Panel ──
 
+// Conventions panel: populate from config, render KaTeX on first open
+(function initConventionsPanel() {
+    const panel = document.getElementById('conventions-info');
+    const body = document.getElementById('conventions-info-body');
+    if (!panel || !body) return;
+    const rows = (CONFIG.conventions || []).map(c =>
+        `<tr><td>${c.context}</td><td>${c.signature}</td><td>$${c.metric}$</td></tr>`
+    ).join('');
+    body.innerHTML =
+        `<table class="info-table">` +
+        `<tr><th>Context</th><th>Metric signature</th><th>$\\eta_{\\mu\\nu}$</th></tr>` +
+        rows +
+        `</table>` +
+        (CONFIG.conventionNotes ? `<p>${CONFIG.conventionNotes}</p>` : '');
+    let rendered = false;
+    panel.addEventListener('toggle', () => {
+        if (panel.open && !rendered) {
+            renderMath(body);
+            rendered = true;
+        }
+    });
+})();
+
 (function populateFamiliarityInfo() {
     const panel = document.getElementById('familiarity-info');
     const body = document.getElementById('familiarity-info-body');
