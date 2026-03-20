@@ -900,6 +900,260 @@ gistPushBtn.addEventListener('click', () => gistPush(false));
 gistPullBtn.addEventListener('click', gistPull);
 gistLogoutBtn.addEventListener('click', gistLogout);
 
+// ── AI Queue Curation ──
+
+function getAIToken() { return localStorage.getItem('ai-api-key'); }
+function setAIToken(k) { localStorage.setItem('ai-api-key', k); }
+function clearAIToken() { localStorage.removeItem('ai-api-key'); }
+
+function buildQuestionSummary() {
+    const famMap = buildFamiliarityMap();
+    return ALL_QUESTIONS.map(q => {
+        const rec = famMap[q.name];
+        return {
+            name: q.name,
+            subject: q.subject,
+            difficulty: q.difficulty,
+            labels: q.labels,
+            familiarity: rec ? rec.score.toFixed(2) : 'unseen',
+            attempts: rec ? rec.attempts : 0,
+        };
+    });
+}
+
+function buildAIPrompt(topic) {
+    const summaries = buildQuestionSummary();
+
+    const summaryText = summaries.map(s => {
+        const safeName = s.name.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        return `- "${safeName}" [${s.subject}, ${s.difficulty}] fam=${s.familiarity}, attempts=${s.attempts}`;
+    }).join('\n');
+
+    return `You are a study coach for a theoretical physics student. Your job is to select and order existing flashcard questions into an optimal study queue.
+
+Here is the full question bank with the student's familiarity scores (0 = unfamiliar, 1 = mastered, "unseen" = never attempted):
+
+${summaryText}
+
+${topic
+    ? `The student wants to focus on: ${topic}
+
+Select questions DIRECTLY relevant to this topic. Do NOT pad with prerequisites or fundamentals from other subjects unless the student explicitly asks for review. Prioritize questions that the student would need to know cold for this topic. Order from most essential to least.`
+    : `The student wants a personalized review session.
+
+Prioritize questions with low familiarity or that are unseen. Mix subjects to keep it engaging, but cluster related questions together.`}
+
+Return a JSON array of question names (strings) in the order they should be studied. Select ${CONFIG.ai.questionsPerBatch} questions. Return ONLY the JSON array, no other text.`;
+}
+
+function detectProvider(key) {
+    if (key.startsWith('sk-or-')) return 'openrouter';
+    // sk-ant-* and sk-* are both Anthropic key formats
+    return 'anthropic';
+}
+
+async function callAI(prompt) {
+    const token = getAIToken();
+    if (!token) throw new Error('No API key');
+
+    const provider = CONFIG.ai.provider || detectProvider(token);
+    let res;
+
+    if (provider === 'anthropic') {
+        res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+                'x-api-key': token,
+                'anthropic-version': '2023-06-01',
+                'anthropic-dangerous-direct-browser-access': 'true',
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                model: CONFIG.ai.model,
+                max_tokens: CONFIG.ai.maxTokens,
+                messages: [{ role: 'user', content: prompt }],
+            }),
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error?.message || `API error ${res.status}`);
+        }
+
+        const data = await res.json();
+        const text = data.content[0].text;
+        const match = text.match(/\[[\s\S]*\]/);
+        if (!match) throw new Error('No JSON array found in response');
+        return JSON.parse(match[0]);
+
+    } else {
+        // OpenRouter (OpenAI-compatible)
+        const headers = {
+            'Content-Type': 'application/json',
+            'HTTP-Referer': window.location.href,
+        };
+        headers['Authorization'] = 'Bearer ' + token;
+        const body = JSON.stringify({
+            model: CONFIG.ai.model,
+            max_tokens: CONFIG.ai.maxTokens,
+            messages: [{ role: 'user', content: prompt }],
+        });
+        console.log('AI request:', { provider: 'openrouter', model: CONFIG.ai.model, tokenPrefix: token.substring(0, 8) + '...' });
+        res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers,
+            body,
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error?.message || `API error ${res.status}`);
+        }
+
+        const data = await res.json();
+        const text = data.choices[0].message.content;
+        const match = text.match(/\[[\s\S]*\]/);
+        if (!match) throw new Error('No JSON array found in response');
+        // The AI may return names with LaTeX backslashes that aren't properly escaped
+        // Fix common JSON issues: unescape LaTeX in strings
+        let jsonStr = match[0];
+        try {
+            return JSON.parse(jsonStr);
+        } catch {
+            // Try fixing unescaped backslashes (e.g. \sin -> \\sin)
+            jsonStr = jsonStr.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+            return JSON.parse(jsonStr);
+        }
+    }
+}
+
+function showAIModal() {
+    const token = getAIToken();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+        <div class="modal modal-ai">
+            <h2>AI Study Queue</h2>
+            ${!token ? `
+                <div id="ai-key-section">
+                    <p>Enter your Anthropic API key (stored locally, sent only to Anthropic's API).</p>
+                    <input type="password" id="ai-key-input" placeholder="sk-ant-..." autocomplete="off">
+                    <button class="btn btn-ai" id="ai-key-save">Save key</button>
+                </div>
+            ` : `
+                <div id="ai-gen-section">
+                    <p>Describe what you want to study, or leave blank for a personalized review of your weak areas.</p>
+                    <input type="text" id="ai-topic-input" placeholder="e.g. prep for reading about path integrals, review angular momentum..." autocomplete="off">
+                    <div class="modal-buttons">
+                        <button class="btn btn-cancel" id="ai-cancel">Cancel</button>
+                        <button class="btn btn-ai" id="ai-submit">Build queue</button>
+                    </div>
+                    <div id="ai-status" class="ai-status"></div>
+                    <div id="ai-results" class="ai-results hidden"></div>
+                    <div class="ai-key-footer">
+                        <button class="btn btn-sync btn-sync-danger" id="ai-clear-key">Remove API key</button>
+                    </div>
+                </div>
+            `}
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    if (!token) {
+        const keyInput = overlay.querySelector('#ai-key-input');
+        keyInput.focus();
+        overlay.querySelector('#ai-key-save').addEventListener('click', () => {
+            const k = keyInput.value.replace(/\s/g, '');
+            if (!k) return;
+            setAIToken(k);
+            overlay.remove();
+            showAIModal();
+        });
+    } else {
+        const topicInput = overlay.querySelector('#ai-topic-input');
+        const status = overlay.querySelector('#ai-status');
+        const results = overlay.querySelector('#ai-results');
+        const submitBtn = overlay.querySelector('#ai-submit');
+        topicInput.focus();
+
+        overlay.querySelector('#ai-cancel').addEventListener('click', () => overlay.remove());
+        overlay.querySelector('#ai-clear-key').addEventListener('click', () => {
+            clearAIToken();
+            overlay.remove();
+        });
+
+        submitBtn.addEventListener('click', async () => {
+            const topic = topicInput.value.trim();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Building...';
+            status.textContent = '';
+            results.classList.add('hidden');
+
+            try {
+                const prompt = buildAIPrompt(topic);
+                const names = await callAI(prompt);
+
+                // Resolve names to question objects
+                const nameMap = new Map(ALL_QUESTIONS.map(q => [q.name, q]));
+                const matched = [];
+                const unmatched = [];
+                for (const name of names) {
+                    const q = nameMap.get(name);
+                    if (q) matched.push(q);
+                    else unmatched.push(name);
+                }
+
+                if (matched.length === 0) {
+                    status.textContent = 'No matching questions found. Try a different topic.';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Build queue';
+                    return;
+                }
+
+                status.textContent = `Selected ${matched.length} questions.` +
+                    (unmatched.length > 0 ? ` (${unmatched.length} not found in bank)` : '');
+
+                // Show preview
+                const famMap = buildFamiliarityMap();
+                results.classList.remove('hidden');
+                results.innerHTML = matched.map((q, i) => {
+                    const rec = famMap[q.name];
+                    const famText = rec ? `${Math.round(rec.score * 100)}%` : 'new';
+                    return `<div class="ai-result-item">
+                        <span class="ai-result-num">${i + 1}</span>
+                        <span class="ai-result-name">${q.name}</span>
+                        <span class="ai-result-subject">${q.subject}</span>
+                        <span class="ai-result-diff">${famText}</span>
+                    </div>`;
+                }).join('') + `
+                    <div class="modal-buttons">
+                        <button class="btn btn-ai" id="ai-apply">Start this queue</button>
+                    </div>
+                `;
+                renderMath(results);
+
+                results.querySelector('#ai-apply').addEventListener('click', () => {
+                    queue = matched;
+                    currentIndex = 0;
+                    displayQuestion();
+                    renderQueueList();
+                    overlay.remove();
+                });
+            } catch (err) {
+                status.textContent = 'Error: ' + err.message;
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Build queue';
+        });
+    }
+}
+
+document.getElementById('ai-generate-btn').addEventListener('click', showAIModal);
+
 // ── Familiarity Info Panel ──
 
 // Conventions panel: populate from config, render KaTeX on first open
