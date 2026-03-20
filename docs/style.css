@@ -731,6 +731,62 @@ kbd {
     border: 1px solid #e0dbd5;
 }
 
+/* Info panel (collapsible) */
+.info-panel {
+    margin-top: 1rem;
+    background: white;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: #666;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    border: 1px solid #e0dbd5;
+}
+
+.info-panel summary {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: #999;
+    font-size: 0.78rem;
+    user-select: none;
+}
+
+.info-panel summary:hover {
+    color: #666;
+}
+
+.info-panel-body {
+    padding: 0.5rem 1rem 1rem;
+    border-top: 1px solid #eee;
+    line-height: 1.6;
+}
+
+.info-panel-body p {
+    margin: 0.4rem 0;
+}
+
+.info-formula {
+    text-align: center;
+    margin: 0.8rem 0 !important;
+}
+
+.info-table {
+    margin: 0.5rem 0;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.info-table th,
+.info-table td {
+    padding: 0.25rem 0.8rem;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.info-table th {
+    color: #999;
+    font-weight: normal;
+}
+
 /* Sync bar */
 .sync-bar {
     margin-top: 1rem;

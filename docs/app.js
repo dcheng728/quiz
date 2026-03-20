@@ -296,8 +296,8 @@ function saveResult(questionObj, grade) {
 
 // ── Familiarity ──
 
-const FAM_TAU = 48;
-const FAM_SCORES = { right: 1, unsure: 0.3, wrong: 0 };
+const FAM_TAU = CONFIG.familiarityTau;
+const FAM_SCORES = CONFIG.gradeScores;
 
 function buildFamiliarityMap() {
     const history = getHistory();
@@ -904,6 +904,26 @@ gistPushBtn.addEventListener('click', () => gistPush(false));
 gistPullBtn.addEventListener('click', gistPull);
 gistLogoutBtn.addEventListener('click', gistLogout);
 
+// ── Familiarity Info Panel ──
+
+(function populateFamiliarityInfo() {
+    const body = document.getElementById('familiarity-info-body');
+    if (!body) return;
+    const s = CONFIG.gradeScores;
+    const tau = CONFIG.familiarityTau;
+    body.innerHTML = `
+        <p class="info-formula">$$\\text{familiarity} = \\frac{\\sum_i s_i \\, e^{-\\Delta t_i / \\tau}}{\\sum_i e^{-\\Delta t_i / \\tau}}$$</p>
+        <p>where $\\Delta t_i$ is the hours since answer $i$ and $s_i$ is the grade score.</p>
+        <table class="info-table">
+            <tr><th>Response</th><th>Score ($s_i$)</th></tr>
+            <tr><td>Got it</td><td>${s.right}</td></tr>
+            <tr><td>Not sure</td><td>${s.unsure}</td></tr>
+            <tr><td>Missed it</td><td>${s.wrong}</td></tr>
+        </table>
+        <p>Decay time constant: $\\tau = ${tau}$ hours (weight drops to $1/e \\approx 37\\%$ after ${tau}h, half-life $\\approx ${Math.round(tau * Math.LN2)}$h)</p>
+    `;
+})();
+
 // ── Init ──
 
 populateFilters();
@@ -919,6 +939,8 @@ function renderAllMath() {
     renderMath(); // question card
     document.querySelectorAll('.queue-item').forEach(el => renderMath(el));
     document.querySelectorAll('.search-item').forEach(el => renderMath(el));
+    const infoBody = document.getElementById('familiarity-info-body');
+    if (infoBody) renderMath(infoBody);
 }
 document.addEventListener('DOMContentLoaded', renderAllMath);
 if (typeof renderMathInElement === 'undefined') {
