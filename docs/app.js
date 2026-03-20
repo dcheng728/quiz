@@ -907,8 +907,9 @@ gistLogoutBtn.addEventListener('click', gistLogout);
 // ── Familiarity Info Panel ──
 
 (function populateFamiliarityInfo() {
+    const panel = document.getElementById('familiarity-info');
     const body = document.getElementById('familiarity-info-body');
-    if (!body) return;
+    if (!panel || !body) return;
     const s = CONFIG.gradeScores;
     const tau = CONFIG.familiarityTau;
     body.innerHTML = `
@@ -922,6 +923,14 @@ gistLogoutBtn.addEventListener('click', gistLogout);
         </table>
         <p>Decay time constant: $\\tau = ${tau}$ hours (weight drops to $1/e \\approx 37\\%$ after ${tau}h, half-life $\\approx ${Math.round(tau * Math.LN2)}$h)</p>
     `;
+    // Render math when panel is opened (KaTeX needs visible elements for correct layout)
+    let mathRendered = false;
+    panel.addEventListener('toggle', () => {
+        if (panel.open && !mathRendered) {
+            renderMath(body);
+            mathRendered = true;
+        }
+    });
 })();
 
 // ── Init ──
@@ -939,8 +948,6 @@ function renderAllMath() {
     renderMath(); // question card
     document.querySelectorAll('.queue-item').forEach(el => renderMath(el));
     document.querySelectorAll('.search-item').forEach(el => renderMath(el));
-    const infoBody = document.getElementById('familiarity-info-body');
-    if (infoBody) renderMath(infoBody);
 }
 document.addEventListener('DOMContentLoaded', renderAllMath);
 if (typeof renderMathInElement === 'undefined') {
