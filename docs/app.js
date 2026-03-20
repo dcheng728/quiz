@@ -1,5 +1,7 @@
 // ── Filter Configuration ──
 
+const DIFF_LEVEL = { basic: 1, intermediate: 2, advanced: 3 };
+
 const SORT_OPTIONS = [
     { value: 'least-familiar', label: 'Most unfamiliar' },
     { value: 'random', label: 'Random' },
@@ -469,17 +471,14 @@ function displayQuestion() {
     categoryBadge.textContent = q.subject;
 
     // Difficulty indicator (bars)
-    const DIFFICULTY_LEVELS = ['basic', 'intermediate', 'advanced'];
-    const diff = q.labels.find(l => DIFFICULTY_LEVELS.includes(l));
-    const diffLevel = diff ? DIFFICULTY_LEVELS.indexOf(diff) + 1 : 0;
-    const diffTitle = diff || 'unrated';
+    const diffLevel = DIFF_LEVEL[q.difficulty] || 0;
     difficultyIndicator.innerHTML = '';
     for (let i = 0; i < 3; i++) {
         const bar = document.createElement('span');
         bar.className = 'diff-bar' + (i < diffLevel ? ' active' : '');
         difficultyIndicator.appendChild(bar);
     }
-    difficultyIndicator.title = diffTitle;
+    difficultyIndicator.title = q.difficulty || 'unrated';
 
     // Familiarity badge
     const famMap = buildFamiliarityMap();
@@ -489,10 +488,9 @@ function displayQuestion() {
     familiarityBadge.textContent = famLabel.text;
     familiarityBadge.className = 'familiarity-indicator ' + famLabel.cls;
 
-    // Question labels (exclude difficulty since it's shown as bars)
+    // Question labels
     questionLabelsEl.innerHTML = '';
     for (const label of q.labels) {
-        if (DIFFICULTY_LEVELS.includes(label)) continue;
         const pill = document.createElement('span');
         pill.className = 'label-pill small';
         pill.textContent = label;
@@ -612,7 +610,6 @@ function renderQueueList() {
 
     if (queue.length === 0) return;
 
-    const DIFFICULTY_LEVELS = ['basic', 'intermediate', 'advanced'];
     const famMap = buildFamiliarityMap();
 
     // Show a window of items around current index
@@ -626,8 +623,7 @@ function renderQueueList() {
         item.className = 'queue-item' + (i === currentIndex ? ' current' : '');
 
         // Difficulty
-        const diff = q.labels.find(l => DIFFICULTY_LEVELS.includes(l));
-        const diffLevel = diff ? DIFFICULTY_LEVELS.indexOf(diff) + 1 : 0;
+        const diffLevel = DIFF_LEVEL[q.difficulty] || 0;
 
         // Familiarity
         const famRecord = famMap[q.name];

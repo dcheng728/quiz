@@ -29,7 +29,8 @@ docs/
   index.html      -- main page (minimal structure, controls populated by JS)
   style.css       -- light theme styles
   app.js          -- quiz logic, filters, search, queue nav, localStorage, gist sync
-  questions.js    -- all 189 questions bundled as JS
+  config.js       -- tunable parameters (grade scores, familiarity decay)
+  questions.js    -- all 190 questions bundled as JS
 ```
 
 ## Question Schema
@@ -43,7 +44,8 @@ Each question in `questions.js` has:
 | `answer`      | string   | Answer text with LaTeX                         |
 | `explanation` | string   | Explanation connecting to physics              |
 | `subject`     | string   | Exactly one subject (e.g., `math-calculus`)    |
-| `labels`      | string[] | Freeform tags (e.g., `["derivatives", "basic"]`) |
+| `difficulty`  | string   | One of `"basic"`, `"intermediate"`, `"advanced"` |
+| `labels`      | string[] | Freeform tags (e.g., `["derivatives"]`)        |
 
 ### Subjects (15)
 
