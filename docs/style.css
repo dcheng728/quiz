@@ -361,9 +361,7 @@ body {
 
 .diff-bar { height: 12px; }
 
-.diff-bar.active:nth-child(1) { background: #4a8a6a; }
-.diff-bar.active:nth-child(2) { background: #d4a84a; }
-.diff-bar.active:nth-child(3) { background: #c46a5a; }
+.diff-bar.active { background: #8a7a6a; }
 
 .btn-nav {
     background: #e8e2db;
