@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics & Math Daily Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="top-bar">
+            <h1>Physics & Math Daily Quiz</h1>
+            <div class="top-controls">
+                <div class="dropdown" id="subject-dropdown">
+                    <button class="btn btn-filter" id="subject-dropdown-btn">Subjects (all)</button>
+                    <div class="dropdown-panel hidden" id="subject-dropdown-panel">
+                        <div class="dropdown-actions">
+                            <a href="#" id="select-all-subjects">Select all</a>
+                            <a href="#" id="deselect-all-subjects">Deselect all</a>
+                        </div>
+                        <div id="subject-checkboxes"></div>
+                    </div>
+                </div>
+
+                <div class="search-container" id="search-container">
+                    <input type="text" id="search-input" placeholder="Search flashcards or labels..." autocomplete="off">
+                    <div class="search-results hidden" id="search-results"></div>
+                </div>
+
+                <select id="sort-order" title="Question order"></select>
+                <button id="shuffle-btn" class="btn btn-shuffle" title="Reshuffle questions">Shuffle</button>
+                <button id="ai-generate-btn" class="btn btn-ai" title="Build a personalized study queue with AI">AI Queue</button>
+            </div>
+        </div>
+
+        <div class="label-filter-bar" id="label-filter-bar">
+            <span class="label-filter-label">Labels:</span>
+            <span class="label-filter-hint" id="label-filter-hint">none (showing all)</span>
+            <div id="active-labels"></div>
+        </div>
+
+        <div class="counter-bar">
+            <div class="counter-left">
+                <button class="btn btn-nav" id="prev-btn" title="Previous question">&lsaquo;</button>
+                <span id="counter">Question 1</span>
+                <button class="btn btn-nav" id="next-btn" title="Next question">&rsaquo;</button>
+                <span id="session-score" class="score"></span>
+            </div>
+            <div class="counter-right">
+                <span id="category-badge" class="badge badge-subject"></span>
+                <span id="difficulty-indicator" class="difficulty-indicator"></span>
+            </div>
+        </div>
+
+        <div class="card" id="question-card">
+            <div class="familiarity-indicator" id="familiarity-badge"></div>
+            <div class="question-labels" id="question-labels"></div>
+            <div class="question" id="question-text"></div>
+            <div class="answer hidden" id="answer-section">
+                <hr>
+                <div id="answer-text"></div>
+                <div id="explanation-text" class="explanation"></div>
+            </div>
+        </div>
+
+        <div id="show-answer-container">
+            <button id="show-answer-btn" class="btn btn-secondary">Show Answer</button>
+        </div>
+
+        <div id="grade-container" class="hidden">
+            <p>How did you do?</p>
+            <div class="grade-buttons">
+                <button class="btn btn-wrong" data-grade="wrong">Missed it <kbd>1</kbd></button>
+                <button class="btn btn-unsure" data-grade="unsure">Not sure <kbd>2</kbd></button>
+                <button class="btn btn-right" data-grade="right">Got it <kbd>3</kbd></button>
+            </div>
+        </div>
+
+        <div class="queue-panel" id="queue-panel">
+            <h3 class="queue-title">Queue</h3>
+            <div class="queue-list" id="queue-list"></div>
+        </div>
+
+        <div class="stats-bar" id="stats-bar"></div>
+
+        <div class="sync-bar" id="sync-bar">
+            <div id="sync-logged-out">
+                <button id="gist-login-btn" class="btn btn-sync" title="Connect GitHub Gist for cross-device sync">Sync with Gist</button>
+            </div>
+            <div id="sync-logged-in" class="hidden">
+                <span id="sync-status" class="sync-status"></span>
+                <button id="gist-push-btn" class="btn btn-sync" title="Upload local history to Gist">Push to Gist</button>
+                <button id="gist-pull-btn" class="btn btn-sync" title="Download history from Gist">Pull from Gist</button>
+                <button id="gist-logout-btn" class="btn btn-sync btn-sync-danger" title="Disconnect Gist">Disconnect</button>
+            </div>
+        </div>
+
+        <details class="info-panel" id="conventions-info">
+            <summary>Conventions</summary>
+            <div class="info-panel-body" id="conventions-info-body"></div>
+        </details>
+
+        <details class="info-panel" id="familiarity-info">
+            <summary>Familiarity scoring</summary>
+            <div class="info-panel-body" id="familiarity-info-body"></div>
+        </details>
+    </div>
+
+    <div class="footer-art" id="footer-art" aria-hidden="true"></div>
+    <script>
+      fetch('https://raw.githubusercontent.com/dcheng728/dcheng728.github.io/main/_includes/footer-art.html')
+        .then(r => r.text())
+        .then(html => { document.getElementById('footer-art').innerHTML = html; })
+        .catch(() => {});
+    </script>
+
+    <script src="questions.js"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

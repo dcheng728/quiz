@@ -1,192 +1,2117 @@
 const ALL_QUESTIONS = [
-  {"name":"derivative of $\\sin(x)$","question":"What is the derivative of $\\sin(x)$?","answer":"$\\cos(x)$","explanation":"Follows directly from the limit definition or from the Taylor series of $\\sin(x)$.","subject":"math-calculus","difficulty":"basic","labels":["derivatives"]},
-  {"name":"derivative of $e^{ax}$","question":"What is the derivative of $e^{ax}$?","answer":"$a e^{ax}$","explanation":"The exponential function is its own derivative, scaled by the chain rule factor $a$.","subject":"math-calculus","difficulty":"basic","labels":["derivatives"]},
-  {"name":"derivative of $\\ln(x)$","question":"What is the derivative of $\\ln(x)$?","answer":"$\\frac{1}{x}$","explanation":"Follows from the inverse function theorem applied to $e^x$.","subject":"math-calculus","difficulty":"basic","labels":["derivatives"]},
-  {"name":"Gaussian integral","question":"What is the Gaussian integral: $\\int_{-\\infty}^{+\\infty} e^{-x^2} \\, dx$?","answer":"$\\sqrt{\\pi}$","explanation":"Classic trick: square the integral, convert to polar coordinates, and evaluate the resulting $r$ integral.","subject":"math-calculus","difficulty":"basic","labels":["integrals"]},
-  {"name":"$\\int \\frac{1}{x}\\, dx$","question":"What is $\\int \\frac{1}{x} \\, dx$?","answer":"$\\ln|x| + C$","explanation":"This is the antiderivative definition of the natural logarithm.","subject":"math-calculus","difficulty":"basic","labels":["integrals"]},
-  {"name":"Gamma function integral","question":"What is $\\int_0^\\infty x^{n-1} e^{-x} \\, dx$?","answer":"$\\Gamma(n) = (n-1)!$ for positive integers $n$","explanation":"This defines the Gamma function, which generalizes the factorial to non-integer arguments.","subject":"math-calculus","difficulty":"intermediate","labels":["integrals"]},
-  {"name":"divergence theorem","question":"State the divergence theorem (Gauss\u0027s theorem).","answer":"The volume integral of $\\nabla \\cdot \\vec{F}$ equals the surface integral of $\\vec{F} \\cdot d\\vec{A}$ over the closed boundary surface: $\\int_V (\\nabla \\cdot \\vec{F}) \\, dV = \\oint_S \\vec{F} \\cdot d\\vec{A}$","explanation":"Converts a volume integral of a divergence into a flux integral over the enclosing surface. Fundamental in electrostatics (Gauss\u0027s law).","subject":"math-calculus","difficulty":"basic","labels":["vector-calculus"]},
-  {"name":"Stokes\u0027 theorem","question":"State Stokes\u0027 theorem.","answer":"The surface integral of $\\nabla \\times \\vec{F}$ equals the line integral of $\\vec{F}$ around the boundary curve: $\\int_S (\\nabla \\times \\vec{F}) \\cdot d\\vec{A} = \\oint_C \\vec{F} \\cdot d\\vec{l}$","explanation":"Relates the curl of a vector field over a surface to its circulation around the boundary. Underlies Faraday\u0027s law and Ampere\u0027s law.","subject":"math-calculus","difficulty":"basic","labels":["vector-calculus"]},
-  {"name":"$\\nabla \\cdot (\\nabla \\times \\vec{F})$","question":"What is $\\nabla \\cdot (\\nabla \\times \\vec{F})$ for any smooth vector field $\\vec{F}$?","answer":"Zero","explanation":"$\\nabla \\cdot (\\nabla \\times \\vec{F}) = 0$ identically. This is why magnetic monopoles are absent in Maxwell\u0027s equations: $\\nabla \\cdot \\vec{B} = 0$ follows from $\\vec{B} = \\nabla \\times \\vec{A}$.","subject":"math-calculus","difficulty":"basic","labels":["vector-calculus"]},
-  {"name":"$\\nabla \\times (\\nabla f)$","question":"What is $\\nabla \\times (\\nabla f)$ for any smooth scalar field $f$?","answer":"Zero","explanation":"$\\nabla \\times (\\nabla f) = 0$ identically. This is why conservative forces have zero curl: if $\\vec{F} = -\\nabla V$, then $\\nabla \\times \\vec{F} = 0$.","subject":"math-calculus","difficulty":"basic","labels":["vector-calculus"]},
-  {"name":"$e^x$ expansion","question":"Expand $e^x$ to third order for small $x$.","answer":"$1 + x + \\frac{x^2}{2} + \\frac{x^3}{6} + \\cdots$","explanation":"The general pattern is $\\sum \\frac{x^n}{n!}$. Used everywhere  --  thermal factors $e^{-\\beta E}$, time evolution $e^{-iHt/\\hbar}$, etc.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"$\\frac{1}{1-x}$ expansion","question":"Expand $\\frac{1}{1-x}$ to second order for small $x$.","answer":"$1 + x + x^2 + \\cdots$","explanation":"The geometric series. In physics, used constantly for perturbative expansions  --  e.g., expanding $\\frac{1}{1 - \\frac{v^2}{c^2}}$ or gravitational potentials with small corrections.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"radial Laplacian in spherical coordinates","question":"What is the Laplacian ($\\nabla^2$) in spherical coordinates acting on a function that depends only on $r$?","answer":"$\\frac{1}{r^2} \\frac{d}{dr}\\left(r^2 \\frac{df}{dr}\\right)$","explanation":"The angular parts vanish for spherically symmetric functions. Equivalently, $\\frac{1}{r} \\frac{d^2}{dr^2}(r f)$.","subject":"math-calculus","difficulty":"intermediate","labels":["multivariable"]},
-  {"name":"gradient in spherical coordinates","question":"What is the gradient in spherical coordinates $(r, \\theta, \\phi)$?","answer":"$\\nabla f = \\frac{\\partial f}{\\partial r} \\hat{r} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta} \\hat{\\theta} + \\frac{1}{r \\sin\\theta}\\frac{\\partial f}{\\partial \\phi} \\hat{\\phi}$","explanation":"The scale factors $1$, $r$, and $r \\sin\\theta$ come from the metric of spherical coordinates.","subject":"math-calculus","difficulty":"intermediate","labels":["multivariable"]},
-  {"name":"Leibniz integral rule","question":"State the Leibniz integral rule with variable limits, and use differentiation under the integral sign to evaluate $\\int_0^\\infty \\frac{\\sin x}{x}\\,dx$.","answer":"$\\frac{d}{dt} \\int_{a(t)}^{b(t)} f(x,t) \\, dx = \\int_{a(t)}^{b(t)} \\frac{\\partial f}{\\partial t} \\, dx + f(b,t) b\u0027(t) - f(a,t) a\u0027(t)$. For $\\int_0^\\infty \\frac{\\sin x}{x}\\,dx$: introduce $I(t) = \\int_0^\\infty \\frac{\\sin x}{x} e^{-tx}\\,dx$ for $t \\geq 0$. Differentiating under the integral: $I\u0027(t) = -\\int_0^\\infty \\sin(x)\\,e^{-tx}\\,dx = -\\frac{1}{1+t^2}$. Integrating: $I(t) = -\\arctan(t) + C$. Since $I(\\infty) = 0$, we get $C = \\pi/2$, so $I(0) = \\pi/2$.","explanation":"Feynman\u0027s favorite trick: introduce a parameter to make a hard integral tractable. The constant-limits case ($\\partial_t \\int_a^b f\\,dx = \\int_a^b \\partial_t f\\,dx$) is just swapping the derivative inside. The power of the technique is in choosing the right parametrization -- here, the $e^{-tx}$ regulator turns $\\sin(x)/x$ into a Laplace transform that can be done in closed form.","subject":"math-calculus","difficulty":"intermediate","labels":["integrals"]},
-  {"name":"finite geometric sum","question":"What is the finite geometric sum $\\sum_{i=0}^{n} c^i$ for $c \\neq 1$?","answer":"$\\frac{c^{n+1} - 1}{c - 1}$","explanation":"Used when truncating perturbation series after $n$ terms. For $c = 1$, the sum is simply $n + 1$.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"infinite geometric series","question":"What does the infinite geometric series $\\sum_{i=0}^{\\infty} c^i$ converge to, and when?","answer":"$\\frac{1}{1-c}$ for $|c| \u003c 1$. Also: $\\sum_{i=1}^{\\infty} c^i = \\frac{c}{1-c}$","explanation":"The convergence condition $|c| \u003c 1$ is crucial. This is the foundation of perturbative expansions throughout physics.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"values of $\\pi$ and $e$","question":"What are the numerical values of $\\pi$ and $e$ to five decimal places?","answer":"$\\pi \\approx 3.14159$, $e \\approx 2.71828$","explanation":"Essential for quick order-of-magnitude estimates. Useful mnemonics: $\\pi \\approx 22/7$ and $e \\approx 19/7$.","subject":"math-calculus","difficulty":"basic","labels":["constants"]},
-  {"name":"change-of-base formula","question":"State the change-of-base formula for logarithms.","answer":"$\\log_b x = \\frac{\\log_a x}{\\log_a b}$","explanation":"This lets you convert between any two logarithm bases. In physics, you often switch between $\\ln$ (natural) and $\\log_{10}$.","subject":"math-calculus","difficulty":"basic","labels":["logarithms"]},
-  {"name":"quadratic formula","question":"State the quadratic formula for the roots of $ax^2 + bx + c = 0$.","answer":"$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$","explanation":"The discriminant $b^2 - 4ac$ determines the nature of roots: positive gives two real roots, zero gives one degenerate root, negative gives complex conjugate pairs.","subject":"math-calculus","difficulty":"basic","labels":["algebra"]},
-  {"name":"$e$ as series","question":"Express Euler\u0027s number $e$ as an infinite series.","answer":"$e = \\sum_{n=0}^{\\infty} \\frac{1}{n!} = 1 + 1 + \\frac{1}{2} + \\frac{1}{6} + \\frac{1}{24} + \\frac{1}{120} + \\cdots$","explanation":"This follows from evaluating the Taylor series of $e^x$ at $x = 1$. Also: $e = \\lim_{n \\to \\infty} (1 + 1/n)^n$.","subject":"math-calculus","difficulty":"basic","labels":["constants"]},
-  {"name":"product rule","question":"State the product rule for differentiation.","answer":"$\\frac{d(uv)}{dx} = u\\frac{dv}{dx} + v\\frac{du}{dx}$","explanation":"In quantum mechanics, this appears when differentiating products of wavefunctions, e.g., computing $\\hat{p}(\\psi_1 \\psi_2)$.","subject":"math-calculus","difficulty":"basic","labels":["derivatives"]},
-  {"name":"quotient rule","question":"State the quotient rule for differentiation.","answer":"$\\frac{d(u/v)}{dx} = \\frac{v\\frac{du}{dx} - u\\frac{dv}{dx}}{v^2}$","explanation":"Less commonly needed than the product rule in physics, but useful when differentiating ratios like efficiency or transition rates.","subject":"math-calculus","difficulty":"basic","labels":["derivatives"]},
-  {"name":"$\\frac{d}{dx}(\\arctan u)$","question":"What is $\\frac{d}{dx}(\\arctan u)$?","answer":"$\\frac{1}{1+u^2}\\frac{du}{dx}$","explanation":"Appears when integrating Lorentzian line shapes and in scattering phase shifts. The integral form $\\int \\frac{dx}{1+x^2} = \\arctan x$ is equally important.","subject":"math-calculus","difficulty":"basic","labels":["derivatives"]},
-  {"name":"$\\frac{d}{dx}(\\arcsin u)$","question":"What is $\\frac{d}{dx}(\\arcsin u)$?","answer":"$\\frac{1}{\\sqrt{1-u^2}}\\frac{du}{dx}$","explanation":"The domain restriction $|u| \u003c 1$ reflects the range of $\\sin$. Related: $\\frac{d}{dx}(\\arccos u) = \\frac{-1}{\\sqrt{1-u^2}}\\frac{du}{dx}$.","subject":"math-calculus","difficulty":"basic","labels":["derivatives"]},
-  {"name":"integration by parts","question":"State integration by parts.","answer":"$\\int u \\frac{dv}{dx} dx = uv - \\int v \\frac{du}{dx} dx$","explanation":"The integral analog of the product rule. Essential for evaluating matrix elements in quantum mechanics, e.g., showing that $\\hat{p}$ is Hermitian.","subject":"math-calculus","difficulty":"basic","labels":["integrals"]},
-  {"name":"$\\int \\frac{dx}{1+x^2}$","question":"What is $\\int \\frac{dx}{1+x^2}$?","answer":"$\\arctan x + C$","explanation":"The Fourier transform of a Lorentzian peak. Also appears in scattering cross-section integrals.","subject":"math-calculus","difficulty":"basic","labels":["integrals"]},
-  {"name":"$\\int \\sec x\\, dx$","question":"What is $\\int \\sec x \\, dx$?","answer":"$\\ln|\\sec x + \\tan x| + C$","explanation":"Multiply top and bottom by $(\\sec x + \\tan x)$; the numerator is $d(\\sec x + \\tan x)$, giving $\\int du/u$.","subject":"math-calculus","difficulty":"intermediate","labels":["integrals"]},
-  {"name":"$\\ln(1+x)$ expansion","question":"Expand $\\ln(1+x)$ for small $x$.","answer":"$x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\frac{x^4}{4} + \\cdots = \\sum_{i=1}^{\\infty}(-1)^{i+1}\\frac{x^i}{i}$","explanation":"Converges for $-1 \u003c x \\leq 1$. In thermodynamics, $\\ln(1+x) \\approx x$ for small $x$ is used constantly  --  e.g., in Stirling\u0027s approximation and entropy of mixing.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"$\\sin x$ expansion","question":"Expand $\\sin x$ for small $x$.","answer":"$x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\cdots = \\sum_{i=0}^{\\infty}(-1)^i \\frac{x^{2i+1}}{(2i+1)!}$","explanation":"Only odd powers appear (since $\\sin$ is an odd function). The small-angle approximation $\\sin x \\approx x$ is the leading term.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"$\\cos x$ expansion","question":"Expand $\\cos x$ for small $x$.","answer":"$1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots = \\sum_{i=0}^{\\infty}(-1)^i \\frac{x^{2i}}{(2i)!}$","explanation":"Only even powers appear (since $\\cos$ is an even function). For small oscillations, $\\cos \\theta \\approx 1 - \\theta^2/2$ gives the harmonic potential.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"binomial series $(1+x)^n$","question":"State the binomial series expansion of $(1+x)^n$ for arbitrary $n$.","answer":"$(1+x)^n = \\sum_{i=0}^{\\infty} \\binom{n}{i} x^i = 1 + nx + \\frac{n(n-1)}{2}x^2 + \\cdots$","explanation":"For integer $n \\geq 0$ the series terminates. For non-integer or negative $n$ it is infinite but converges for $|x|\u003c1$. Physicists use this for $(1+\\epsilon)^n \\approx 1 + n\\epsilon$ constantly  --  e.g., relativistic $\\gamma \\approx 1 + v^2/2c^2$.","subject":"math-calculus","difficulty":"basic","labels":["series"]},
-  {"name":"Euler\u0027s formula","question":"State Euler\u0027s formula relating the complex exponential to trigonometric functions.","answer":"$e^{ix} = \\cos x + i\\sin x$, and the special case $e^{i\\pi} = -1$","explanation":"The most important identity in physics. Plane waves $e^{i(kx - \\omega t)}$, phasors, Fourier transforms, and quantum wavefunctions all follow from this.","subject":"math-calculus","difficulty":"basic","labels":["complex-exponentials"]},
-  {"name":"$\\sinh x$ and $\\cosh x$","question":"Define $\\sinh x$ and $\\cosh x$ in terms of exponentials.","answer":"$\\sinh x = \\frac{e^x - e^{-x}}{2}$, $\\cosh x = \\frac{e^x + e^{-x}}{2}$","explanation":"The catenary curve is $y = a\\cosh(x/a)$. In special relativity, Lorentz boosts are hyperbolic rotations: $ct\u0027 = ct\\cosh\\phi - x\\sinh\\phi$ where $\\phi$ is the rapidity.","subject":"math-calculus","difficulty":"basic","labels":["hyperbolic-functions"]},
-  {"name":"$\\cosh^2 x - \\sinh^2 x$","question":"What is $\\cosh^2 x - \\sinh^2 x$?","answer":"$1$","explanation":"The hyperbolic analog of $\\sin^2 + \\cos^2 = 1$. This identity reflects the invariance of the spacetime interval under Lorentz boosts, since $\\cosh^2\\phi - \\sinh^2\\phi = 1$.","subject":"math-calculus","difficulty":"basic","labels":["hyperbolic-functions"]},
-  {"name":"$\\tanh x$ and hyperbolic identities","question":"Define $\\tanh x$ and list two other key hyperbolic identities.","answer":"$\\tanh x = \\frac{e^x - e^{-x}}{e^x + e^{-x}} = \\frac{\\sinh x}{\\cosh x}$. Also: $\\cosh x + \\sinh x = e^x$ and $\\sinh(x+y) = \\sinh x \\cosh y + \\cosh x \\sinh y$.","explanation":"In relativity, the velocity addition formula $\\beta = \\tanh\\phi$ maps the rapidity $\\phi$ to velocity. The addition formula for $\\sinh$ gives the rapidity addition rule.","subject":"math-calculus","difficulty":"basic","labels":["hyperbolic-functions"]},
-  {"name":"$\\sum_{i=1}^{n} i$","question":"What is $\\sum_{i=1}^{n} i$?","answer":"$\\frac{n(n+1)}{2}$","explanation":"Gauss\u0027s trick: pair the first and last terms. Appears when counting pairwise interactions among $n$ particles or summing energy levels of a linear spectrum.","subject":"math-discrete","difficulty":"basic","labels":["summation-formulas"]},
-  {"name":"$\\sum_{i=1}^{n} i^2$","question":"What is $\\sum_{i=1}^{n} i^2$?","answer":"$\\frac{n(n+1)(2n+1)}{6}$","explanation":"Appears in moment-of-inertia calculations for discrete mass distributions and in evaluating second moments of angular momentum quantum numbers.","subject":"math-discrete","difficulty":"basic","labels":["summation-formulas"]},
-  {"name":"binomial coefficient $\\binom{n}{k}$","question":"What is the binomial coefficient $\\binom{n}{k}$?","answer":"$\\binom{n}{k} = \\frac{n!}{(n-k)!\\,k!}$","explanation":"Counts the number of ways to choose $k$ items from $n$. In quantum mechanics, it counts the degeneracy of states when distributing $k$ excitations among $n$ modes.","subject":"math-discrete","difficulty":"basic","labels":["combinatorics"]},
-  {"name":"$\\sum_{k=0}^{n} \\binom{n}{k}$","question":"What is $\\sum_{k=0}^{n} \\binom{n}{k}$?","answer":"$2^n$","explanation":"This is the total number of subsets of an $n$-element set, since each element is either included or not. Follows from the binomial theorem with $x = y = 1$.","subject":"math-discrete","difficulty":"basic","labels":["combinatorics"]},
-  {"name":"binomial coefficient symmetry","question":"State the symmetry property of binomial coefficients.","answer":"$\\binom{n}{k} = \\binom{n}{n-k}$","explanation":"Choosing $k$ items to include is the same as choosing $n-k$ items to exclude. This symmetry is visible in Pascal\u0027s triangle.","subject":"math-discrete","difficulty":"basic","labels":["combinatorics"]},
-  {"name":"expectation value $E[X]$","question":"What is the expectation value $E[X]$ for a discrete and for a continuous random variable?","answer":"Discrete: $E[g(X)] = \\sum_x g(x) \\Pr[X = x]$. Continuous: $E[g(X)] = \\int_{-\\infty}^{\\infty} g(x) p(x) \\, dx$","explanation":"In quantum mechanics, the expectation value of an observable $\\hat{A}$ is $\\langle \\hat{A} \\rangle = \\langle \\psi|\\hat{A}|\\psi \\rangle$, which is the continuous analog weighted by $|\\psi|^2$.","subject":"math-probability","difficulty":"basic","labels":["expectation"]},
-  {"name":"formula for variance and STD","question":"Express the variance $\\text{Var}[X]$ in terms of expectations. What is the standard deviation?","answer":"$\\text{Var}[X] = E[X^2] - (E[X])^2$. The standard deviation is $\\sigma = \\sqrt{\\text{Var}[X]}$.","explanation":"This \u0027computational formula\u0027 is often easier to use than the definition $E[(X - \\mu)^2]$. In physics, $\\sigma$ quantifies fluctuations  --  e.g., energy fluctuations in the canonical ensemble: $\\langle (\\Delta E)^2 \\rangle = k_B T^2 C_V$.","subject":"math-probability","difficulty":"basic","labels":["variance"]},
-  {"name":"Bayes\u0027 theorem","question":"State Bayes\u0027 theorem.","answer":"$\\Pr[A_i | B] = \\frac{\\Pr[B | A_i] \\Pr[A_i]}{\\sum_{j=1}^{n} \\Pr[A_j] \\Pr[B | A_j]}$","explanation":"Bayes\u0027 theorem updates prior probabilities given new evidence. Used in data analysis, parameter estimation, and interpreting detector signals with known false-positive rates.","subject":"math-probability","difficulty":"basic","labels":["bayes-theorem"]},
-  {"name":"linearity of expectation","question":"State the linearity of expectation. When does $E[XY] = E[X] \\cdot E[Y]$?","answer":"$E[X + Y] = E[X] + E[Y]$ (always), $E[cX] = cE[X]$ (always). But $E[XY] = E[X] \\cdot E[Y]$ only when $X$ and $Y$ are independent.","explanation":"Linearity holds even for correlated variables  --  a surprisingly powerful result. The product rule requires independence.","subject":"math-probability","difficulty":"basic","labels":["expectation"]},
-  {"name":"Markov and Chebyshev inequalities","question":"State the Markov and Chebyshev inequalities.","answer":"Markov: $\\Pr[|X| \\geq \\lambda E[X]] \\leq \\frac{1}{\\lambda}$. Chebyshev: $\\Pr[|X - E[X]| \\geq \\lambda \\sigma] \\leq \\frac{1}{\\lambda^2}$.","explanation":"These bound the probability of large deviations from the mean without knowing the full distribution. Chebyshev guarantees at least $1 - 1/k^2$ of the probability lies within $k$ standard deviations.","subject":"math-probability","difficulty":"intermediate","labels":["inequalities"]},
-  {"name":"inclusion-exclusion for two events","question":"State the inclusion-exclusion formula for $\\Pr[A \\cup B]$. When does it simplify?","answer":"$\\Pr[A \\cup B] = \\Pr[A] + \\Pr[B] - \\Pr[A \\cap B]$. If $A$ and $B$ are mutually exclusive ($A \\cap B = \\emptyset$), this simplifies to $\\Pr[A] + \\Pr[B]$. Separately, if $A$ and $B$ are independent, $\\Pr[A \\cap B] = \\Pr[A]\\Pr[B]$.","explanation":"Mutually exclusive (no overlap) and independent (knowing one doesn't affect the other) are different conditions. For $n$ events, inclusion-exclusion generalizes: $\\Pr[\\bigcup_i A_i] = \\sum_i \\Pr[A_i] - \\sum_{i<j} \\Pr[A_i \\cap A_j] + \\cdots$","subject":"math-probability","difficulty":"basic","labels":["probability-rules"]},
-  {"name":"conditional probability","question":"State the conditional probability formula.","answer":"$\\Pr[A|B] = \\frac{\\Pr[A \\cap B]}{\\Pr[B]}$","explanation":"This defines the probability of $A$ given that $B$ has occurred. It is the starting point for deriving Bayes\u0027 theorem.","subject":"math-probability","difficulty":"basic","labels":["probability-rules"]},
-  {"name":"binomial distribution","question":"What is the binomial distribution? Give its PMF and expected value.","answer":"$\\Pr[X = k] = \\binom{n}{k} p^k (1-p)^{n-k}$ with $E[X] = np$.","explanation":"Describes $k$ successes in $n$ independent trials, each with probability $p$. In quantum mechanics: the probability of getting $k$ spin-up outcomes in $n$ Stern-Gerlach measurements on identically prepared spin-$\\frac{1}{2}$ particles.","subject":"math-probability","difficulty":"basic","labels":["distributions"]},
-  {"name":"Poisson distribution","question":"What is the Poisson distribution? Give its PMF and expected value.","answer":"$\\Pr[X = k] = \\frac{e^{-\\lambda} \\lambda^k}{k!}$ with $E[X] = \\lambda$.","explanation":"Describes the number of events in a fixed interval when events occur independently at a constant average rate $\\lambda$  --  radioactive decays, photon counts, cosmic ray arrivals.","subject":"math-probability","difficulty":"basic","labels":["distributions"]},
-  {"name":"Gaussian distribution","question":"Write the probability density function for the normal (Gaussian) distribution.","answer":"$p(x) = \\frac{1}{\\sqrt{2\\pi}\\sigma} e^{-(x-\\mu)^2 / 2\\sigma^2}$ with $E[X] = \\mu$.","explanation":"The central limit theorem explains why the Gaussian appears everywhere: the sum of many independent random variables tends toward a normal distribution regardless of their individual distributions.","subject":"math-probability","difficulty":"basic","labels":["distributions"]},
-  {"name":"geometric distribution","question":"What is the geometric distribution? Give its PMF and expected value.","answer":"$\\Pr[X = k] = p(1-p)^{k-1}$ with $E[X] = \\frac{1}{p}$.","explanation":"Models the number of trials until the first success. The \u0027memoryless\u0027 property of radioactive decay is connected: the waiting time for the first decay is geometrically (or exponentially) distributed.","subject":"math-probability","difficulty":"basic","labels":["distributions"]},
-  {"name":"coupon collector problem","question":"In the coupon collector problem, what is the expected number of draws to collect all $n$ types?","answer":"$nH_n = n\\sum_{i=1}^{n}\\frac{1}{i} \\approx n \\ln n$","explanation":"$H_n$ is the $n$-th harmonic number. This result is useful for estimating how many samples are needed to explore all states of a discrete system.","subject":"math-probability","difficulty":"intermediate","labels":["coupon-collector"]},
-  {"name":"trig definitions for right triangle","question":"Define $\\sin$, $\\cos$, and $\\tan$ for a right triangle with sides $A$ (opposite), $B$ (adjacent), and $C$ (hypotenuse).","answer":"$\\sin a = A/C$, $\\cos a = B/C$, $\\tan a = A/B = \\sin a / \\cos a$","explanation":"On the unit circle, $(\\cos\\theta, \\sin\\theta)$ gives the coordinates of a point at angle $\\theta$. The Pythagorean theorem $A^2 + B^2 = C^2$ immediately gives $\\sin^2 + \\cos^2 = 1$.","subject":"math-trigonometry","difficulty":"basic","labels":["definitions"]},
-  {"name":"Pythagorean identities","question":"State the Pythagorean identity and the two related identities involving $\\sec$ and $\\csc$.","answer":"$\\sin^2 x + \\cos^2 x = 1$, $1 + \\tan^2 x = \\sec^2 x$, $1 + \\cot^2 x = \\csc^2 x$","explanation":"All three follow from dividing $\\sin^2 + \\cos^2 = 1$ by $1$, $\\cos^2$, or $\\sin^2$ respectively.","subject":"math-trigonometry","difficulty":"basic","labels":["identities"]},
-  {"name":"angle addition formulas","question":"State the angle addition formulas for $\\sin(x \\pm y)$ and $\\cos(x \\pm y)$.","answer":"$\\sin(x \\pm y) = \\sin x \\cos y \\pm \\cos x \\sin y$ and $\\cos(x \\pm y) = \\cos x \\cos y \\mp \\sin x \\sin y$","explanation":"These are essential for decomposing wave superpositions and deriving beat frequencies. They follow directly from Euler\u0027s formula: $e^{i(x+y)} = e^{ix}e^{iy}$.","subject":"math-trigonometry","difficulty":"basic","labels":["identities"]},
-  {"name":"double-angle formulas","question":"State the double-angle formulas for $\\sin 2x$ and $\\cos 2x$.","answer":"$\\sin 2x = 2\\sin x \\cos x$. $\\cos 2x = \\cos^2 x - \\sin^2 x = 2\\cos^2 x - 1 = 1 - 2\\sin^2 x$.","explanation":"The $\\cos 2x$ forms are especially useful: rearranging gives the half-angle substitutions $\\cos^2 x = (1 + \\cos 2x)/2$ and $\\sin^2 x = (1 - \\cos 2x)/2$, which appear in time-averaged intensities.","subject":"math-trigonometry","difficulty":"basic","labels":["identities"]},
-  {"name":"trig values at standard angles","question":"What are $\\sin$, $\\cos$, and $\\tan$ of the standard angles $0, \\pi/6, \\pi/4, \\pi/3, \\pi/2$?","answer":"$\\sin: 0, \\frac{1}{2}, \\frac{\\sqrt{2}}{2}, \\frac{\\sqrt{3}}{2}, 1$. $\\cos: 1, \\frac{\\sqrt{3}}{2}, \\frac{\\sqrt{2}}{2}, \\frac{1}{2}, 0$. $\\tan: 0, \\frac{\\sqrt{3}}{3}, 1, \\sqrt{3}, \\infty$.","explanation":"These values should be known by heart. They follow from the geometry of 30-60-90 and 45-45-90 triangles.","subject":"math-trigonometry","difficulty":"basic","labels":["special-values"]},
-  {"name":"Hermitian eigenvalues","question":"What are the eigenvalues of a Hermitian (self-adjoint) matrix guaranteed to be?","answer":"Real","explanation":"If $A = A^\\dagger$, then $\\langle v|A|v\\rangle = \\langle v|A^\\dagger|v\\rangle^* = \\langle v|A|v\\rangle^*$, so eigenvalues equal their complex conjugates.","subject":"math-linear-algebra","difficulty":"basic","labels":["hermitian-matrices"]},
-  {"name":"matrix trace","question":"What is the trace of a matrix?","answer":"The sum of its diagonal elements, equivalently the sum of its eigenvalues.","explanation":"$\\text{Tr}(A) = \\sum_i A_{ii}$. The trace is invariant under similarity transformations: $\\text{Tr}(P^{-1}AP) = \\text{Tr}(A)$.","subject":"math-linear-algebra","difficulty":"basic","labels":["traces"]},
-  {"name":"determinant as eigenvalue product","question":"What is the determinant of a matrix in terms of its eigenvalues?","answer":"The product of all its eigenvalues.","explanation":"$\\det(A) = \\prod_i \\lambda_i$. A matrix is singular (non-invertible) if and only if at least one eigenvalue is zero.","subject":"math-linear-algebra","difficulty":"basic","labels":["determinants"]},
-  {"name":"orthogonality of eigenstates","question":"Why are eigenstates of a quantum observable with different eigenvalues orthogonal?","answer":"Because the observable is Hermitian: if $\\hat{A}|a\\rangle = a|a\\rangle$ and $\\hat{A}|b\\rangle = b|b\\rangle$ with $a \\neq b$, then $(a - b)\\langle a|b\\rangle = 0$ forces $\\langle a|b\\rangle = 0$.","explanation":"This is why measurement outcomes are distinguishable  --  states with different eigenvalues have zero overlap.","subject":"math-linear-algebra","difficulty":"basic","labels":["hermitian-matrices"]},
-  {"name":"spectral theorem","question":"What is the spectral theorem for Hermitian matrices?","answer":"Any Hermitian matrix can be diagonalized by a unitary transformation: $A = U D U^\\dagger$, where $D$ is diagonal with real eigenvalues and $U$ is unitary.","explanation":"This is why observables in quantum mechanics (Hermitian operators) have real eigenvalues and orthogonal eigenstates forming a complete basis.","subject":"math-linear-algebra","difficulty":"intermediate","labels":["decompositions"]},
-  {"name":"unitary matrix","question":"What is a unitary matrix?","answer":"A matrix $U$ such that $U^\\dagger U = U U^\\dagger = I$ (its inverse is its conjugate transpose).","explanation":"Unitary matrices preserve inner products: $\\langle Uv|Uw\\rangle = \\langle v|w\\rangle$. In quantum mechanics, time evolution operators are unitary.","subject":"math-linear-algebra","difficulty":"basic","labels":["special-matrices"]},
-  {"name":"unitary eigenvalues","question":"What are the eigenvalues of a unitary matrix constrained to be?","answer":"They lie on the unit circle in the complex plane: $|\\lambda| = 1$, i.e., $\\lambda = e^{i\\theta}$.","explanation":"If $U|v\\rangle = \\lambda|v\\rangle$ and $U$ is unitary, then $|\\lambda|^2 \\langle v|v\\rangle = \\langle Uv|Uv\\rangle = \\langle v|v\\rangle$, so $|\\lambda| = 1$.","subject":"math-linear-algebra","difficulty":"intermediate","labels":["special-matrices"]},
-  {"name":"Cayley-Hamilton theorem","question":"What is the Cayley-Hamilton theorem?","answer":"Every square matrix satisfies its own characteristic equation: if $p(\\lambda) = \\det(A - \\lambda I)$, then $p(A) = 0$.","explanation":"For a 2x2 matrix with characteristic polynomial $\\lambda^2 - \\text{Tr}(A)\\lambda + \\det(A) = 0$, this gives $A^2 - \\text{Tr}(A) A + \\det(A) I = 0$.","subject":"math-linear-algebra","difficulty":"intermediate","labels":["theorems"]},
-  {"name":"why observables are Hermitian","question":"Why must quantum mechanical observables be represented by Hermitian operators?","answer":"Because Hermitian operators have real eigenvalues (measurement outcomes must be real numbers) and their eigenstates form a complete orthonormal basis (any state can be expanded in the eigenbasis).","explanation":"The spectral theorem guarantees both properties. Anti-Hermitian operators have purely imaginary eigenvalues and generate unitary transformations instead.","subject":"math-linear-algebra","difficulty":"intermediate","labels":["hermitian-matrices"]},
-  {"name":"commutator $[A,B]$ and simultaneous diagonalization","question":"What is the commutator $[A, B]$ of two matrices, and when can $A$ and $B$ be simultaneously diagonalized?","answer":"$[A, B] = AB - BA$. Two Hermitian matrices can be simultaneously diagonalized if and only if they commute: $[A, B] = 0$.","explanation":"If $[A,B]=0$, then $B$ maps each eigenspace of $A$ into itself (since $A(B|v\\rangle) = B(A|v\\rangle) = a(B|v\\rangle)$), so $B$ can be diagonalized within each eigenspace of $A$ without disturbing $A$. Conversely, if they are simultaneously diagonal, they commute because diagonal matrices commute. In quantum mechanics, commuting observables share a common eigenbasis and can be measured simultaneously without uncertainty.","subject":"math-linear-algebra","difficulty":"intermediate","labels":["commutators"]},
-  {"name":"$\\frac{dy}{dx} = ky$","question":"What is the general solution to $\\frac{dy}{dx} = ky$?","answer":"$y(x) = A e^{kx}$, where $A$ is determined by initial conditions.","explanation":"The exponential function is the eigenfunction of the derivative operator. Ubiquitous in radioactive decay ($k \u003c 0$) and population growth ($k \u003e 0$).","subject":"math-differential-equations","difficulty":"basic","labels":["odes"]},
-  {"name":"simple harmonic oscillator","question":"What is the general solution to the simple harmonic oscillator equation: $\\frac{d^2x}{dt^2} + \\omega^2 x = 0$?","answer":"$x(t) = A \\cos(\\omega t) + B \\sin(\\omega t)$, equivalently $x(t) = C e^{i\\omega t} + D e^{-i\\omega t}$.","explanation":"The most important ODE in physics. Appears in mass-spring systems, LC circuits, small oscillations about equilibrium, and quantum harmonic oscillator.","subject":"math-differential-equations","difficulty":"basic","labels":["odes"]},
-  {"name":"separation of variables","question":"What is separation of variables for PDEs?","answer":"Assume the solution factors as a product of functions of each variable, e.g., $u(x,t) = X(x)T(t)$, then substitute into the PDE to get separate ODEs for each factor.","explanation":"Each separated ODE involves only one variable, so both sides must equal a constant (the separation constant). Standard technique for wave, heat, and Laplace equations.","subject":"math-differential-equations","difficulty":"basic","labels":["pdes"]},
-  {"name":"Green\u0027s function","question":"What is the Green\u0027s function $G(x, x\u0027)$ conceptually?","answer":"The response of a linear differential operator $L$ to a point source: $L G(x, x\u0027) = \\delta(x - x\u0027)$. The solution to $Lu = f$ is then $u(x) = \\int G(x, x\u0027) f(x\u0027) \\, dx\u0027$.","explanation":"Green\u0027s functions are propagators in physics. In electrostatics, the Green\u0027s function for the Laplacian is $\\frac{1}{4\\pi |\\vec{x} - \\vec{x}\u0027|}$.","subject":"math-differential-equations","difficulty":"intermediate","labels":["greens-functions"]},
-  {"name":"heat equation","question":"What is the heat equation in one dimension?","answer":"$\\frac{\\partial u}{\\partial t} = \\alpha \\frac{\\partial^2 u}{\\partial x^2}$, where $\\alpha$ is the thermal diffusivity.","explanation":"Parabolic PDE. Solutions smooth out over time (irreversible). The fundamental solution is a spreading Gaussian.","subject":"math-differential-equations","difficulty":"basic","labels":["pdes"]},
-  {"name":"wave equation","question":"What is the wave equation in one dimension?","answer":"$\\frac{\\partial^2 u}{\\partial t^2} = c^2 \\frac{\\partial^2 u}{\\partial x^2}$, where $c$ is the wave speed.","explanation":"Hyperbolic PDE. General solution is $u = f(x - ct) + g(x + ct)$  --  two counter-propagating waves (d\u0027Alembert\u0027s solution).","subject":"math-differential-equations","difficulty":"basic","labels":["pdes"]},
-  {"name":"Sturm-Liouville problem","question":"What is a Sturm-Liouville problem?","answer":"An eigenvalue problem of the form: $\\frac{d}{dx}\\left[p(x) \\frac{dy}{dx}\\right] + q(x) y = -\\lambda w(x) y$, with boundary conditions on an interval $[a, b]$.","explanation":"A regular Sturm-Liouville problem (with $p, w > 0$ on $[a,b]$) has countably infinite real eigenvalues $\\lambda_1 < \\lambda_2 < \\cdots \\to \\infty$, each with a unique eigenfunction $y_n(x)$. These eigenfunctions form an orthonormal basis of $L^2([a,b], w)$: $\\int_a^b y_m(x) y_n(x) w(x)\\,dx = \\delta_{mn}$, and any square-integrable function can be expanded as $f(x) = \\sum c_n y_n(x)$. Many physics eigenvalue problems are Sturm-Liouville: Legendre ($p = 1-x^2$, $w = 1$), Bessel, Hermite, and Laguerre equations. The Schrodinger equation $-\\frac{\\hbar^2}{2m}\\psi\u0027\u0027 + V\\psi = E\\psi$ is also Sturm-Liouville, which is why energy eigenstates form a complete orthonormal set.","subject":"math-differential-equations","difficulty":"intermediate","labels":["sturm-liouville"]},
-  {"name":"Wronskian","question":"What is the Wronskian and what does it test?","answer":"For two functions $y_1$ and $y_2$: $W = y_1 y_2\u0027 - y_2 y_1\u0027$. If $W \\neq 0$, the functions are linearly independent.","explanation":"Used to verify you have a complete set of solutions to a second-order ODE. If $W = 0$ everywhere, the solutions are linearly dependent.","subject":"math-differential-equations","difficulty":"intermediate","labels":["odes"]},
-  {"name":"Frobenius method","question":"What is the Frobenius method?","answer":"A method to find series solutions of ODEs near regular singular points by assuming $y = \\sum a_n x^{n+s}$, where $s$ is determined by the indicial equation.","explanation":"Essential for solving Bessel\u0027s equation, Legendre\u0027s equation, and the hydrogen atom radial equation near the origin.","subject":"math-differential-equations","difficulty":"intermediate","labels":["odes"]},
-  {"name":"Laplace\u0027s equation","question":"What is Laplace\u0027s equation and what are its solutions called?","answer":"$\\nabla^2 u = 0$. Its solutions are called harmonic functions.","explanation":"Describes electrostatic potential in charge-free regions, steady-state heat flow, and gravitational potential in vacuum. Solutions satisfy the mean value property.","subject":"math-differential-equations","difficulty":"basic","labels":["pdes"]},
-  {"name":"Cauchy\u0027s integral theorem","question":"State Cauchy\u0027s integral theorem.","answer":"If $f(z)$ is analytic (holomorphic) inside and on a simple closed contour $C$, then $\\oint_C f(z) \\, dz = 0$.","explanation":"Analytic functions have zero \u0027circulation.\u0027 This is the complex-variable analog of a conservative field having zero line integral around a closed loop.","subject":"math-complex-analysis","difficulty":"basic","labels":["cauchy-theorem"]},
-  {"name":"residue theorem","question":"State the residue theorem.","answer":"The contour integral of $f(z)$ around a closed curve $C$ equals $2\\pi i$ times the sum of residues of $f$ at its poles enclosed by $C$: $\\oint_C f(z) \\, dz = 2\\pi i \\sum_k \\text{Res}(f, z_k)$.","explanation":"The primary tool for evaluating difficult real integrals by extending to the complex plane.","subject":"math-complex-analysis","difficulty":"basic","labels":["residues"]},
-  {"name":"$\\int \\frac{dx}{x^2+a^2}$ by contour","question":"Evaluate $\\int_{-\\infty}^{\\infty} \\frac{dx}{x^2 + a^2}$ for $a \u003e 0$ using contour integration.","answer":"$\\frac{\\pi}{a}$","explanation":"Close in the upper half-plane. Simple pole at $z = ia$ with residue $\\frac{1}{2ia}$. Result: $2\\pi i \\cdot \\frac{1}{2ia} = \\frac{\\pi}{a}$. This is the prototype contour integral every physicist should know.","subject":"math-complex-analysis","difficulty":"basic","labels":["contour-integrals"]},
-  {"name":"residue at a simple pole","question":"How do you compute the residue at a simple pole $z_0$ of $f(z) = \\frac{g(z)}{h(z)}$ where $h(z_0) = 0$ and $h\u0027(z_0) \\neq 0$?","answer":"$\\text{Res}(f, z_0) = \\frac{g(z_0)}{h\u0027(z_0)}$","explanation":"This follows from L\u0027Hopital-style reasoning: $\\frac{z - z_0}{h(z)} \\to \\frac{1}{h\u0027(z_0)}$ as $z \\to z_0$.","subject":"math-complex-analysis","difficulty":"intermediate","labels":["residues"]},
-  {"name":"branch cuts","question":"What is a branch cut, and why is it needed for functions like $\\log(z)$ or $z^{1/2}$?","answer":"A branch cut is a curve in the complex plane across which a multi-valued function is discontinuous, chosen so the function becomes single-valued on the cut plane.","explanation":"$\\log(z) = \\ln|z| + i\\arg(z)$ is multi-valued because $\\arg(z)$ changes by $2\\pi$ around the origin. The standard branch cut for $\\log(z)$ is the negative real axis.","subject":"math-complex-analysis","difficulty":"intermediate","labels":["branch-cuts"]},
-  {"name":"Cauchy-Riemann equations","question":"What are the Cauchy-Riemann equations?","answer":"For $f(z) = u(x,y) + iv(x,y)$ to be analytic: $\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}$ and $\\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$.","explanation":"These are the necessary and sufficient conditions (given continuity of partials) for complex differentiability. They imply both $u$ and $v$ are harmonic: $\\nabla^2 u = \\nabla^2 v = 0$.","subject":"math-complex-analysis","difficulty":"basic","labels":["analyticity"]},
-  {"name":"analytic continuation","question":"What is analytic continuation and why does a physicist care about it?","answer":"Given an analytic function $f(z)$ defined on a domain $D \\subset \\mathbb{C}$, an analytic continuation is an analytic function $g(z)$ on a larger domain $D\u0027 \\supset D$ such that $g|_D = f$. By the identity theorem, if two analytic functions agree on a set with an accumulation point, they agree everywhere on their common domain -- so the continuation is unique when it exists. Physics applications: (1) Zeta function regularization -- $\\zeta(s) = \\sum_{n=1}^\\infty n^{-s}$ converges only for $\\text{Re}(s) > 1$, but its analytic continuation to $s = -1$ gives $\\zeta(-1) = -\\frac{1}{12}$, used to regularize the Casimir energy $\\sum_{n=1}^\\infty n$ in string theory and QFT. (2) Wick rotation -- continuing $t \\to -i\\tau$ maps the Minkowski metric to Euclidean signature, turning oscillatory path integrals $e^{iS}$ into convergent ones $e^{-S_E}$. (3) Feynman propagator -- the $i\\epsilon$ prescription $1/(p^2 - m^2 + i\\epsilon)$ selects the correct causal boundary conditions by deforming the integration contour in the complex energy plane.","explanation":"The continuation of $\\zeta(s)$ is constructed via the functional equation $\\zeta(s) = 2^s \\pi^{s-1} \\sin(\\pi s/2)\\,\\Gamma(1-s)\\,\\zeta(1-s)$, which relates values at $s$ to values at $1-s$. The statement $\\sum n = -1/12$ is shorthand: the divergent series does not equal $-1/12$ in the ordinary sense, but the analytic continuation of the function it defines assigns that value at $s = -1$. In the Casimir effect, this regularization gives a finite, experimentally confirmed force between conducting plates. For Wick rotation, the key requirement is that the integrand has no singularities in the quadrant being rotated through -- the $i\\epsilon$ prescription ensures this. References: Boas, Mathematical Methods in the Physical Sciences, Chapter 14; Ablowitz & Fokas, Complex Variables, Chapter 4; Peskin & Schroeder, Section 9.3 (Wick rotation and Euclidean field theory).","subject":"math-complex-analysis","difficulty":"intermediate","labels":["analytic-continuation"]},
-  {"name":"$\\int \\frac{e^{iz}}{z^2+a^2}\\, dz$","question":"What is $\\int_{-\\infty}^{+\\infty} \\frac{e^{iz}}{z^2 + a^2} \\, dz$ for $a \u003e 0$?","answer":"$\\frac{\\pi}{a} e^{-a}$","explanation":"Close the contour in the upper half-plane (since $e^{iz}$ decays there). The pole at $z = ia$ is enclosed. $\\text{Res} = \\frac{e^{-a}}{2ia}$. Result: $2\\pi i \\cdot \\frac{e^{-a}}{2ia} = \\frac{\\pi e^{-a}}{a}$.","subject":"math-complex-analysis","difficulty":"intermediate","labels":["contour-integrals"]},
-  {"name":"Newton\u0027s second law","question":"State Newton\u0027s second law in its most general form (not assuming constant mass).","answer":"$\\vec{F} = \\frac{d\\vec{p}}{dt}$, where $\\vec{p}$ is the momentum of the body.","explanation":"The familiar $\\vec{F} = m\\vec{a}$ is a special case when mass is constant. The general form is the time derivative of momentum.","subject":"classical-mechanics","difficulty":"basic","labels":["newtons-laws"]},
-  {"name":"Euler-Lagrange equation","question":"What is the Euler-Lagrange equation for a system with generalized coordinate $q$ and Lagrangian $L(q, \\dot{q}, t)$?","answer":"$\\frac{d}{dt} \\frac{\\partial L}{\\partial \\dot{q}} - \\frac{\\partial L}{\\partial q} = 0$","explanation":"Derived from Hamilton\u0027s principle (stationary action). This is the foundational equation of Lagrangian mechanics.","subject":"classical-mechanics","difficulty":"basic","labels":["lagrangian-mechanics"]},
-  {"name":"Lagrangian to Hamiltonian","question":"What is the relationship between the Lagrangian $L$ and the Hamiltonian $H$?","answer":"$H = \\sum_i p_i \\dot{q}_i - L$, where $p_i = \\frac{\\partial L}{\\partial \\dot{q}_i}$ are the conjugate momenta.","explanation":"This is the Legendre transformation from $(q, \\dot{q})$ to $(q, p)$. For many systems $H$ equals the total energy $T + V$.","subject":"classical-mechanics","difficulty":"basic","labels":["hamiltonian-mechanics"]},
-  {"name":"Noether\u0027s theorem","question":"Derive Noether\u0027s theorem: given an action $S = \\int L(q, \\dot{q}, t)\\,dt$ invariant under a continuous symmetry, show that there is a conserved quantity $Q$.","answer":"Consider an infinitesimal transformation $q \\to q + \\epsilon\\,\\delta q$ that leaves the action invariant ($\\delta S = 0$). Then $\\delta L = \\frac{\\partial L}{\\partial q}\\delta q + \\frac{\\partial L}{\\partial \\dot{q}}\\delta\\dot{q}$. Using the Euler-Lagrange equation $\\frac{\\partial L}{\\partial q} = \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}}$, this becomes $\\delta L = \\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}}\\delta q\\right)$. If the symmetry leaves $L$ invariant (or changes it by a total derivative $\\delta L = \\frac{d}{dt}\\Lambda$), then $Q = \\frac{\\partial L}{\\partial \\dot{q}}\\delta q - \\Lambda$ satisfies $\\frac{dQ}{dt} = 0$.","explanation":"Classic examples: time translation ($\\delta q = \\dot{q}\\,\\delta t$) gives energy $H = p\\dot{q} - L$; spatial translation ($\\delta q_i = \\epsilon_i$) gives momentum $p_i = \\partial L/\\partial \\dot{q}_i$; rotation ($\\delta \\vec{r} = \\vec{\\epsilon} \\times \\vec{r}$) gives angular momentum $\\vec{L} = \\vec{r} \\times \\vec{p}$. In field theory the same logic yields conserved currents $j^\\mu$ with $\\partial_\\mu j^\\mu = 0$ rather than conserved charges, and the conserved charge is $Q = \\int j^0\\,d^3x$. For example, the $U(1)$ phase symmetry $\\psi \\to e^{i\\alpha}\\psi$ of the Dirac Lagrangian gives the electromagnetic current $j^\\mu = \\bar{\\psi}\\gamma^\\mu\\psi$. References: Goldstein, Classical Mechanics, Section 13.7; Landau & Lifshitz, Mechanics, Sections 6--9; Peskin & Schroeder, Section 2.2 (field theory version).","subject":"classical-mechanics","difficulty":"intermediate","labels":["noethers-theorem"]},
-  {"name":"angular momentum from $\\vec{r}$ and $\\vec{p}$","question":"What is the angular momentum $\\vec{L}$ of a particle with position $\\vec{r}$ and momentum $\\vec{p}$?","answer":"$\\vec{L} = \\vec{r} \\times \\vec{p}$. In components, $L_i = \\epsilon_{ijk} r_j p_k$. The magnitude is $|\\vec{L}| = |\\vec{r}||\\vec{p}|\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{p}$.","explanation":"$\\vec{L}$ is conserved when the net torque $\\vec{\\tau} = \\vec{r} \\times \\vec{F} = \\frac{d\\vec{L}}{dt}$ vanishes, i.e. for central forces. In quantum mechanics, the components become operators satisfying $[\\hat{L}_i, \\hat{L}_j] = i\\hbar\\epsilon_{ijk}\\hat{L}_k$, and only $\\hat{L}^2$ and one component (conventionally $\\hat{L}_z$) can be simultaneously diagonalized.","subject":"classical-mechanics","difficulty":"basic","labels":["angular-momentum"]},
-  {"name":"central force conserved quantities","question":"For a central force problem, what two quantities are conserved and why?","answer":"Energy (time-translation invariance) and angular momentum (rotational symmetry about the force center).","explanation":"Conservation of angular momentum confines the orbit to a plane. The effective 1D potential is $V_{\\text{eff}}(r) = V(r) + \\frac{L^2}{2mr^2}$.","subject":"classical-mechanics","difficulty":"basic","labels":["central-force"]},
-  {"name":"Poisson bracket","question":"What is the definition of the Poisson bracket $\\{f, g\\}$ for two phase-space functions $f$ and $g$?","answer":"$\\{f, g\\} = \\sum_i \\left(\\frac{\\partial f}{\\partial q_i} \\frac{\\partial g}{\\partial p_i} - \\frac{\\partial f}{\\partial p_i} \\frac{\\partial g}{\\partial q_i}\\right)$","explanation":"Poisson brackets encode the symplectic structure of phase space and are the classical analogue of quantum commutators (up to a factor of $i\\hbar$).","subject":"classical-mechanics","difficulty":"intermediate","labels":["poisson-brackets"]},
-  {"name":"Hamilton\u0027s equations","question":"What are Hamilton\u0027s equations of motion?","answer":"$\\dot{q}_i = \\frac{\\partial H}{\\partial p_i}$ and $\\dot{p}_i = -\\frac{\\partial H}{\\partial q_i}$","explanation":"These are $2N$ first-order ODEs equivalent to the $N$ second-order Euler-Lagrange equations.","subject":"classical-mechanics","difficulty":"basic","labels":["hamiltonian-mechanics"]},
-  {"name":"Hamilton-Jacobi equation","question":"What is the physical significance of the Hamilton-Jacobi equation, and what is its form?","answer":"$H\\!\\left(q_i, \\frac{\\partial S}{\\partial q_i}, t\\right) + \\frac{\\partial S}{\\partial t} = 0$, where $S$ is Hamilton\u0027s principal function. Solving it yields a complete solution to the equations of motion via a canonical transformation to constant coordinates and momenta.","explanation":"Start from Hamilton\u0027s equations with a canonical transformation $(q,p) \\to (Q,P)$ chosen so that the new Hamiltonian $K = 0$. Then $\\dot{Q} = \\dot{P} = 0$, meaning the new variables are constants -- the problem is solved. The generating function $S(q, P, t)$ of this transformation satisfies $p_i = \\partial S/\\partial q_i$, and the condition $K = H + \\partial S/\\partial t = 0$ gives the Hamilton-Jacobi equation. For a time-independent $H$, write $S = W(q) - Et$ (separation of time), where $W$ is Hamilton\u0027s characteristic function satisfying $H(q_i, \\partial W/\\partial q_i) = E$. For separable systems you can further write $W = \\sum_i W_i(q_i)$, reducing the PDE to uncoupled ODEs -- one per degree of freedom. Example: for a 1D free particle, $H = p^2/2m$, the HJ equation gives $\\frac{1}{2m}(\\partial S/\\partial x)^2 + \\partial S/\\partial t = 0$. Trying $S = \\alpha x - \\frac{\\alpha^2}{2m}t$ yields $p = \\alpha$ (constant momentum), $x = (\\alpha/m)t + \\beta$ (uniform motion). The deep connection: $S$ equals the classical action $\\int L\\,dt$ evaluated along the actual trajectory, and its gradient gives the momentum field. This is why the Hamilton-Jacobi equation is the classical limit of the Schrodinger equation -- write $\\psi = A e^{iS/\\hbar}$ and take $\\hbar \\to 0$. References: Goldstein, Classical Mechanics, Chapter 10; Landau & Lifshitz, Mechanics, Sections 47--48; Arnold, Mathematical Methods of Classical Mechanics, Chapter 9.","subject":"classical-mechanics","difficulty":"advanced","labels":["hamilton-jacobi"]},
-  {"name":"moment of inertia tensor","question":"What is the moment of inertia tensor, and when can you describe rotation with a single scalar moment of inertia?","answer":"The moment of inertia tensor $I_{ij} = \\sum_a m_a (r_a^2 \\delta_{ij} - r_{a,i} r_{a,j})$. A single scalar suffices when the body rotates about a principal axis.","explanation":"The inertia tensor generalizes the scalar $I$ to 3D: the angular momentum is $L_i = I_{ij}\\omega_j$, so $\\mathbf{L}$ need not be parallel to $\\boldsymbol{\\omega}$ unless you rotate about a principal axis. Diagonalizing $I_{ij}$ gives three principal moments $I_1, I_2, I_3$ along orthogonal body-fixed axes. A single scalar $I$ works when $\\boldsymbol{\\omega}$ is along one of these axes, because then $\\mathbf{L} = I\\boldsymbol{\\omega}$. For a symmetric top ($I_1 = I_2 \\neq I_3$), the free rotation decomposes into spin about the symmetry axis plus precession of that axis around $\\mathbf{L}$. The parallel and perpendicular axis theorems relate moments about different axes. Euler\u0027s equations $I_i \\dot{\\omega}_i + \\epsilon_{ijk}\\omega_j I_k \\omega_k = \\tau_i$ (no sum on $i$) govern rigid body dynamics in the body frame. References: Goldstein, Classical Mechanics, Chapter 5 (especially 5.3--5.6); Landau & Lifshitz, Mechanics, Sections 32--36; Taylor, Classical Mechanics, Chapter 10.","subject":"classical-mechanics","difficulty":"intermediate","labels":["rigid-body"]},
-  {"name":"normal modes","question":"What are normal modes of a coupled oscillator system?","answer":"Normal modes are independent patterns of oscillation in which all parts of the system move sinusoidally at the same frequency. They are the eigenvectors of the matrix $M^{-1}K$, where $M$ is the mass matrix and $K$ is the stiffness matrix.","explanation":"Any motion of the system can be expressed as a superposition of its normal modes.","subject":"classical-mechanics","difficulty":"intermediate","labels":["normal-modes"]},
-  {"name":"relativistic free particle Lagrangian","question":"Write the Lagrangian for a free particle in special relativity.","answer":"$L = -mc^2 \\sqrt{1 - \\frac{v^2}{c^2}}$","explanation":"The action is $-mc^2 \\int d\\tau$, where $\\tau$ is proper time. This Lagrangian reproduces relativistic momentum $p = \\gamma m v$.","subject":"classical-mechanics","difficulty":"intermediate","labels":["lagrangian-mechanics"]},
-  {"name":"Liouville\u0027s theorem","question":"State Liouville\u0027s theorem in classical mechanics.","answer":"The phase-space distribution function is constant along the trajectories of the system; equivalently, phase-space volume is preserved under Hamiltonian time evolution.","explanation":"Mathematically, $\\frac{d\\rho}{dt} = \\frac{\\partial \\rho}{\\partial t} + \\{\\rho, H\\} = 0$. This is foundational for statistical mechanics.","subject":"classical-mechanics","difficulty":"intermediate","labels":["hamiltonian-mechanics"]},
-  {"name":"values of $\\mu_0$ and $\\epsilon_0$","question":"What are the values of the vacuum permeability $\\mu_0$ and vacuum permittivity $\\epsilon_0$ in SI units?","answer":"$\\mu_0 = 4\\pi \\times 10^{-7}\\;\\text{N/A}^2 \\approx 1.257 \\times 10^{-6}\\;\\text{N/A}^2$ (equivalently $\\text{H/m}$). $\\epsilon_0 = \\frac{1}{\\mu_0 c^2} \\approx 8.854 \\times 10^{-12}\\;\\text{F/m}$ (equivalently $\\text{C}^2/\\text{N}\\cdot\\text{m}^2$).","explanation":"Since the 2019 SI redefinition, $\\mu_0$ is no longer exact but is determined experimentally through the fine-structure constant: $\\mu_0 = 2\\alpha h/(e^2 c)$. Previously $\\mu_0 = 4\\pi \\times 10^{-7}$ was exact by definition. The relation $c = 1/\\sqrt{\\mu_0 \\epsilon_0}$ always holds, so knowing one determines the other. In Gaussian units these constants do not appear -- Coulomb\u0027s law is simply $F = q_1 q_2/r^2$.","subject":"electromagnetism","difficulty":"basic","labels":["constants"]},
-  {"name":"Maxwell\u0027s equations","question":"Write down all four of Maxwell\u0027s equations in differential form (in vacuum with sources).","answer":"1) $\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}$ (Gauss\u0027s law), 2) $\\nabla \\cdot \\vec{B} = 0$ (no magnetic monopoles), 3) $\\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}$ (Faraday\u0027s law), 4) $\\nabla \\times \\vec{B} = \\mu_0 \\vec{J} + \\mu_0 \\epsilon_0 \\frac{\\partial \\vec{E}}{\\partial t}$ (Ampere-Maxwell law).","explanation":"These four equations, together with the Lorentz force law, form the complete classical theory of electromagnetism.","subject":"electromagnetism","difficulty":"basic","labels":["maxwells-equations"]},
-  {"name":"Poynting vector","question":"What is the Poynting vector and what does it represent?","answer":"$\\vec{S} = \\frac{1}{\\mu_0} \\vec{E} \\times \\vec{B}$. It represents the energy flux (power per unit area) carried by the electromagnetic field.","explanation":"The Poynting theorem states $\\frac{\\partial u}{\\partial t} + \\nabla \\cdot \\vec{S} = -\\vec{J} \\cdot \\vec{E}$, where $u$ is the EM energy density.","subject":"electromagnetism","difficulty":"basic","labels":["poynting-vector"]},
-  {"name":"EM boundary conditions","question":"State the boundary conditions for $\\vec{E}$ and $\\vec{B}$ at an interface between two linear media (no free surface charge or current).","answer":"The tangential component of $\\vec{E}$ and the normal component of $\\vec{B}$ are continuous. Additionally, the normal component of $\\vec{D}$ and the tangential component of $\\vec{H}$ are continuous.","explanation":"Each condition comes from one of Maxwell\u0027s equations applied to a thin surface at the interface. (1) $\\nabla \\cdot \\vec{D} = \\rho_f$: apply Gauss\u0027s law to a pillbox straddling the surface. The flux through the sides vanishes as the height shrinks, giving $D_{1\\perp} = D_{2\\perp}$ (no free surface charge). (2) $\\nabla \\cdot \\vec{B} = 0$: same pillbox argument gives $B_{1\\perp} = B_{2\\perp}$ (always true -- no magnetic monopoles). (3) $\\nabla \\times \\vec{E} = -\\partial\\vec{B}/\\partial t$: apply Faraday\u0027s law to a thin rectangular loop with long sides parallel to the surface. As the height shrinks the flux through the loop vanishes, giving $E_{1\\parallel} = E_{2\\parallel}$ (always true). (4) $\\nabla \\times \\vec{H} = \\vec{J}_f + \\partial\\vec{D}/\\partial t$: same loop argument gives $H_{1\\parallel} = H_{2\\parallel}$ (no free surface current). In linear media, $\\vec{D} = \\epsilon\\vec{E}$ and $\\vec{B} = \\mu\\vec{H}$, so continuity of $D_\\perp$ means $\\epsilon_1 E_{1\\perp} = \\epsilon_2 E_{2\\perp}$ (the normal $E$ is discontinuous), and continuity of $H_\\parallel$ means $B_{1\\parallel}/\\mu_1 = B_{2\\parallel}/\\mu_2$ (the tangential $B$ is discontinuous). These conditions determine reflection and transmission coefficients (Fresnel equations) and are essential for waveguides, optical coatings, and cavity design. References: Griffiths, Introduction to Electrodynamics, Section 7.3.5 (boundary conditions) and Section 9.3.2 (Fresnel equations); Jackson, Classical Electrodynamics, Section 1.5.","subject":"electromagnetism","difficulty":"intermediate","labels":["boundary-conditions"]},
-  {"name":"EM energy density","question":"What is the electromagnetic energy density in vacuum?","answer":"$u = \\frac{1}{2}\\left(\\epsilon_0 E^2 + \\frac{B^2}{\\mu_0}\\right)$","explanation":"This is the energy stored per unit volume in the electric and magnetic fields.","subject":"electromagnetism","difficulty":"basic","labels":["energy"]},
-  {"name":"gauge transformations in EM","question":"What is a gauge transformation in electrodynamics, and what are the Lorenz and Coulomb gauges?","answer":"A gauge transformation is $\\vec{A} \\to \\vec{A} + \\nabla \\lambda$, $\\phi \\to \\phi - \\frac{\\partial \\lambda}{\\partial t}$, which leaves $\\vec{E}$ and $\\vec{B}$ unchanged. The Lorenz gauge requires $\\nabla \\cdot \\vec{A} + \\mu_0 \\epsilon_0 \\frac{\\partial \\phi}{\\partial t} = 0$. The Coulomb gauge requires $\\nabla \\cdot \\vec{A} = 0$.","explanation":"The physical fields $\\vec{E}$ and $\\vec{B}$ are gauge-invariant. Choosing a gauge simplifies the equations for the potentials.","subject":"electromagnetism","difficulty":"intermediate","labels":["gauge-transformations"]},
-  {"name":"multipole expansion","question":"What is the leading-order term in the multipole expansion of the potential of a localized charge distribution, far from the source?","answer":"The monopole term: $\\phi \\sim \\frac{1}{4\\pi\\epsilon_0} \\frac{Q}{r}$, where $Q$ is the total charge.","explanation":"If $Q = 0$, the next term is the dipole term proportional to $\\frac{1}{r^2}$, then the quadrupole proportional to $\\frac{1}{r^3}$, etc.","subject":"electromagnetism","difficulty":"basic","labels":["multipole-expansion"]},
-  {"name":"speed of EM waves","question":"What is the speed of electromagnetic waves in vacuum, expressed in terms of fundamental constants?","answer":"$c = \\frac{1}{\\sqrt{\\mu_0 \\epsilon_0}}$","explanation":"This follows directly from the wave equation derived from Maxwell\u0027s equations in vacuum. It was one of the great triumphs of Maxwell\u0027s theory.","subject":"electromagnetism","difficulty":"basic","labels":["electromagnetic-waves"]},
-  {"name":"retarded potentials","question":"What are retarded potentials and why are they called \u0027retarded\u0027?","answer":"The retarded potentials are $\\phi(\\vec{r},t) = \\frac{1}{4\\pi\\epsilon_0} \\int \\frac{\\rho(\\vec{r}\u0027, t_r)}{|\\vec{r}-\\vec{r}\u0027|} d^3r\u0027$ (and similarly for $\\vec{A}$), where $t_r = t - \\frac{|\\vec{r}-\\vec{r}\u0027|}{c}$ is the retarded time. They are \u0027retarded\u0027 because the field at $(\\vec{r},t)$ depends on the source at the earlier time $t_r$, reflecting the finite speed of light.","explanation":"This enforces causality. The advanced potentials (using $t + \\frac{|\\vec{r}-\\vec{r}\u0027|}{c}$) are mathematically valid but physically rejected for radiation problems.","subject":"electromagnetism","difficulty":"intermediate","labels":["retarded-potentials"]},
-  {"name":"Lorentz force law","question":"Write the Lorentz force law for a charged particle in electric and magnetic fields.","answer":"$\\vec{F} = q(\\vec{E} + \\vec{v} \\times \\vec{B})$","explanation":"This is in SI units and is exact as written. In Gaussian units the form is $\\vec{F} = q(\\vec{E} + \\frac{\\vec{v}}{c} \\times \\vec{B})$. The electric force $q\\vec{E}$ is independent of velocity and can do work. The magnetic force $q\\vec{v} \\times \\vec{B}$ is always perpendicular to $\\vec{v}$, so $\\vec{F}_{\\text{mag}} \\cdot \\vec{v} = 0$ -- it changes the direction of motion but never the speed or kinetic energy. This is why magnetic fields alone cannot accelerate particles from rest. The Lorentz force is the foundation of charged particle dynamics: cyclotron motion ($r = mv/qB$, $\\omega_c = qB/m$), velocity selectors ($E = vB$), and the Hall effect. It also appears in the equation of motion for plasmas (magnetohydrodynamics) and underpins the $\\vec{J} \\times \\vec{B}$ force on current-carrying conductors. References: Griffiths, Introduction to Electrodynamics, Section 5.1; Jackson, Classical Electrodynamics, Section 1.2 and 12.1 (covariant form $f^\\mu = qF^{\\mu\\nu}u_\\nu$).","subject":"electromagnetism","difficulty":"basic","labels":["lorentz-force"]},
-  {"name":"Larmor formula","question":"What is Larmor\u0027s formula for the power radiated by an accelerating point charge?","answer":"$P = \\frac{q^2 a^2}{6\\pi \\epsilon_0 c^3}$, where $a$ is the magnitude of the acceleration.","explanation":"This is the nonrelativistic result. It shows that only accelerating charges radiate. The relativistic generalization involves the four-acceleration.","subject":"electromagnetism","difficulty":"intermediate","labels":["radiation"]},
-  {"name":"Gauss\u0027s law","question":"State Gauss\u0027s law in integral form and explain when it is most useful for computing $\\vec{E}$.","answer":"The flux of $\\vec{E}$ through a closed surface equals $\\frac{Q_{\\text{enc}}}{\\epsilon_0}$. It is most useful when the charge distribution has sufficient symmetry (spherical, cylindrical, or planar) so that $\\vec{E}$ can be pulled out of the integral.","explanation":"For a spherically symmetric charge distribution, $\\vec{E}$ is radial and constant on a concentric sphere, giving $E \\cdot 4\\pi r^2 = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$.","subject":"electromagnetism","difficulty":"basic","labels":["gausss-law"]},
-  {"name":"field strength tensor $F^{\\mu\\nu}$","question":"What is the covariant (four-vector) form of the electromagnetic field, and how are $\\vec{E}$ and $\\vec{B}$ encoded in the field strength tensor $F^{\\mu\\nu}$?","answer":"$F^{\\mu\\nu}$ is an antisymmetric rank-2 tensor. Its components are: $F^{0i} = -E^i/c$ (electric field), and $F^{ij} = -\\epsilon^{ijk} B_k$ (magnetic field). Maxwell\u0027s equations become $\\partial_\\mu F^{\\mu\\nu} = \\mu_0 J^\\nu$ and $\\partial_{[\\alpha} F_{\\beta\\gamma]} = 0$.","explanation":"This formulation makes the Lorentz covariance of electrodynamics manifest and is essential for relativistic treatments.","subject":"electromagnetism","difficulty":"advanced","labels":["covariant-formulation"]},
-  {"name":"$[\\hat{x}, \\hat{p}]$ commutation relation","question":"What is the canonical commutation relation between position $\\hat{x}$ and momentum $\\hat{p}$?","answer":"$[\\hat{x}, \\hat{p}] = i\\hbar$","explanation":"This is the foundational commutation relation of quantum mechanics, from which the uncertainty principle follows directly.","subject":"quantum-mechanics","difficulty":"basic","labels":["commutation-relations"]},
-  {"name":"Schrodinger equation","question":"Write the time-dependent Schrodinger equation.","answer":"$i\\hbar \\frac{\\partial \\psi}{\\partial t} = \\hat{H} \\psi$, where $\\hat{H}$ is the Hamiltonian operator.","explanation":"For a single particle in a potential, $\\hat{H} = -\\frac{\\hbar^2}{2m} \\nabla^2 + V(\\vec{r})$. The time-independent version is $\\hat{H}\\psi = E\\psi$.","subject":"quantum-mechanics","difficulty":"basic","labels":["schrodinger-equation"]},
-  {"name":"quantum harmonic oscillator energies","question":"What are the energy eigenvalues of the quantum harmonic oscillator?","answer":"$E_n = \\hbar\\omega\\left(n + \\frac{1}{2}\\right)$, for $n = 0, 1, 2, \\ldots$","explanation":"The equally spaced energy levels and nonzero ground state energy ($\\frac{1}{2}\\hbar\\omega$) are hallmarks of the quantum harmonic oscillator. Solved elegantly via creation and annihilation operators.","subject":"quantum-mechanics","difficulty":"basic","labels":["harmonic-oscillator"]},
-  {"name":"hydrogen atom energy levels","question":"What are the energy levels of the hydrogen atom (nonrelativistic, ignoring fine structure)?","answer":"$E_n = -\\frac{13.6 \\text{ eV}}{n^2}$, for $n = 1, 2, 3, \\ldots$","explanation":"The degeneracy of each level is $n^2$ (ignoring spin) or $2n^2$ (including spin). This follows from the Coulomb potential and the accidental $SO(4)$ symmetry.","subject":"quantum-mechanics","difficulty":"basic","labels":["hydrogen-atom"]},
-  {"name":"$\\hat{L}^2$ and $\\hat{L}_z$ eigenvalues","question":"What are the eigenvalues of the angular momentum operators $\\hat{L}^2$ and $\\hat{L}_z$?","answer":"$\\hat{L}^2$ has eigenvalues $\\hbar^2 l(l+1)$ for $l = 0, 1, 2, \\ldots$ and $\\hat{L}_z$ has eigenvalues $\\hbar m$ for $m = -l, -l+1, \\ldots, l-1, l$.","explanation":"These follow from the commutation relations $[\\hat{L}_i, \\hat{L}_j] = i\\hbar \\epsilon_{ijk} \\hat{L}_k$ and $[\\hat{L}^2, \\hat{L}_i] = 0$.","subject":"quantum-mechanics","difficulty":"basic","labels":["angular-momentum"]},
-  {"name":"electron spin","question":"What is the spin of an electron, and what are the possible measurement outcomes of $\\hat{S}_z$?","answer":"The electron has spin $\\frac{1}{2}$. The possible outcomes of $\\hat{S}_z$ are $+\\frac{\\hbar}{2}$ and $-\\frac{\\hbar}{2}$.","explanation":"Spin is an intrinsic angular momentum with no classical analogue. The spin-$\\frac{1}{2}$ operators are represented by $\\frac{\\hbar}{2}$ times the Pauli matrices.","subject":"quantum-mechanics","difficulty":"basic","labels":["spin"]},
-  {"name":"generalized uncertainty principle","question":"State the generalized uncertainty principle for two observables $\\hat{A}$ and $\\hat{B}$.","answer":"$\\sigma_A \\sigma_B \\geq \\frac{1}{2}|\\langle[\\hat{A}, \\hat{B}]\\rangle|$","explanation":"For $\\hat{x}$ and $\\hat{p}$, this gives $\\sigma_x \\sigma_p \\geq \\frac{\\hbar}{2}$, the Heisenberg uncertainty principle.","subject":"quantum-mechanics","difficulty":"basic","labels":["uncertainty-principle"]},
-  {"name":"first-order perturbation theory","question":"What is the first-order energy correction in non-degenerate perturbation theory?","answer":"$E_n^{(1)} = \\langle n^{(0)}| \\hat{H}\u0027 |n^{(0)}\\rangle$, the expectation value of the perturbation $\\hat{H}\u0027$ in the unperturbed state.","explanation":"The first-order correction to the state is $|n^{(1)}\\rangle = \\sum_{m \\neq n} \\frac{\\langle m^{(0)}|\\hat{H}\u0027|n^{(0)}\\rangle}{E_n^{(0)} - E_m^{(0)}} |m^{(0)}\\rangle$.","subject":"quantum-mechanics","difficulty":"intermediate","labels":["perturbation-theory"]},
-  {"name":"Fermi\u0027s golden rule","question":"What is Fermi\u0027s golden rule?","answer":"The transition rate from state $|i\\rangle$ to state $|f\\rangle$ under a time-dependent perturbation is $\\Gamma_{i \\to f} = \\frac{2\\pi}{\\hbar} |\\langle f|\\hat{H}\u0027|i\\rangle|^2 \\rho(E_f)$, where $\\rho(E_f)$ is the density of final states.","explanation":"This is derived from first-order time-dependent perturbation theory in the long-time limit.","subject":"quantum-mechanics","difficulty":"intermediate","labels":["perturbation-theory"]},
-  {"name":"WKB approximation","question":"What is the WKB approximation for the allowed energies of a bound state in one dimension?","answer":"The Bohr-Sommerfeld quantization condition: $\\int_a^b p(x) \\, dx = \\left(n + \\frac{1}{2}\\right)\\pi\\hbar$, where $a$ and $b$ are the classical turning points and $p(x) = \\sqrt{2m(E - V(x))}$.","explanation":"WKB (Wentzel-Kramers-Brillouin) approximates the wavefunction when the potential varies slowly on the scale of the de Broglie wavelength $\\lambda = h/p(x)$. You write $\\psi(x) \\approx \\frac{C}{\\sqrt{p(x)}} e^{\\pm \\frac{i}{\\hbar}\\int p(x)\\,dx}$ in classically allowed regions ($E > V$) and an exponentially decaying form in forbidden regions ($E < V$). This breaks down at classical turning points where $p(x) \\to 0$; there you match to Airy function solutions. Each turning point introduces a phase shift of $\\pi/2$ (the Maslov index). For a bound state between turning points $a$ and $b$, demanding single-valuedness of the wavefunction after a round trip gives $\\int_a^b p\\,dx = (n + 1/2)\\pi\\hbar$, where the $1/2$ accounts for the two turning-point phase shifts. The full-period form $\\oint p\\,dq = 2\\pi\\hbar(n+1/2)$ is the Bohr-Sommerfeld condition. This beautifully connects quantum energy levels to classical phase-space areas: each state occupies an area $2\\pi\\hbar = h$ in phase space. For the harmonic oscillator $V = \\frac{1}{2}m\\omega^2 x^2$, the phase-space orbit is an ellipse with area $2\\pi E/\\omega$, and the WKB condition gives the exact result $E_n = \\hbar\\omega(n+1/2)$. References: Griffiths, Introduction to Quantum Mechanics, Chapter 8 (the WKB approximation); Landau & Lifshitz, Quantum Mechanics, Section 46--48; Sakurai, Modern Quantum Mechanics, Section 2.4 (WKB and semiclassical methods).","subject":"quantum-mechanics","difficulty":"intermediate","labels":["wkb"]},
-  {"name":"bosons vs fermions","question":"What is the difference between bosons and fermions regarding identical particles?","answer":"Bosons have symmetric wavefunctions under particle exchange and obey Bose-Einstein statistics (integer spin). Fermions have antisymmetric wavefunctions and obey Fermi-Dirac statistics (half-integer spin). Fermions satisfy the Pauli exclusion principle.","explanation":"The spin-statistics theorem connects spin to exchange symmetry. It is proven rigorously in relativistic quantum field theory.","subject":"quantum-mechanics","difficulty":"basic","labels":["identical-particles"]},
-  {"name":"Feynman path integral","question":"What is the Feynman path integral expression for the quantum propagator?","answer":"$K(x_f, t_f; x_i, t_i) = \\int \\mathcal{D}[\\text{path}] \\, e^{iS[\\text{path}]/\\hbar}$, where $S$ is the classical action along the path.","explanation":"Every path contributes with a phase proportional to its action. Classical paths dominate in the limit $\\hbar \\to 0$ due to stationary phase.","subject":"quantum-mechanics","difficulty":"advanced","labels":["path-integrals"]},
-  {"name":"Pauli matrices","question":"What are the Pauli matrices?","answer":"$\\sigma_x = \\begin{pmatrix} 0 \u0026 1 \\\\\\\\ 1 \u0026 0 \\end{pmatrix}$, $\\sigma_y = \\begin{pmatrix} 0 \u0026 -i \\\\\\\\ i \u0026 0 \\end{pmatrix}$, $\\sigma_z = \\begin{pmatrix} 1 \u0026 0 \\\\\\\\ 0 \u0026 -1 \\end{pmatrix}$","explanation":"They satisfy $\\{\\sigma_i, \\sigma_j\\} = 2\\delta_{ij}I$ and $[\\sigma_i, \\sigma_j] = 2i\\epsilon_{ijk}\\sigma_k$. The spin operators are $\\hat{S}_i = \\frac{\\hbar}{2}\\sigma_i$.","subject":"quantum-mechanics","difficulty":"basic","labels":["spin"]},
-  {"name":"variational principle","question":"What is the variational principle (Rayleigh-Ritz) in quantum mechanics?","answer":"For any normalized trial wavefunction $|\\psi_{\\text{trial}}\\rangle$, the expectation value $\\langle\\psi_{\\text{trial}}|\\hat{H}|\\psi_{\\text{trial}}\\rangle \\geq E_0$, the true ground state energy. Equality holds only when $|\\psi_{\\text{trial}}\\rangle$ is the exact ground state.","explanation":"This gives an upper bound on the ground state energy and is the basis for variational methods.","subject":"quantum-mechanics","difficulty":"intermediate","labels":["variational-method"]},
-  {"name":"angular momentum addition","question":"What is the addition rule for angular momenta $j_1$ and $j_2$? What total angular momentum values $j$ are possible?","answer":"$j$ ranges from $|j_1 - j_2|$ to $j_1 + j_2$ in integer steps.","explanation":"When two angular momenta couple, the total $\\mathbf{J} = \\mathbf{J}_1 + \\mathbf{J}_2$ has $J_z = m_1 + m_2$ (always), but $j$ is not simply $j_1 + j_2$. The range $|j_1 - j_2| \\leq j \\leq j_1 + j_2$ follows from counting states: the uncoupled basis has $(2j_1+1)(2j_2+1)$ states, and so does the coupled basis $\\sum_{j=|j_1-j_2|}^{j_1+j_2}(2j+1)$. The Clebsch-Gordan coefficients $\\langle j_1, m_1; j_2, m_2 | j, m \\rangle$ are the unitary transformation between these bases. They vanish unless $m = m_1 + m_2$ and the triangle inequality holds. Example: two spin-1/2 particles give $j = 1$ (triplet, 3 states, symmetric) and $j = 0$ (singlet, 1 state, antisymmetric). For $j_1 = 1, j_2 = 1$: $j = 0, 1, 2$ with $1 + 3 + 5 = 9 = 3 \\times 3$ states. In group theory language this is the decomposition of the tensor product: $\\mathbf{j_1} \\otimes \\mathbf{j_2} = \\bigoplus_j \\mathbf{j}$. This is essential for atomic spectroscopy (LS coupling), nuclear physics (isospin), and particle physics ($SU(2)$ flavor). References: Griffiths, Introduction to Quantum Mechanics, Chapter 4.3--4.4; Sakurai, Modern Quantum Mechanics, Chapter 3.7--3.8; Shankar, Principles of Quantum Mechanics, Chapter 15.","subject":"quantum-mechanics","difficulty":"intermediate","labels":["angular-momentum"]},
-  {"name":"canonical partition function","question":"What is the canonical partition function for a system at temperature $T$?","answer":"$Z = \\sum_i e^{-E_i / (k_B T)}$, where the sum runs over all microstates $i$ with energy $E_i$.","explanation":"All thermodynamic quantities can be derived from $Z$. For example, the free energy is $F = -k_B T \\ln Z$.","subject":"statistical-mechanics","difficulty":"basic","labels":["partition-function"]},
-  {"name":"Boltzmann distribution","question":"What is the Boltzmann distribution? What is the probability of a system being in microstate $i$?","answer":"$P_i = \\frac{e^{-E_i / (k_B T)}}{Z}$, where $Z$ is the partition function.","explanation":"This applies to a system in thermal equilibrium with a heat bath at temperature $T$ (canonical ensemble).","subject":"statistical-mechanics","difficulty":"basic","labels":["boltzmann-distribution"]},
-  {"name":"two-level system partition function","question":"What is the partition function of a two-level system with energies $0$ and $\\epsilon$?","answer":"$Z = 1 + e^{-\\epsilon / (k_B T)}$","explanation":"The average energy is $\\langle E \\rangle = \\frac{\\epsilon}{e^{\\epsilon/(k_B T)} + 1}$. This is one of the most fundamental exactly solvable models.","subject":"statistical-mechanics","difficulty":"basic","labels":["partition-function"]},
-  {"name":"equipartition theorem","question":"State the equipartition theorem.","answer":"Each quadratic degree of freedom in the Hamiltonian contributes $\\frac{1}{2} k_B T$ to the average energy in thermal equilibrium.","explanation":"For example, a classical ideal gas molecule with 3 translational degrees of freedom has $\\langle E \\rangle = \\frac{3}{2} k_B T$. This breaks down at low temperatures where quantum effects dominate.","subject":"statistical-mechanics","difficulty":"basic","labels":["equipartition"]},
-  {"name":"Fermi-Dirac and Bose-Einstein distributions","question":"What are the Fermi-Dirac and Bose-Einstein distribution functions?","answer":"Fermi-Dirac: $f(E) = \\frac{1}{e^{(E - \\mu)/(k_B T)} + 1}$. Bose-Einstein: $f(E) = \\frac{1}{e^{(E - \\mu)/(k_B T)} - 1}$.","explanation":"The $+1$ for fermions enforces the Pauli exclusion principle ($f \\leq 1$). The $-1$ for bosons allows unlimited occupation and can lead to Bose-Einstein condensation.","subject":"statistical-mechanics","difficulty":"intermediate","labels":["quantum-statistics"]},
-  {"name":"statistical ensembles","question":"What are the three standard statistical ensembles and what variables are held fixed in each?","answer":"\\u2022 Microcanonical (NVE): fixed $E$, $V$, $N$. All accessible microstates equally probable. Partition function: $\\Omega(E)$ = number of microstates. Thermodynamic potential: entropy $S = k_B \\ln \\Omega$. Temperature emerges as $1/T = \\partial S/\\partial E$. Models an isolated system.\\n\\u2022 Canonical (NVT): fixed $T$, $V$, $N$. System exchanges energy with a heat bath. Partition function: $Z = \\sum_i e^{-\\beta E_i}$, $\\beta = 1/(k_B T)$. Probability of microstate $i$: $P_i = e^{-\\beta E_i}/Z$ (Boltzmann distribution). Thermodynamic potential: Helmholtz free energy $F = -k_B T \\ln Z$. Energy fluctuations: $\\langle (\\Delta E)^2 \\rangle = k_B T^2 C_V$.\\n\\u2022 Grand canonical ($\\mu$VT): fixed $T$, $V$, $\\mu$. System exchanges both energy and particles with a reservoir. Partition function: $\\mathcal{Z} = \\sum_N \\sum_i e^{-\\beta(E_i - \\mu N)}$. Thermodynamic potential: grand potential $\\Phi = -k_B T \\ln \\mathcal{Z} = F - \\mu N$. Particle number fluctuations: $\\langle (\\Delta N)^2 \\rangle = k_B T (\\partial \\langle N \\rangle / \\partial \\mu)_T$.","explanation":"The ensembles are equivalent in the thermodynamic limit ($N \\to \\infty$): relative fluctuations scale as $1/\\sqrt{N}$, so $\\Delta E/\\langle E \\rangle \\sim 1/\\sqrt{N} \\to 0$. Each ensemble is obtained from the previous by a Legendre transform -- canonical from microcanonical by trading $E$ for $T$, grand canonical from canonical by trading $N$ for $\\mu$. The canonical ensemble is most commonly used because most lab systems are in thermal contact with their surroundings. The grand canonical ensemble is essential for quantum gases (Bose-Einstein and Fermi-Dirac statistics), where fixing $N$ exactly is impractical and the fugacity $z = e^{\\beta\\mu}$ controls the mean particle number. The microcanonical ensemble is the most fundamental (no assumptions about a bath) and is the starting point for deriving the other two. References: Pathria & Beale, Statistical Mechanics, Chapters 2--4; Kardar, Statistical Physics of Particles, Chapters 4--5; Reif, Fundamentals of Statistical and Thermal Physics, Chapters 6--7.","subject":"statistical-mechanics","difficulty":"basic","labels":["ensembles"]},
-  {"name":"entropy (statistical)","question":"What is the statistical definition of entropy?","answer":"$S = k_B \\ln \\Omega$, where $\\Omega$ is the number of accessible microstates (Boltzmann entropy). More generally, $S = -k_B \\sum_i P_i \\ln P_i$ (Gibbs entropy).","explanation":"The Boltzmann formula applies to the microcanonical ensemble. The Gibbs formula is more general and reduces to Boltzmann\u0027s when all accessible states are equally probable.","subject":"statistical-mechanics","difficulty":"basic","labels":["entropy"]},
-  {"name":"phase transitions","question":"What is a phase transition, and what distinguishes first-order from second-order (continuous) phase transitions?","answer":"A phase transition is a non-analyticity in the free energy. In a first-order transition, the first derivative of the free energy (e.g., entropy, volume) is discontinuous, involving latent heat. In a second-order transition, first derivatives are continuous but second derivatives (e.g., heat capacity, susceptibility) diverge.","explanation":"Examples: melting is first-order; the ferromagnetic transition at the Curie point is second-order.","subject":"statistical-mechanics","difficulty":"intermediate","labels":["phase-transitions"]},
-  {"name":"Ising model","question":"What is the Ising model?","answer":"A lattice model where spin variables $s_i = \\pm 1$ interact via $H = -J \\sum_{\\langle i,j \\rangle} s_i s_j - h \\sum_i s_i$, where $J$ is the coupling constant, $h$ is an external field, and the first sum is over nearest neighbors.","explanation":"The 1D Ising model has no phase transition (solved by Ising). The 2D model has a phase transition at $T_c$ (solved exactly by Onsager). The 3D model has no known exact solution.","subject":"statistical-mechanics","difficulty":"intermediate","labels":["ising-model"]},
-  {"name":"Helmholtz free energy","question":"What is the Helmholtz free energy and when is it minimized?","answer":"$F = U - TS$, where $U$ is internal energy, $T$ is temperature, and $S$ is entropy. It is minimized at equilibrium for a system at constant $T$ and $V$.","explanation":"The Gibbs free energy $G = U - TS + PV$ is minimized at constant $T$ and $P$ instead. These are related to the partition function by $F = -k_B T \\ln Z$.","subject":"statistical-mechanics","difficulty":"basic","labels":["free-energy"]},
-  {"name":"Lorentz transformation","question":"Write down the Lorentz transformation for coordinates $(t, x)$ between two inertial frames with relative velocity $v$ along the $x$-axis.","answer":"$t\u0027 = \\gamma\\left(t - \\frac{vx}{c^2}\\right)$, $x\u0027 = \\gamma(x - vt)$, where $\\gamma = \\frac{1}{\\sqrt{1 - v^2/c^2}}$.","explanation":"$y$ and $z$ are unchanged. These reduce to the Galilean transformation in the limit $v \\ll c$.","subject":"relativity","difficulty":"basic","labels":["lorentz-transformations"]},
-  {"name":"spacetime interval","question":"What is the spacetime interval in special relativity and why is it important?","answer":"$ds^2 = -c^2 dt^2 + dx^2 + dy^2 + dz^2$ (in the $-+++$ convention). It is invariant under Lorentz transformations, meaning all observers agree on its value.","explanation":"Timelike intervals ($ds^2 \u003c 0$) connect causally related events; spacelike intervals ($ds^2 \u003e 0$) connect causally unrelated events; null intervals ($ds^2 = 0$) describe light signals.","subject":"relativity","difficulty":"basic","labels":["metric-tensor"]},
-  {"name":"equivalence principle","question":"What is the equivalence principle?","answer":"The effects of gravity are locally indistinguishable from the effects of acceleration. Equivalently, inertial mass equals gravitational mass.","explanation":"This is the foundational physical principle of general relativity. It implies that gravity is described by the geometry of spacetime.","subject":"relativity","difficulty":"basic","labels":["equivalence-principle"]},
-  {"name":"Einstein field equations","question":"Write the Einstein field equations.","answer":"$G_{\\mu\\nu} = R_{\\mu\\nu} - \\frac{1}{2} g_{\\mu\\nu} R = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}$, where $G_{\\mu\\nu}$ is the Einstein tensor, $R_{\\mu\\nu}$ is the Ricci tensor, $R$ is the Ricci scalar, and $T_{\\mu\\nu}$ is the stress-energy tensor.","explanation":"The left side encodes spacetime geometry; the right side encodes matter and energy content. Sometimes a cosmological constant term $\\Lambda g_{\\mu\\nu}$ is added.","subject":"relativity","difficulty":"intermediate","labels":["einstein-field-equations"]},
-  {"name":"geodesic equation","question":"What is the geodesic equation?","answer":"$\\frac{d^2 x^\\mu}{d\\tau^2} + \\Gamma^\\mu_{\\alpha\\beta} \\frac{dx^\\alpha}{d\\tau} \\frac{dx^\\beta}{d\\tau} = 0$, where $\\Gamma^\\mu_{\\alpha\\beta}$ are the Christoffel symbols and $\\tau$ is proper time.","explanation":"This describes the motion of a free particle in curved spacetime. Geodesics extremize the proper time between two events.","subject":"relativity","difficulty":"intermediate","labels":["geodesic-equation"]},
-  {"name":"Schwarzschild metric","question":"What is the Schwarzschild metric?","answer":"$ds^2 = -\\left(1 - \\frac{2GM}{c^2 r}\\right)c^2 dt^2 + \\left(1 - \\frac{2GM}{c^2 r}\\right)^{-1} dr^2 + r^2 (d\\theta^2 + \\sin^2\\theta \\, d\\phi^2)$","explanation":"This is the unique spherically symmetric vacuum solution to the Einstein field equations (Birkhoff\u0027s theorem). The coordinate singularity at $r = \\frac{2GM}{c^2}$ is the event horizon.","subject":"relativity","difficulty":"intermediate","labels":["schwarzschild-solution"]},
-  {"name":"four-vectors","question":"What is a four-vector? Give three examples.","answer":"A four-vector is a quantity with four components that transforms as a vector under Lorentz transformations. Examples: four-position $(ct, x, y, z)$, four-momentum $(E/c, p_x, p_y, p_z)$, four-velocity $(\\gamma c, \\gamma v_x, \\gamma v_y, \\gamma v_z)$.","explanation":"Four-vectors are elements of Minkowski spacetime. Their Lorentz-invariant norm is computed using the metric: $A_\\mu A^\\mu$.","subject":"relativity","difficulty":"basic","labels":["four-vectors"]},
-  {"name":"stress-energy tensor","question":"What is the stress-energy tensor for a perfect fluid?","answer":"$T^{\\mu\\nu} = \\left(\\rho + \\frac{P}{c^2}\\right) u^\\mu u^\\nu + P g^{\\mu\\nu}$, where $\\rho$ is the energy density, $P$ is the pressure, and $u^\\mu$ is the four-velocity of the fluid.","explanation":"In the rest frame of the fluid, $T^{00} = \\rho c^2$, $T^{ii} = P$ (no sum), and all off-diagonal components vanish.","subject":"relativity","difficulty":"intermediate","labels":["stress-energy-tensor"]},
-  {"name":"energy-momentum relation","question":"What is the relativistic energy-momentum relation?","answer":"$E^2 = (pc)^2 + (mc^2)^2$, where $E$ is total energy, $p$ is the magnitude of three-momentum, and $m$ is the rest mass.","explanation":"For massless particles ($m = 0$), $E = pc$. For particles at rest ($p = 0$), $E = mc^2$. This is the Lorentz-invariant norm of the four-momentum.","subject":"relativity","difficulty":"basic","labels":["four-vectors"]},
-  {"name":"gravitational time dilation","question":"What is gravitational time dilation in the Schwarzschild geometry?","answer":"A clock at radial coordinate $r$ runs slower than a clock at infinity by a factor $\\sqrt{1 - \\frac{2GM}{c^2 r}}$. That is, $d\\tau = \\sqrt{1 - \\frac{2GM}{c^2 r}} \\, dt$.","explanation":"The connection to $g_{tt}$ is direct. The Schwarzschild line element is $ds^2 = -\\left(1 - \\frac{2GM}{c^2 r}\\right)c^2 dt^2 + \\left(1 - \\frac{2GM}{c^2 r}\\right)^{-1}dr^2 + r^2 d\\Omega^2$. For a clock sitting at fixed $r$ (i.e. $dr = d\\theta = d\\phi = 0$), the line element reduces to $ds^2 = g_{tt}\\,c^2 dt^2$. Since proper time is $d\\tau^2 = -ds^2/c^2$ (with our $-+++$ signature), we get $d\\tau = \\sqrt{-g_{tt}}\\,dt = \\sqrt{1 - 2GM/(c^2 r)}\\,dt$. So $g_{tt}$ directly controls the rate at which proper time accumulates relative to coordinate time $t$ (which is the proper time of a distant observer at $r \\to \\infty$, where $g_{tt} \\to -1$). This generalizes: in any stationary spacetime, $d\\tau/dt = \\sqrt{-g_{tt}}$ for a static observer. At the event horizon $r_s = 2GM/c^2$, $g_{tt} = 0$, so $d\\tau/dt \\to 0$ -- a distant observer sees the clock freeze. GPS satellites must correct for this: clocks in orbit at $r \\approx 26{,}600$ km run ~45 microseconds/day faster than ground clocks due to weaker gravity (partially offset by ~7 microseconds/day slower from special-relativistic time dilation due to orbital velocity). The Pound-Rebka experiment (1959) confirmed gravitational redshift to 1% by measuring the frequency shift of gamma rays over a 22.5 m tower. References: Carroll, Spacetime and Geometry, Sections 5.1--5.2; Hartle, Gravity, Chapter 9; Schutz, A First Course in General Relativity, Section 10.1.","subject":"relativity","difficulty":"intermediate","labels":["schwarzschild-solution"]},
-  {"name":"Fermi gas ground-state energy","question":"What is the total ground-state energy of $N$ non-interacting fermions in 3D, in terms of the Fermi energy $E_F$?","answer":"$E = \\frac{3}{5} N E_F$","explanation":"The 3D density of states is $g(E) = C E^{1/2}$ where $C = \\frac{V}{2\\pi^2}\\left(\\frac{2m}{\\hbar^2}\\right)^{3/2}$. At $T=0$, all states up to $E_F$ are filled, so $N = \\int_0^{E_F} g(E)\\,dE = C \\cdot \\frac{2}{3} E_F^{3/2}$. The total energy is $E_{\\text{tot}} = \\int_0^{E_F} E\\,g(E)\\,dE = C \\int_0^{E_F} E^{3/2}\\,dE = C \\cdot \\frac{2}{5} E_F^{5/2}$. Dividing: $E_{\\text{tot}}/N = \\frac{C \\cdot \\frac{2}{5} E_F^{5/2}}{C \\cdot \\frac{2}{3} E_F^{3/2}} = \\frac{3}{5} E_F$. The factor $3/5$ (not $1/2$) arises because $g(E) \\propto E^{1/2}$ weights higher energies more heavily -- there are more states near $E_F$ than near $E = 0$.","subject":"statistical-mechanics","difficulty":"basic","labels":["fermi-gas"]},
-  {"name":"grand canonical partition function","question":"How is the grand canonical partition function $\\Xi$ related to the canonical partition functions $Z(N)$?","answer":"$\\Xi(\\mu) = \\sum_{N=0}^{\\infty} e^{\\beta \\mu N} Z(N)$","explanation":"$\\Xi$ is the generating function for $Z(N)$ weighted by the fugacity $z = e^{\\beta\\mu}$. This relation lets you move between fixed-$N$ and variable-$N$ descriptions, which is essential whenever a quantum system is easier to solve in one ensemble than the other.","subject":"statistical-mechanics","difficulty":"basic","labels":["grand-canonical"]},
-  {"name":"saddle-point approximation","question":"For an integral $I = \\int e^{N f(x)} \\, dx$ with large $N$, what is the leading saddle-point (steepest descent) approximation?","answer":"$I \\approx e^{N f(x_0)} \\sqrt{\\frac{2\\pi}{N |f\u0027\u0027(x_0)|}}$, where $f\u0027(x_0) = 0$","explanation":"The integral is dominated by the neighborhood of the maximum of $f(x)$, with Gaussian fluctuations giving the prefactor. This is the workhorse for evaluating partition functions, path integrals, and matrix model integrals in the large-$N$ limit.","subject":"math-calculus","difficulty":"intermediate","labels":["asymptotic-methods"]},
-  {"name":"asymptotic series","question":"A series $\\sum a_n x^n$ is asymptotic to $f(x)$ as $x \\to 0$. Does it need to converge?","answer":"No. The partial sum $\\sum_{n=0}^{N} a_n x^n$ approximates $f(x)$ with error $O(x^{N+1})$ at fixed $N$ as $x \\to 0$, even if the series diverges for any nonzero $x$.","explanation":"Perturbative expansions in physics are almost always asymptotic, not convergent. The optimal truncation point is typically around $N \\sim 1/g$, after which adding more terms makes the approximation worse.","subject":"math-calculus","difficulty":"intermediate","labels":["asymptotic-methods"]},
-  {"name":"non-perturbative $e^{-A/g}$","question":"Why can\u0027t a contribution of the form $e^{-A/g}$ (with $A \u003e 0$) be captured at any finite order in a perturbative expansion in $g$?","answer":"All derivatives of $e^{-A/g}$ at $g = 0$ vanish, so its Taylor series is identically zero  --  it is \u0027beyond all orders\u0027 of perturbation theory.","explanation":"This is why non-perturbative effects (tunneling, instantons, bound states in some cases) require methods beyond Feynman diagrams. They are exponentially suppressed and invisible to any finite-order perturbative calculation.","subject":"quantum-mechanics","difficulty":"intermediate","labels":["non-perturbative"]},
-  {"name":"Airy function","question":"The Airy function $\\mathrm{Ai}(x)$ solves which ODE, and what is its qualitative behavior?","answer":"$\\frac{d^2y}{dx^2} - xy = 0$. It oscillates for $x \u003c 0$ and decays exponentially $\\sim e^{-\\frac{2}{3}x^{3/2}}$ for $x \u003e 0$.","explanation":"Airy functions arise wherever a WKB solution transitions between oscillatory and exponential behavior (classical turning points). They also appear in random matrix theory via the Tracy-Widom distribution, and in optics near caustics.","subject":"math-differential-equations","difficulty":"intermediate","labels":["special-functions"]},
-  {"name":"Bohr-Sommerfeld quantization","question":"What is the Bohr-Sommerfeld (WKB) quantization condition for bound states in 1D?","answer":"$\\oint p \\, dq = 2\\pi\\hbar\\left(n + \\frac{1}{2}\\right)$, integrated over one full classical period.","explanation":"The semiclassical limit connects quantum energy levels to classical phase-space areas. The $1/2$ correction (Maslov index) comes from the phase shift at each classical turning point, where the WKB approximation breaks down and Airy function matching is needed.","subject":"quantum-mechanics","difficulty":"intermediate","labels":["semiclassical"]},
-  {"name":"extracting coefficients via contour integral","question":"Given a generating function $f(z) = \\sum_{N=0}^{\\infty} a_N z^N$, how do you extract the coefficient $a_N$ using a contour integral?","answer":"$a_N = \\frac{1}{2\\pi i} \\oint \\frac{f(z)}{z^{N+1}} \\, dz$","explanation":"This is Cauchy\u0027s integral formula applied to Taylor coefficients. In practice it is how fixed-$N$ quantities are extracted from generating functions  --  the contour integral can then be evaluated by saddle-point methods for large $N$.","subject":"math-complex-analysis","difficulty":"intermediate","labels":["contour-integrals"]},
-  {"name":"Wilson loop","question":"What is a Wilson loop in gauge theory, and what does it measure physically?","answer":"$W(\\mathcal{C}) = \\mathrm{Tr}\\left[\\mathcal{P} \\exp\\left(i \\oint_{\\mathcal{C}} A_\\mu \\, dx^\\mu\\right)\\right]$. It measures the holonomy  --  the net phase (or rotation in gauge space) acquired by parallel-transporting a charged particle around a closed path $\\mathcal{C}$.","explanation":"Wilson loops are gauge-invariant observables that probe the gauge field non-locally. In electromagnetism, the phase reduces to $e^{iq\\Phi_B/\\hbar}$ (Aharonov-Bohm effect). In non-abelian theories, the path-ordering $\\mathcal{P}$ is needed because gauge fields at different points don\u0027t commute.","subject":"electromagnetism","difficulty":"advanced","labels":["gauge-theory"]},
-  {"name":"Dirac equation","question":"Write the Dirac equation for a free particle of mass $m$.","answer":"$(i\\gamma^\\mu \\partial_\\mu - m)\\psi = 0$, where $\\gamma^\\mu$ are the $4 \\times 4$ Dirac gamma matrices satisfying $\\{\\gamma^\\mu, \\gamma^\\nu\\} = 2\\eta^{\\mu\\nu}$ (in natural units $\\hbar = c = 1$).","explanation":"The Dirac equation is the relativistic wave equation for spin-$1/2$ particles. It naturally predicts antiparticles and the correct electron magnetic moment. The four-component spinor $\\psi$ encodes both particle and antiparticle, each with two spin states.","subject":"quantum-field-theory","difficulty":"basic","labels":["dirac-equation"]},
-  {"name":"Klein-Gordon equation","question":"What is the Klein-Gordon equation, and what kind of particle does it describe?","answer":"$(\\partial_\\mu \\partial^\\mu + m^2)\\phi = 0$, i.e., $(\\Box + m^2)\\phi = 0$. It describes relativistic spin-$0$ (scalar) particles.","explanation":"This is the simplest relativistic field equation. It follows from the energy-momentum relation $E^2 = p^2 + m^2$ by the substitution $E \\to i\\partial_t$, $\\vec{p} \\to -i\\nabla$. The Higgs boson is a physical spin-0 particle.","subject":"quantum-field-theory","difficulty":"basic","labels":["klein-gordon"]},
-  {"name":"Feynman propagator","question":"What is the Feynman propagator for a free scalar field, and what does it represent physically?","answer":"Using the mostly-minus convention $\\eta_{\\mu\\nu} = \\mathrm{diag}(+,-,-,-)$ so that $k^2 = k_0^2 - |\\vec{k}|^2$: $$D_F(x - y) = \\int \\frac{d^4 k}{(2\\pi)^4} \\frac{i}{k^2 - m^2 + i\\epsilon}$$ It represents the amplitude for a particle to propagate from $y$ to $x$ (equivalently, the time-ordered two-point function $\\langle 0|T\\{\\phi(x)\\phi(y)\\}|0\\rangle$).","explanation":"The $i\\epsilon$ prescription selects the Feynman boundary condition: positive-frequency modes propagate forward in time, negative-frequency backward (antiparticles). Each internal line in a Feynman diagram contributes one propagator factor.","subject":"quantum-field-theory","difficulty":"intermediate","labels":["propagators"]},
-  {"name":"Feynman rules in $\\lambda\\phi^4$","question":"In $\\lambda \\phi^4$ scalar field theory, what are the Feynman rules in momentum space?","answer":"Propagator: $\\frac{i}{k^2 - m^2 + i\\epsilon}$ for each internal line. Vertex: $-i\\lambda$ for each four-point vertex. Impose momentum conservation at each vertex, integrate $\\int \\frac{d^4k}{(2\\pi)^4}$ over each undetermined loop momentum, and include symmetry factors.","explanation":"These rules translate Feynman diagrams into integrals. The symmetry factor accounts for overcounting due to identical internal lines or vertices related by symmetry.","subject":"quantum-field-theory","difficulty":"intermediate","labels":["feynman-rules"]},
-  {"name":"Wick\u0027s theorem","question":"What does Wick\u0027s theorem state, and why is it important for computing scattering amplitudes?","answer":"The time-ordered product of free fields equals the normal-ordered product plus all possible contractions: $T\\{\\phi_1 \\phi_2 \\cdots \\phi_n\\} = :\\!\\phi_1 \\phi_2 \\cdots \\phi_n\\!: + \\text{all contractions}$. Each contraction equals the Feynman propagator $D_F$.","explanation":"This is the bridge between the operator formalism and Feynman diagrams. Only fully contracted terms survive in vacuum expectation values, since $\\langle 0|:\\!\\cdots\\!:|0\\rangle = 0$.","subject":"quantum-field-theory","difficulty":"intermediate","labels":["wick-theorem"]},
-  {"name":"gauge invariance in QED","question":"What is a local gauge transformation in QED, and what does gauge invariance require?","answer":"$\\psi(x) \\to e^{i\\alpha(x)}\\psi(x)$, $A_\\mu \\to A_\\mu - \\frac{1}{e}\\partial_\\mu \\alpha(x)$. Gauge invariance requires replacing $\\partial_\\mu$ with the covariant derivative $D_\\mu = \\partial_\\mu + ieA_\\mu$ and forbids a photon mass term $m^2 A_\\mu A^\\mu$.","explanation":"The requirement of local gauge invariance generates the entire interaction between matter and gauge fields. In QED it dictates the electron-photon coupling. The masslessness of the photon is a direct consequence.","subject":"quantum-field-theory","difficulty":"intermediate","labels":["gauge-invariance"]},
-  {"name":"renormalization","question":"What is the basic idea of renormalization? Why do loop integrals in QFT diverge, and how is this handled?","answer":"Loop integrals diverge because we integrate over arbitrarily high momenta (UV divergence). Renormalization absorbs these infinities into redefinitions of physical parameters (mass, charge, field strength). A theory is renormalizable if only finitely many types of divergent diagrams appear.","explanation":"QED is renormalizable: only the electron self-energy, vacuum polarization, and vertex correction are primitively divergent. The physical predictions (like the anomalous magnetic moment $g-2$) are finite and spectacularly confirmed by experiment.","subject":"quantum-field-theory","difficulty":"intermediate","labels":["renormalization"]},
-  {"name":"Dirac spinor components","question":"How many independent components does a Dirac spinor have, and what do they represent physically?","answer":"A Dirac spinor has 4 complex components. In the rest frame, two correspond to particle states (spin up/down) and two to antiparticle states (spin up/down).","explanation":"The four-component structure arises because the Dirac equation combines two irreducible representations of the Lorentz group (left-handed and right-handed Weyl spinors). A Weyl spinor has 2 components; a Majorana spinor has 4 components with a reality condition.","subject":"quantum-field-theory","difficulty":"basic","labels":["spinors"]},
-  {"name":"LSZ reduction formula","question":"What is the LSZ reduction formula, and what role does it play in QFT?","answer":"The LSZ formula relates $S$-matrix elements (scattering amplitudes) to time-ordered correlation functions of the interacting theory. Each external particle contributes an inverse propagator that amputates the external leg and puts it on-shell.","explanation":"LSZ is the formal justification for computing scattering amplitudes from Feynman diagrams. It tells you to compute the connected, amputated Green\u0027s function and evaluate it with external momenta on-shell ($k^2 = m^2$).","subject":"quantum-field-theory","difficulty":"intermediate","labels":["lsz"]},
-  {"name":"beta function and asymptotic freedom","question":"What is the beta function in QFT, and what does asymptotic freedom mean?","answer":"The beta function $\\beta(g) = \\mu \\frac{dg}{d\\mu}$ describes how the coupling $g$ changes with the energy scale $\\mu$. Asymptotic freedom means $\\beta(g) \u003c 0$: the coupling decreases at high energies. Non-abelian gauge theories like QCD (with $N_f \u003c 33/2$) are asymptotically free.","explanation":"QCD becomes weakly coupled at high energies, enabling perturbative calculations for hard scattering. At low energies the coupling grows, leading to confinement. QED has $\\beta \u003e 0$, so its coupling grows at high energies.","subject":"quantum-field-theory","difficulty":"advanced","labels":["running-coupling"]},
-  {"name":"differential cross-section from $\\mathcal{M}$","question":"How is a differential cross-section related to the matrix element $\\mathcal{M}$ for a $2 \\to 2$ process?","answer":"$$\\frac{d\\sigma}{d\\Omega} = \\frac{|\\mathcal{M}|^2}{64\\pi^2 s}$$in the center-of-mass frame for massless or equal-mass particles, where $s$ is the Mandelstam variable. More generally, $d\\sigma$ involves a flux factor and Lorentz-invariant phase space.","explanation":"The full formula is $d\\sigma = \\frac{1}{2E_A 2E_B |v_A - v_B|}|\\mathcal{M}|^2 d\\Pi_{\\text{LIPS}}$, where the prefactor is the flux factor (accounting for beam densities and relative velocity) and $d\\Pi_{\\text{LIPS}}$ is the Lorentz-invariant phase space measure that enforces 4-momentum conservation. For $2 \\to 2$ scattering in the CM frame, integrating over the constrained final-state momenta reduces $d\\Pi_{\\text{LIPS}}$ to $\\frac{|\\mathbf{p}_f|}{16\\pi^2 \\sqrt{s}} d\\Omega$, and combining with the flux factor $4|\\mathbf{p}_i|\\sqrt{s}$ yields $d\\sigma/d\\Omega = |\\mathcal{M}|^2/(64\\pi^2 s)$ when $|\\mathbf{p}_f| = |\\mathbf{p}_i|$ (equal-mass or massless case). The matrix element $\\mathcal{M}$ is read off from Feynman diagrams: draw all contributing diagrams, write down the amplitude using Feynman rules, then square it. For unpolarized scattering, average over initial spins (factor of $1/(2s_i+1)$ per particle) and sum over final spins. In QCD, also average over initial colors and sum over final colors. The total cross-section $\\sigma = \\int d\\sigma$ is directly proportional to event rates measured in colliders: $R = \\mathcal{L}\\sigma$, where $\\mathcal{L}$ is the luminosity. References: Peskin & Schroeder, Section 4.5 (cross sections and the S-matrix) and Section 4.6 (worked example: $e^+e^- \\to \\mu^+\\mu^-$); Schwartz, Quantum Field Theory and the Standard Model, Chapter 5; Griffiths, Introduction to Elementary Particles, Section 6.2 (Fermi's Golden Rule to cross-sections).","subject":"quantum-field-theory","difficulty":"advanced","labels":["cross-sections"]},
-  {"name":"Noether stress-energy tensor","question":"In field theory, what conserved current does spacetime translation invariance give via Noether\u0027s theorem?","answer":"The energy-momentum tensor $T^{\\mu\\nu}$. The conserved charges are $P^\\nu = \\int T^{0\\nu} \\, d^3x$, and conservation is $\\partial_\\mu T^{\\mu\\nu} = 0$.","explanation":"Lorentz invariance gives angular momentum conservation. Internal symmetries like $U(1)$ phase symmetry give conserved currents such as $j^\\mu = \\bar{\\psi}\\gamma^\\mu\\psi$ (electromagnetic current).","subject":"quantum-field-theory","difficulty":"intermediate","labels":["noether-qft"]},
-  {"name":"Lie groups and generators","question":"What is a Lie group, and what are its generators?","answer":"A Lie group is a continuous group that is also a smooth manifold. Its generators $T^a$ are the basis of the Lie algebra, related to group elements near the identity by $g = e^{i\\alpha_a T^a}$. They satisfy $[T^a, T^b] = if^{abc} T^c$, where $f^{abc}$ are the structure constants.","explanation":"In physics, generators correspond to conserved charges via Noether\u0027s theorem. Angular momentum operators are the generators of $SO(3)$; the Hamiltonian generates time translations.","subject":"math-group-theory","difficulty":"basic","labels":["lie-groups"]},
-  {"name":"$SU(2)$ and $SO(3)$","question":"What is $SU(2)$, what are its generators, and how is it related to $SO(3)$?","answer":"$SU(2)$ is the group of $2 \\times 2$ unitary matrices with determinant 1. Its generators are $T^a = \\frac{1}{2}\\sigma^a$ (half the Pauli matrices), satisfying $[T^a, T^b] = i\\epsilon^{abc} T^c$. $SU(2)$ is the double cover of $SO(3)$: every rotation corresponds to two $SU(2)$ elements ($\\pm g$).","explanation":"This is why spinors pick up a minus sign under $2\\pi$ rotation. Integer-spin representations see only $SO(3)$; half-integer representations require the full $SU(2)$.","subject":"math-group-theory","difficulty":"basic","labels":["su2"]},
-  {"name":"$SU(2)$ irreps","question":"What are the irreducible representations of $SU(2)$, and what labels them?","answer":"The irreps are labeled by $j = 0, \\frac{1}{2}, 1, \\frac{3}{2}, 2, \\ldots$ with dimension $2j + 1$. Each has basis states $|j, m\\rangle$ with $m = -j, -j+1, \\ldots, j$.","explanation":"These are exactly the angular momentum multiplets in quantum mechanics. $j = 1/2$ is the fundamental (spinor), $j = 1$ is the adjoint (vector), etc.","subject":"math-group-theory","difficulty":"intermediate","labels":["representations"]},
-  {"name":"Schur\u0027s lemma","question":"State Schur\u0027s lemma and explain its importance in physics.","answer":"(1) Any operator that commutes with all generators of an irreducible representation is proportional to the identity. (2) Any intertwining map between inequivalent irreps is zero.","explanation":"This is why $\\hat{L}^2$ has a single eigenvalue $\\hbar^2 l(l+1)$ within a given angular momentum multiplet. It also underlies selection rules: matrix elements of operators between states in different irreps vanish unless the operator transforms appropriately.","subject":"math-group-theory","difficulty":"basic","labels":["schur-lemma"]},
-  {"name":"$SU(2)$ tensor product decomposition","question":"How do you decompose the tensor product of two $SU(2)$ irreps $j_1 \\otimes j_2$?","answer":"$$j_1 \\otimes j_2 = |j_1 - j_2| \\oplus (|j_1 - j_2| + 1) \\oplus \\cdots \\oplus (j_1 + j_2)$$This is the Clebsch-Gordan decomposition. Alternatively, this follows from characters: the character of the spin-$j$ irrep is $\\chi_j(\\theta) = \\frac{\\sin((2j+1)\\theta/2)}{\\sin(\\theta/2)}$, and the tensor product character is the product $\\chi_{j_1}\\chi_{j_2}$. Using the product-to-sum identity for sines, this decomposes as $\\chi_{j_1}\\chi_{j_2} = \\sum_{j=|j_1-j_2|}^{j_1+j_2} \\chi_j$, proving the decomposition.","explanation":"For example, $1/2 \\otimes 1/2 = 0 \\oplus 1$ (singlet + triplet). Via characters: $\\chi_{1/2}(\\theta) = 2\\cos(\\theta/2)$, so $\\chi_{1/2}^2 = 2\\cos^2(\\theta/2) = 1 + (2\\cos\\theta + 1)/(1) = \\chi_0 + \\chi_1$. The expansion coefficients in the state basis are the Clebsch-Gordan coefficients. This is the group-theoretic content of angular momentum addition.","subject":"math-group-theory","difficulty":"intermediate","labels":["tensor-products","lie-groups"]},
-  {"name":"$SU(3)$ in the Standard Model","question":"What is $SU(3)$, how many generators does it have, and what role does it play in the Standard Model?","answer":"$SU(3)$ is the group of $3 \\times 3$ unitary matrices with determinant 1, with $3^2 - 1 = 8$ generators (the Gell-Mann matrices $\\lambda^a/2$). It is the gauge group of QCD: quarks carry three color charges and gluons transform in the adjoint (octet) representation.","explanation":"The fundamental is $\\mathbf{3}$ (quarks), the conjugate is $\\bar{\\mathbf{3}}$ (antiquarks), the adjoint is $\\mathbf{8}$ (gluons). Mesons are $\\mathbf{3} \\otimes \\bar{\\mathbf{3}} = \\mathbf{1} \\oplus \\mathbf{8}$.","subject":"math-group-theory","difficulty":"intermediate","labels":["su3"]},
-  {"name":"Noether\u0027s theorem and symmetry groups","question":"How does Noether\u0027s theorem connect symmetry groups to conservation laws? Give three examples.","answer":"Every continuous symmetry of the action has a corresponding conserved quantity. Time translation gives energy; spatial translation gives momentum; rotation ($SO(3)$) gives angular momentum.","explanation":"Internal symmetries also apply: $U(1)$ phase invariance gives charge conservation, $SU(3)$ color symmetry gives color charge conservation. The conserved current is $j^\\mu = \\frac{\\partial \\mathcal{L}}{\\partial(\\partial_\\mu \\phi)} \\delta \\phi$.","subject":"math-group-theory","difficulty":"basic","labels":["noether"]},
-  {"name":"Lie algebra structure constants","question":"What are the structure constants $f^{abc}$ of a Lie algebra?","answer":"They are defined by $[T^a, T^b] = if^{abc} T^c$, are fully antisymmetric ($f^{abc} = -f^{bac}$), and satisfy the Jacobi identity: $f^{abe}f^{ecd} + f^{bce}f^{ead} + f^{cae}f^{ebd} = 0$.","explanation":"For $SU(2)$, $f^{abc} = \\epsilon^{abc}$. For $SU(3)$, the structure constants are more complex but tabulated. In gauge theory, structure constants determine gluon self-interaction vertices.","subject":"math-group-theory","difficulty":"intermediate","labels":["structure-constants"]},
-  {"name":"Young tableaux","question":"What are Young tableaux, and how are they used in physics?","answer":"Young tableaux are diagrams of boxes in left-justified rows of non-increasing length that label irreducible representations of $SU(N)$ and the permutation group $S_n$. Rows represent symmetrization and columns represent antisymmetrization of tensor indices.","explanation":"For $SU(3)$: one box is $\\mathbf{3}$, two boxes in a column is $\\bar{\\mathbf{3}}$, two in a row is $\\mathbf{6}$. They systematize tensor product decompositions and the classification of hadrons in the quark model.","subject":"math-group-theory","difficulty":"advanced","labels":["young-tableaux"]},
-  {"name":"Casimir operators","question":"What is a Casimir operator, and what is the quadratic Casimir of $SU(2)$?","answer":"A Casimir operator commutes with all generators of the Lie algebra. For $SU(2)$, the quadratic Casimir is $C_2 = T^a T^a$. In the spin-$j$ representation, its eigenvalue is $j(j+1)$.","explanation":"By Schur\u0027s lemma, a Casimir is proportional to the identity within each irrep, so its eigenvalue labels the representation. $SU(3)$ has two independent Casimirs (quadratic and cubic), matching the two labels needed for an $SU(3)$ irrep.","subject":"math-group-theory","difficulty":"intermediate","labels":["casimir"]},
-  {"name":"weight diagrams","question":"What is a weight diagram for a Lie algebra representation?","answer":"A weight diagram plots the eigenvalues of the Cartan (mutually commuting) generators for each state. The roots are the weights of the adjoint representation, corresponding to raising/lowering operators. For $SU(2)$, the single Cartan generator is $T^3$, and the roots are $\\pm 1$ (corresponding to $T^\\pm$).","explanation":"For $SU(3)$, the Cartan subalgebra is 2D ($T^3$, $T^8$), so weight diagrams are 2D. The fundamental $\\mathbf{3}$ has three weights forming a triangle; the adjoint $\\mathbf{8}$ has a hexagonal diagram with two states at the origin.","subject":"math-group-theory","difficulty":"advanced","labels":["weight-diagrams"]},
-  {"name":"Legendre polynomials","question":"What ODE do the Legendre polynomials $P_l(x)$ satisfy, and where do they arise in physics?","answer":"$(1-x^2)P_l\u0027\u0027 - 2xP_l\u0027 + l(l+1)P_l = 0$. They arise as the angular part of solutions to Laplace\u0027s equation in spherical coordinates.","explanation":"The first few: $P_0 = 1$, $P_1 = x$, $P_2 = (3x^2 - 1)/2$. Orthogonality: $\\int_{-1}^{1} P_l P_{l\u0027} dx = \\frac{2}{2l+1}\\delta_{ll\u0027}$. Every multipole expansion in electrostatics uses them.","subject":"math-special-functions","difficulty":"basic","labels":["legendre-polynomials"]},
-  {"name":"spherical harmonics $Y_l^m$","question":"What are the spherical harmonics $Y_l^m(\\theta, \\phi)$, and what is their orthonormality relation?","answer":"$Y_l^m(\\theta, \\phi) = N_{lm} P_l^m(\\cos\\theta) e^{im\\phi}$, where $P_l^m$ are associated Legendre functions. They satisfy $\\int Y_l^m Y_{l\u0027}^{m\u0027*} d\\Omega = \\delta_{ll\u0027}\\delta_{mm\u0027}$.","explanation":"Spherical harmonics are eigenfunctions of $\\hat{L}^2$ and $\\hat{L}_z$ on the sphere. Any function on the sphere can be expanded in them  --  the angular analog of a Fourier series. They appear in hydrogen atom wavefunctions, multipole expansions, and CMB analysis.","subject":"math-special-functions","difficulty":"basic","labels":["spherical-harmonics"]},
-  {"name":"Bessel functions","question":"What ODE do the Bessel functions $J_n(x)$ satisfy, and where do they appear in physics?","answer":"$x^2 y\u0027\u0027 + xy\u0027 + (x^2 - n^2)y = 0$. The general solution is $y = AJ_n(x) + BY_n(x)$, where $Y_n$ is the Bessel function of the second kind (singular at the origin).","explanation":"Bessel functions appear whenever you separate the wave, Helmholtz, or diffusion equation in cylindrical coordinates: vibrating drum heads, waveguide modes, diffraction from circular apertures.","subject":"math-special-functions","difficulty":"intermediate","labels":["bessel-functions"]},
-  {"name":"Fourier transform","question":"Write the Fourier transform and its inverse for a function $f(x)$ (physicist\u0027s convention).","answer":"$$\\tilde{f}(k) = \\int_{-\\infty}^{\\infty} f(x) e^{-ikx} dx, \\qquad f(x) = \\int_{-\\infty}^{\\infty} \\tilde{f}(k) \\frac{e^{ikx}}{2\\pi} dk$$","explanation":"Key properties: convolution becomes multiplication, differentiation becomes $ik$, and the Fourier transform of a Gaussian is a Gaussian. Parseval\u0027s theorem: $\\int |f|^2 dx = \\int |\\tilde{f}|^2 dk/(2\\pi)$.","subject":"math-special-functions","difficulty":"basic","labels":["fourier-transform"]},
-  {"name":"Fourier transform of Gaussian","question":"What is the Fourier transform of a Gaussian $f(x) = e^{-ax^2}$?","answer":"$$\\tilde{f}(k) = \\sqrt{\\frac{\\pi}{a}} \\, e^{-k^2/(4a)}$$A narrow Gaussian in $x$ becomes wide in $k$, and vice versa.","explanation":"This is a manifestation of the uncertainty principle: $\\Delta x \\cdot \\Delta k \\geq 1/2$, with equality for Gaussians. The Gaussian is the unique function that minimizes the uncertainty product.","subject":"math-special-functions","difficulty":"intermediate","labels":["fourier-transform"]},
-  {"name":"Helmholtz Green\u0027s function","question":"What is the Green\u0027s function for the Helmholtz equation $(\\nabla^2 + k^2)G = -\\delta^3(\\vec{r})$ in 3D?","answer":"$$G(\\vec{r}) = \\frac{e^{\\pm ikr}}{4\\pi r}$$The $+$ sign gives the retarded (outgoing wave) Green\u0027s function; the $-$ sign gives the advanced (incoming wave) Green\u0027s function.","explanation":"This is the starting point for scattering theory. The scattered wave is constructed by convolving the Green\u0027s function with the source. It reduces to the electrostatic $1/(4\\pi r)$ when $k = 0$.","subject":"math-special-functions","difficulty":"intermediate","labels":["greens-functions"]},
-  {"name":"Laplace transform","question":"Write the definition of the Laplace transform and state two key properties.","answer":"$$F(s) = \\int_0^\\infty f(t) e^{-st} dt$$Properties: $\\mathcal{L}\\{f\u0027(t)\\} = sF(s) - f(0)$ (derivatives become algebraic), and $\\mathcal{L}\\{e^{at}f(t)\\} = F(s-a)$ (frequency shifting).","explanation":"The Laplace transform converts ODEs with initial conditions into algebraic equations. Especially useful for linear circuits, control theory, and solving the damped driven harmonic oscillator.","subject":"math-special-functions","difficulty":"basic","labels":["laplace-transform"]},
-  {"name":"Hermite polynomials","question":"What ODE do the Hermite polynomials $H_n(x)$ satisfy, and where do they appear in quantum mechanics?","answer":"$H_n\u0027\u0027 - 2xH_n\u0027 + 2nH_n = 0$. The harmonic oscillator wavefunctions are $\\psi_n(x) = N_n H_n(\\alpha x) e^{-\\alpha^2 x^2/2}$, where $\\alpha = \\sqrt{m\\omega/\\hbar}$.","explanation":"First few: $H_0 = 1$, $H_1 = 2x$, $H_2 = 4x^2 - 2$, $H_3 = 8x^3 - 12x$. Orthogonal with weight $e^{-x^2}$: $\\int H_m H_n e^{-x^2} dx = \\sqrt{\\pi} \\, 2^n n! \\, \\delta_{mn}$.","subject":"math-special-functions","difficulty":"intermediate","labels":["hermite-polynomials"]},
-  {"name":"Dirac delta representations","question":"Write three useful representations of the Dirac delta function $\\delta(x)$.","answer":"(1) Fourier: $\\delta(x) = \\int \\frac{e^{ikx}}{2\\pi} dk$. (2) Gaussian: $\\delta(x) = \\lim_{\\epsilon \\to 0} \\frac{1}{\\sqrt{2\\pi}\\epsilon} e^{-x^2/(2\\epsilon^2)}$. (3) Lorentzian: $\\delta(x) = \\lim_{\\epsilon \\to 0} \\frac{\\epsilon}{\\pi(x^2 + \\epsilon^2)}$.","explanation":"The Fourier representation is the most used  --  it is the completeness relation for plane waves. Also essential: $\\delta(ax) = \\delta(x)/|a|$ and $\\delta(g(x)) = \\sum_i \\delta(x - x_i)/|g\u0027(x_i)|$.","subject":"math-special-functions","difficulty":"intermediate","labels":["delta-function"]},
-  {"name":"spherical Bessel functions","question":"What are the spherical Bessel functions, and where do they arise?","answer":"$j_l(x) = \\sqrt{\\frac{\\pi}{2x}} J_{l+1/2}(x)$. The first two: $j_0(x) = \\frac{\\sin x}{x}$, $j_1(x) = \\frac{\\sin x}{x^2} - \\frac{\\cos x}{x}$. They solve the radial Helmholtz equation in spherical coordinates.","explanation":"They appear in the partial wave expansion: $e^{ikr\\cos\\theta} = \\sum_l (2l+1) i^l j_l(kr) P_l(\\cos\\theta)$. This is the starting point for partial wave analysis in quantum scattering theory.","subject":"math-special-functions","difficulty":"advanced","labels":["spherical-bessel"]},
-  {"name":"orthogonal polynomial families","question":"What general structure do Legendre, Hermite, and Laguerre polynomials share?","answer":"They are families of orthogonal polynomials satisfying Sturm-Liouville problems with weight $w(x)$: $\\int p_m p_n w(x) dx = N_n \\delta_{mn}$. Legendre: $w = 1$ on $[-1,1]$; Hermite: $w = e^{-x^2}$ on $(-\\infty,\\infty)$; Laguerre: $w = x^\\alpha e^{-x}$ on $[0,\\infty)$.","explanation":"Laguerre polynomials appear in hydrogen radial wavefunctions. Sturm-Liouville theory guarantees completeness, so any reasonable function can be expanded in these polynomials on their domain.","subject":"math-special-functions","difficulty":"intermediate","labels":["orthogonal-polynomials"]}
+  {
+    "name": "derivative of $\\sin(x)$",
+    "question": "What is the derivative of $\\sin(x)$?",
+    "answer": "$\\cos(x)$",
+    "explanation": "Follows directly from the limit definition or from the Taylor series of $\\sin(x)$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "derivatives"
+    ]
+  },
+  {
+    "name": "derivative of $e^{ax}$",
+    "question": "What is the derivative of $e^{ax}$?",
+    "answer": "$a e^{ax}$",
+    "explanation": "The exponential function is its own derivative, scaled by the chain rule factor $a$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "derivatives"
+    ]
+  },
+  {
+    "name": "derivative of $\\ln(x)$",
+    "question": "What is the derivative of $\\ln(x)$?",
+    "answer": "$\\frac{1}{x}$",
+    "explanation": "Follows from the inverse function theorem applied to $e^x$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "derivatives"
+    ]
+  },
+  {
+    "name": "Gaussian integral",
+    "question": "What is the Gaussian integral: $\\int_{-\\infty}^{+\\infty} e^{-x^2} \\, dx$?",
+    "answer": "$\\sqrt{\\pi}$",
+    "explanation": "Classic trick: square the integral, convert to polar coordinates, and evaluate the resulting $r$ integral.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "integrals"
+    ]
+  },
+  {
+    "name": "$\\int \\frac{1}{x}\\, dx$",
+    "question": "What is $\\int \\frac{1}{x} \\, dx$?",
+    "answer": "$\\ln|x| + C$",
+    "explanation": "This is the antiderivative definition of the natural logarithm.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "integrals"
+    ]
+  },
+  {
+    "name": "Gamma function integral",
+    "question": "What is $\\int_0^\\infty x^{n-1} e^{-x} \\, dx$?",
+    "answer": "$\\Gamma(n) = (n-1)!$ for positive integers $n$",
+    "explanation": "This defines the Gamma function, which generalizes the factorial to non-integer arguments.",
+    "subject": "math-calculus",
+    "difficulty": "intermediate",
+    "labels": [
+      "integrals"
+    ]
+  },
+  {
+    "name": "divergence theorem",
+    "question": "State the divergence theorem (Gauss's theorem).",
+    "answer": "The volume integral of $\\nabla \\cdot \\vec{F}$ equals the surface integral of $\\vec{F} \\cdot d\\vec{A}$ over the closed boundary surface: $\\int_V (\\nabla \\cdot \\vec{F}) \\, dV = \\oint_S \\vec{F} \\cdot d\\vec{A}$",
+    "explanation": "Converts a volume integral of a divergence into a flux integral over the enclosing surface. Fundamental in electrostatics (Gauss's law).",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "vector-calculus"
+    ]
+  },
+  {
+    "name": "Stokes' theorem",
+    "question": "State Stokes' theorem.",
+    "answer": "The surface integral of $\\nabla \\times \\vec{F}$ equals the line integral of $\\vec{F}$ around the boundary curve: $\\int_S (\\nabla \\times \\vec{F}) \\cdot d\\vec{A} = \\oint_C \\vec{F} \\cdot d\\vec{l}$",
+    "explanation": "Relates the curl of a vector field over a surface to its circulation around the boundary. Underlies Faraday's law and Ampere's law.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "vector-calculus"
+    ]
+  },
+  {
+    "name": "$\\nabla \\cdot (\\nabla \\times \\vec{F})$",
+    "question": "What is $\\nabla \\cdot (\\nabla \\times \\vec{F})$ for any smooth vector field $\\vec{F}$?",
+    "answer": "Zero",
+    "explanation": "$\\nabla \\cdot (\\nabla \\times \\vec{F}) = 0$ identically. This is why magnetic monopoles are absent in Maxwell's equations: $\\nabla \\cdot \\vec{B} = 0$ follows from $\\vec{B} = \\nabla \\times \\vec{A}$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "vector-calculus"
+    ]
+  },
+  {
+    "name": "$\\nabla \\times (\\nabla f)$",
+    "question": "What is $\\nabla \\times (\\nabla f)$ for any smooth scalar field $f$?",
+    "answer": "Zero",
+    "explanation": "$\\nabla \\times (\\nabla f) = 0$ identically. This is why conservative forces have zero curl: if $\\vec{F} = -\\nabla V$, then $\\nabla \\times \\vec{F} = 0$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "vector-calculus"
+    ]
+  },
+  {
+    "name": "$e^x$ expansion",
+    "question": "Expand $e^x$ to third order for small $x$.",
+    "answer": "$1 + x + \\frac{x^2}{2} + \\frac{x^3}{6} + \\cdots$",
+    "explanation": "The general pattern is $\\sum \\frac{x^n}{n!}$. Used everywhere  --  thermal factors $e^{-\\beta E}$, time evolution $e^{-iHt/\\hbar}$, etc.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "$\\frac{1}{1-x}$ expansion",
+    "question": "Expand $\\frac{1}{1-x}$ to second order for small $x$.",
+    "answer": "$1 + x + x^2 + \\cdots$",
+    "explanation": "The geometric series. In physics, used constantly for perturbative expansions  --  e.g., expanding $\\frac{1}{1 - \\frac{v^2}{c^2}}$ or gravitational potentials with small corrections.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "radial Laplacian in spherical coordinates",
+    "question": "What is the Laplacian ($\\nabla^2$) in spherical coordinates acting on a function that depends only on $r$?",
+    "answer": "$\\frac{1}{r^2} \\frac{d}{dr}\\left(r^2 \\frac{df}{dr}\\right)$",
+    "explanation": "The angular parts vanish for spherically symmetric functions. Equivalently, $\\frac{1}{r} \\frac{d^2}{dr^2}(r f)$.",
+    "subject": "math-calculus",
+    "difficulty": "intermediate",
+    "labels": [
+      "multivariable"
+    ]
+  },
+  {
+    "name": "gradient in spherical coordinates",
+    "question": "What is the gradient in spherical coordinates $(r, \\theta, \\phi)$?",
+    "answer": "$\\nabla f = \\frac{\\partial f}{\\partial r} \\hat{r} + \\frac{1}{r}\\frac{\\partial f}{\\partial \\theta} \\hat{\\theta} + \\frac{1}{r \\sin\\theta}\\frac{\\partial f}{\\partial \\phi} \\hat{\\phi}$",
+    "explanation": "The scale factors $1$, $r$, and $r \\sin\\theta$ come from the metric of spherical coordinates.",
+    "subject": "math-calculus",
+    "difficulty": "intermediate",
+    "labels": [
+      "multivariable"
+    ]
+  },
+  {
+    "name": "Leibniz integral rule",
+    "question": "State the Leibniz integral rule with variable limits, and use differentiation under the integral sign to evaluate $\\int_0^\\infty \\frac{\\sin x}{x}\\,dx$.",
+    "answer": "$\\frac{d}{dt} \\int_{a(t)}^{b(t)} f(x,t) \\, dx = \\int_{a(t)}^{b(t)} \\frac{\\partial f}{\\partial t} \\, dx + f(b,t) b'(t) - f(a,t) a'(t)$. For $\\int_0^\\infty \\frac{\\sin x}{x}\\,dx$: introduce $I(t) = \\int_0^\\infty \\frac{\\sin x}{x} e^{-tx}\\,dx$ for $t \\geq 0$. Differentiating under the integral: $I'(t) = -\\int_0^\\infty \\sin(x)\\,e^{-tx}\\,dx = -\\frac{1}{1+t^2}$. Integrating: $I(t) = -\\arctan(t) + C$. Since $I(\\infty) = 0$, we get $C = \\pi/2$, so $I(0) = \\pi/2$.",
+    "explanation": "Feynman's favorite trick: introduce a parameter to make a hard integral tractable. The constant-limits case ($\\partial_t \\int_a^b f\\,dx = \\int_a^b \\partial_t f\\,dx$) is just swapping the derivative inside. The power of the technique is in choosing the right parametrization -- here, the $e^{-tx}$ regulator turns $\\sin(x)/x$ into a Laplace transform that can be done in closed form.",
+    "subject": "math-calculus",
+    "difficulty": "intermediate",
+    "labels": [
+      "integrals"
+    ]
+  },
+  {
+    "name": "finite geometric sum",
+    "question": "What is the finite geometric sum $\\sum_{i=0}^{n} c^i$ for $c \\neq 1$?",
+    "answer": "$\\frac{c^{n+1} - 1}{c - 1}$",
+    "explanation": "Used when truncating perturbation series after $n$ terms. For $c = 1$, the sum is simply $n + 1$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "infinite geometric series",
+    "question": "What does the infinite geometric series $\\sum_{i=0}^{\\infty} c^i$ converge to, and when?",
+    "answer": "$\\frac{1}{1-c}$ for $|c| < 1$. Also: $\\sum_{i=1}^{\\infty} c^i = \\frac{c}{1-c}$",
+    "explanation": "The convergence condition $|c| < 1$ is crucial. This is the foundation of perturbative expansions throughout physics.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "values of $\\pi$ and $e$",
+    "question": "What are the numerical values of $\\pi$ and $e$ to five decimal places?",
+    "answer": "$\\pi \\approx 3.14159$, $e \\approx 2.71828$",
+    "explanation": "Essential for quick order-of-magnitude estimates. Useful mnemonics: $\\pi \\approx 22/7$ and $e \\approx 19/7$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "constants"
+    ]
+  },
+  {
+    "name": "change-of-base formula",
+    "question": "State the change-of-base formula for logarithms.",
+    "answer": "$\\log_b x = \\frac{\\log_a x}{\\log_a b}$",
+    "explanation": "This lets you convert between any two logarithm bases. In physics, you often switch between $\\ln$ (natural) and $\\log_{10}$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "logarithms"
+    ]
+  },
+  {
+    "name": "quadratic formula",
+    "question": "State the quadratic formula for the roots of $ax^2 + bx + c = 0$.",
+    "answer": "$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$",
+    "explanation": "The discriminant $b^2 - 4ac$ determines the nature of roots: positive gives two real roots, zero gives one degenerate root, negative gives complex conjugate pairs.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "algebra"
+    ]
+  },
+  {
+    "name": "$e$ as series",
+    "question": "Express Euler's number $e$ as an infinite series.",
+    "answer": "$e = \\sum_{n=0}^{\\infty} \\frac{1}{n!} = 1 + 1 + \\frac{1}{2} + \\frac{1}{6} + \\frac{1}{24} + \\frac{1}{120} + \\cdots$",
+    "explanation": "This follows from evaluating the Taylor series of $e^x$ at $x = 1$. Also: $e = \\lim_{n \\to \\infty} (1 + 1/n)^n$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "constants"
+    ]
+  },
+  {
+    "name": "product rule",
+    "question": "State the product rule for differentiation.",
+    "answer": "$\\frac{d(uv)}{dx} = u\\frac{dv}{dx} + v\\frac{du}{dx}$",
+    "explanation": "In quantum mechanics, this appears when differentiating products of wavefunctions, e.g., computing $\\hat{p}(\\psi_1 \\psi_2)$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "derivatives"
+    ]
+  },
+  {
+    "name": "quotient rule",
+    "question": "State the quotient rule for differentiation.",
+    "answer": "$\\frac{d(u/v)}{dx} = \\frac{v\\frac{du}{dx} - u\\frac{dv}{dx}}{v^2}$",
+    "explanation": "Less commonly needed than the product rule in physics, but useful when differentiating ratios like efficiency or transition rates.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "derivatives"
+    ]
+  },
+  {
+    "name": "$\\frac{d}{dx}(\\arctan u)$",
+    "question": "What is $\\frac{d}{dx}(\\arctan u)$?",
+    "answer": "$\\frac{1}{1+u^2}\\frac{du}{dx}$",
+    "explanation": "Appears when integrating Lorentzian line shapes and in scattering phase shifts. The integral form $\\int \\frac{dx}{1+x^2} = \\arctan x$ is equally important.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "derivatives"
+    ]
+  },
+  {
+    "name": "$\\frac{d}{dx}(\\arcsin u)$",
+    "question": "What is $\\frac{d}{dx}(\\arcsin u)$?",
+    "answer": "$\\frac{1}{\\sqrt{1-u^2}}\\frac{du}{dx}$",
+    "explanation": "The domain restriction $|u| < 1$ reflects the range of $\\sin$. Related: $\\frac{d}{dx}(\\arccos u) = \\frac{-1}{\\sqrt{1-u^2}}\\frac{du}{dx}$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "derivatives"
+    ]
+  },
+  {
+    "name": "integration by parts",
+    "question": "State integration by parts.",
+    "answer": "$\\int u \\frac{dv}{dx} dx = uv - \\int v \\frac{du}{dx} dx$",
+    "explanation": "The integral analog of the product rule. Essential for evaluating matrix elements in quantum mechanics, e.g., showing that $\\hat{p}$ is Hermitian.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "integrals"
+    ]
+  },
+  {
+    "name": "$\\int \\frac{dx}{1+x^2}$",
+    "question": "What is $\\int \\frac{dx}{1+x^2}$?",
+    "answer": "$\\arctan x + C$",
+    "explanation": "The Fourier transform of a Lorentzian peak. Also appears in scattering cross-section integrals.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "integrals"
+    ]
+  },
+  {
+    "name": "$\\int \\sec x\\, dx$",
+    "question": "What is $\\int \\sec x \\, dx$?",
+    "answer": "$\\ln|\\sec x + \\tan x| + C$",
+    "explanation": "Multiply top and bottom by $(\\sec x + \\tan x)$; the numerator is $d(\\sec x + \\tan x)$, giving $\\int du/u$.",
+    "subject": "math-calculus",
+    "difficulty": "intermediate",
+    "labels": [
+      "integrals"
+    ]
+  },
+  {
+    "name": "$\\ln(1+x)$ expansion",
+    "question": "Expand $\\ln(1+x)$ for small $x$.",
+    "answer": "$x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\frac{x^4}{4} + \\cdots = \\sum_{i=1}^{\\infty}(-1)^{i+1}\\frac{x^i}{i}$",
+    "explanation": "Converges for $-1 < x \\leq 1$. In thermodynamics, $\\ln(1+x) \\approx x$ for small $x$ is used constantly  --  e.g., in Stirling's approximation and entropy of mixing.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "$\\sin x$ expansion",
+    "question": "Expand $\\sin x$ for small $x$.",
+    "answer": "$x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\cdots = \\sum_{i=0}^{\\infty}(-1)^i \\frac{x^{2i+1}}{(2i+1)!}$",
+    "explanation": "Only odd powers appear (since $\\sin$ is an odd function). The small-angle approximation $\\sin x \\approx x$ is the leading term.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "$\\cos x$ expansion",
+    "question": "Expand $\\cos x$ for small $x$.",
+    "answer": "$1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots = \\sum_{i=0}^{\\infty}(-1)^i \\frac{x^{2i}}{(2i)!}$",
+    "explanation": "Only even powers appear (since $\\cos$ is an even function). For small oscillations, $\\cos \\theta \\approx 1 - \\theta^2/2$ gives the harmonic potential.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "binomial series $(1+x)^n$",
+    "question": "State the binomial series expansion of $(1+x)^n$ for arbitrary $n$.",
+    "answer": "$(1+x)^n = \\sum_{i=0}^{\\infty} \\binom{n}{i} x^i = 1 + nx + \\frac{n(n-1)}{2}x^2 + \\cdots$",
+    "explanation": "For integer $n \\geq 0$ the series terminates. For non-integer or negative $n$ it is infinite but converges for $|x|<1$. Physicists use this for $(1+\\epsilon)^n \\approx 1 + n\\epsilon$ constantly  --  e.g., relativistic $\\gamma \\approx 1 + v^2/2c^2$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "series"
+    ]
+  },
+  {
+    "name": "Euler's formula",
+    "question": "State Euler's formula relating the complex exponential to trigonometric functions.",
+    "answer": "$e^{ix} = \\cos x + i\\sin x$, and the special case $e^{i\\pi} = -1$",
+    "explanation": "The most important identity in physics. Plane waves $e^{i(kx - \\omega t)}$, phasors, Fourier transforms, and quantum wavefunctions all follow from this.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "complex-exponentials"
+    ]
+  },
+  {
+    "name": "$\\sinh x$ and $\\cosh x$",
+    "question": "Define $\\sinh x$ and $\\cosh x$ in terms of exponentials.",
+    "answer": "$\\sinh x = \\frac{e^x - e^{-x}}{2}$, $\\cosh x = \\frac{e^x + e^{-x}}{2}$",
+    "explanation": "The catenary curve is $y = a\\cosh(x/a)$. In special relativity, Lorentz boosts are hyperbolic rotations: $ct' = ct\\cosh\\phi - x\\sinh\\phi$ where $\\phi$ is the rapidity.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "hyperbolic-functions"
+    ]
+  },
+  {
+    "name": "$\\cosh^2 x - \\sinh^2 x$",
+    "question": "What is $\\cosh^2 x - \\sinh^2 x$?",
+    "answer": "$1$",
+    "explanation": "The hyperbolic analog of $\\sin^2 + \\cos^2 = 1$. This identity reflects the invariance of the spacetime interval under Lorentz boosts, since $\\cosh^2\\phi - \\sinh^2\\phi = 1$.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "hyperbolic-functions"
+    ]
+  },
+  {
+    "name": "$\\tanh x$ and hyperbolic identities",
+    "question": "Define $\\tanh x$ and list two other key hyperbolic identities.",
+    "answer": "$\\tanh x = \\frac{e^x - e^{-x}}{e^x + e^{-x}} = \\frac{\\sinh x}{\\cosh x}$. Also: $\\cosh x + \\sinh x = e^x$ and $\\sinh(x+y) = \\sinh x \\cosh y + \\cosh x \\sinh y$.",
+    "explanation": "In relativity, the velocity addition formula $\\beta = \\tanh\\phi$ maps the rapidity $\\phi$ to velocity. The addition formula for $\\sinh$ gives the rapidity addition rule.",
+    "subject": "math-calculus",
+    "difficulty": "basic",
+    "labels": [
+      "hyperbolic-functions"
+    ]
+  },
+  {
+    "name": "saddle-point approximation",
+    "question": "For an integral $I = \\int e^{N f(x)} \\, dx$ with large $N$, what is the leading saddle-point (steepest descent) approximation?",
+    "answer": "$I \\approx e^{N f(x_0)} \\sqrt{\\frac{2\\pi}{N |f''(x_0)|}}$, where $f'(x_0) = 0$",
+    "explanation": "The integral is dominated by the neighborhood of the maximum of $f(x)$, with Gaussian fluctuations giving the prefactor. This is the workhorse for evaluating partition functions, path integrals, and matrix model integrals in the large-$N$ limit.",
+    "subject": "math-calculus",
+    "difficulty": "intermediate",
+    "labels": [
+      "asymptotic-methods"
+    ]
+  },
+  {
+    "name": "asymptotic series",
+    "question": "A series $\\sum a_n x^n$ is asymptotic to $f(x)$ as $x \\to 0$. Does it need to converge?",
+    "answer": "No. The partial sum $\\sum_{n=0}^{N} a_n x^n$ approximates $f(x)$ with error $O(x^{N+1})$ at fixed $N$ as $x \\to 0$, even if the series diverges for any nonzero $x$.",
+    "explanation": "Perturbative expansions in physics are almost always asymptotic, not convergent. The optimal truncation point is typically around $N \\sim 1/g$, after which adding more terms makes the approximation worse.",
+    "subject": "math-calculus",
+    "difficulty": "intermediate",
+    "labels": [
+      "asymptotic-methods"
+    ]
+  },
+  {
+    "name": "Hermitian eigenvalues",
+    "question": "What are the eigenvalues of a Hermitian (self-adjoint) matrix guaranteed to be?",
+    "answer": "Real",
+    "explanation": "If $A = A^\\dagger$, then $\\langle v|A|v\\rangle = \\langle v|A^\\dagger|v\\rangle^* = \\langle v|A|v\\rangle^*$, so eigenvalues equal their complex conjugates.",
+    "subject": "math-linear-algebra",
+    "difficulty": "basic",
+    "labels": [
+      "hermitian-matrices"
+    ]
+  },
+  {
+    "name": "matrix trace",
+    "question": "What is the trace of a matrix?",
+    "answer": "The sum of its diagonal elements, equivalently the sum of its eigenvalues.",
+    "explanation": "$\\text{Tr}(A) = \\sum_i A_{ii}$. The trace is invariant under similarity transformations: $\\text{Tr}(P^{-1}AP) = \\text{Tr}(A)$.",
+    "subject": "math-linear-algebra",
+    "difficulty": "basic",
+    "labels": [
+      "traces"
+    ]
+  },
+  {
+    "name": "determinant as eigenvalue product",
+    "question": "What is the determinant of a matrix in terms of its eigenvalues?",
+    "answer": "The product of all its eigenvalues.",
+    "explanation": "$\\det(A) = \\prod_i \\lambda_i$. A matrix is singular (non-invertible) if and only if at least one eigenvalue is zero.",
+    "subject": "math-linear-algebra",
+    "difficulty": "basic",
+    "labels": [
+      "determinants"
+    ]
+  },
+  {
+    "name": "orthogonality of eigenstates",
+    "question": "Why are eigenstates of a quantum observable with different eigenvalues orthogonal?",
+    "answer": "Because the observable is Hermitian: if $\\hat{A}|a\\rangle = a|a\\rangle$ and $\\hat{A}|b\\rangle = b|b\\rangle$ with $a \\neq b$, then $(a - b)\\langle a|b\\rangle = 0$ forces $\\langle a|b\\rangle = 0$.",
+    "explanation": "This is why measurement outcomes are distinguishable  --  states with different eigenvalues have zero overlap.",
+    "subject": "math-linear-algebra",
+    "difficulty": "basic",
+    "labels": [
+      "hermitian-matrices"
+    ]
+  },
+  {
+    "name": "spectral theorem",
+    "question": "What is the spectral theorem for Hermitian matrices?",
+    "answer": "Any Hermitian matrix can be diagonalized by a unitary transformation: $A = U D U^\\dagger$, where $D$ is diagonal with real eigenvalues and $U$ is unitary.",
+    "explanation": "This is why observables in quantum mechanics (Hermitian operators) have real eigenvalues and orthogonal eigenstates forming a complete basis.",
+    "subject": "math-linear-algebra",
+    "difficulty": "intermediate",
+    "labels": [
+      "decompositions"
+    ]
+  },
+  {
+    "name": "unitary matrix",
+    "question": "What is a unitary matrix?",
+    "answer": "A matrix $U$ such that $U^\\dagger U = U U^\\dagger = I$ (its inverse is its conjugate transpose).",
+    "explanation": "Unitary matrices preserve inner products: $\\langle Uv|Uw\\rangle = \\langle v|w\\rangle$. In quantum mechanics, time evolution operators are unitary.",
+    "subject": "math-linear-algebra",
+    "difficulty": "basic",
+    "labels": [
+      "special-matrices"
+    ]
+  },
+  {
+    "name": "unitary eigenvalues",
+    "question": "What are the eigenvalues of a unitary matrix constrained to be?",
+    "answer": "They lie on the unit circle in the complex plane: $|\\lambda| = 1$, i.e., $\\lambda = e^{i\\theta}$.",
+    "explanation": "If $U|v\\rangle = \\lambda|v\\rangle$ and $U$ is unitary, then $|\\lambda|^2 \\langle v|v\\rangle = \\langle Uv|Uv\\rangle = \\langle v|v\\rangle$, so $|\\lambda| = 1$.",
+    "subject": "math-linear-algebra",
+    "difficulty": "intermediate",
+    "labels": [
+      "special-matrices"
+    ]
+  },
+  {
+    "name": "Cayley-Hamilton theorem",
+    "question": "What is the Cayley-Hamilton theorem?",
+    "answer": "Every square matrix satisfies its own characteristic equation: if $p(\\lambda) = \\det(A - \\lambda I)$, then $p(A) = 0$.",
+    "explanation": "For a 2x2 matrix with characteristic polynomial $\\lambda^2 - \\text{Tr}(A)\\lambda + \\det(A) = 0$, this gives $A^2 - \\text{Tr}(A) A + \\det(A) I = 0$.",
+    "subject": "math-linear-algebra",
+    "difficulty": "intermediate",
+    "labels": [
+      "theorems"
+    ]
+  },
+  {
+    "name": "why observables are Hermitian",
+    "question": "Why must quantum mechanical observables be represented by Hermitian operators?",
+    "answer": "Because Hermitian operators have real eigenvalues (measurement outcomes must be real numbers) and their eigenstates form a complete orthonormal basis (any state can be expanded in the eigenbasis).",
+    "explanation": "The spectral theorem guarantees both properties. Anti-Hermitian operators have purely imaginary eigenvalues and generate unitary transformations instead.",
+    "subject": "math-linear-algebra",
+    "difficulty": "intermediate",
+    "labels": [
+      "hermitian-matrices"
+    ]
+  },
+  {
+    "name": "commutator $[A,B]$ and simultaneous diagonalization",
+    "question": "What is the commutator $[A, B]$ of two matrices, and when can $A$ and $B$ be simultaneously diagonalized?",
+    "answer": "$[A, B] = AB - BA$. Two Hermitian matrices can be simultaneously diagonalized if and only if they commute: $[A, B] = 0$.",
+    "explanation": "If $[A,B]=0$, then $B$ maps each eigenspace of $A$ into itself (since $A(B|v\\rangle) = B(A|v\\rangle) = a(B|v\\rangle)$), so $B$ can be diagonalized within each eigenspace of $A$ without disturbing $A$. Conversely, if they are simultaneously diagonal, they commute because diagonal matrices commute. In quantum mechanics, commuting observables share a common eigenbasis and can be measured simultaneously without uncertainty.",
+    "subject": "math-linear-algebra",
+    "difficulty": "intermediate",
+    "labels": [
+      "commutators"
+    ]
+  },
+  {
+    "name": "$\\frac{dy}{dx} = ky$",
+    "question": "What is the general solution to $\\frac{dy}{dx} = ky$?",
+    "answer": "$y(x) = A e^{kx}$, where $A$ is determined by initial conditions.",
+    "explanation": "The exponential function is the eigenfunction of the derivative operator. Ubiquitous in radioactive decay ($k < 0$) and population growth ($k > 0$).",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "odes"
+    ]
+  },
+  {
+    "name": "simple harmonic oscillator",
+    "question": "What is the general solution to the simple harmonic oscillator equation: $\\frac{d^2x}{dt^2} + \\omega^2 x = 0$?",
+    "answer": "$x(t) = A \\cos(\\omega t) + B \\sin(\\omega t)$, equivalently $x(t) = C e^{i\\omega t} + D e^{-i\\omega t}$.",
+    "explanation": "The most important ODE in physics. Appears in mass-spring systems, LC circuits, small oscillations about equilibrium, and quantum harmonic oscillator.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "odes"
+    ]
+  },
+  {
+    "name": "separation of variables",
+    "question": "What is separation of variables for PDEs?",
+    "answer": "Assume the solution factors as a product of functions of each variable, e.g., $u(x,t) = X(x)T(t)$, then substitute into the PDE to get separate ODEs for each factor.",
+    "explanation": "Each separated ODE involves only one variable, so both sides must equal a constant (the separation constant). Standard technique for wave, heat, and Laplace equations.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "pdes"
+    ]
+  },
+  {
+    "name": "Green's function",
+    "question": "What is the Green's function $G(x, x')$ conceptually?",
+    "answer": "The response of a linear differential operator $L$ to a point source: $L G(x, x') = \\delta(x - x')$. The solution to $Lu = f$ is then $u(x) = \\int G(x, x') f(x') \\, dx'$.",
+    "explanation": "Green's functions are propagators in physics. In electrostatics, the Green's function for the Laplacian is $\\frac{1}{4\\pi |\\vec{x} - \\vec{x}'|}$.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "greens-functions"
+    ]
+  },
+  {
+    "name": "heat equation",
+    "question": "What is the heat equation in one dimension?",
+    "answer": "$\\frac{\\partial u}{\\partial t} = \\alpha \\frac{\\partial^2 u}{\\partial x^2}$, where $\\alpha$ is the thermal diffusivity.",
+    "explanation": "Parabolic PDE. Solutions smooth out over time (irreversible). The fundamental solution is a spreading Gaussian.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "pdes"
+    ]
+  },
+  {
+    "name": "wave equation",
+    "question": "What is the wave equation in one dimension?",
+    "answer": "$\\frac{\\partial^2 u}{\\partial t^2} = c^2 \\frac{\\partial^2 u}{\\partial x^2}$, where $c$ is the wave speed.",
+    "explanation": "Hyperbolic PDE. General solution is $u = f(x - ct) + g(x + ct)$  --  two counter-propagating waves (d'Alembert's solution).",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "pdes"
+    ]
+  },
+  {
+    "name": "Sturm-Liouville problem",
+    "question": "What is a Sturm-Liouville problem?",
+    "answer": "An eigenvalue problem of the form: $\\frac{d}{dx}\\left[p(x) \\frac{dy}{dx}\\right] + q(x) y = -\\lambda w(x) y$, with boundary conditions on an interval $[a, b]$.",
+    "explanation": "A regular Sturm-Liouville problem (with $p, w > 0$ on $[a,b]$) has countably infinite real eigenvalues $\\lambda_1 < \\lambda_2 < \\cdots \\to \\infty$, each with a unique eigenfunction $y_n(x)$. These eigenfunctions form an orthonormal basis of $L^2([a,b], w)$: $\\int_a^b y_m(x) y_n(x) w(x)\\,dx = \\delta_{mn}$, and any square-integrable function can be expanded as $f(x) = \\sum c_n y_n(x)$. Many physics eigenvalue problems are Sturm-Liouville: Legendre ($p = 1-x^2$, $w = 1$), Bessel, Hermite, and Laguerre equations. The Schrodinger equation $-\\frac{\\hbar^2}{2m}\\psi'' + V\\psi = E\\psi$ is also Sturm-Liouville, which is why energy eigenstates form a complete orthonormal set.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "sturm-liouville"
+    ]
+  },
+  {
+    "name": "Wronskian",
+    "question": "What is the Wronskian and what does it test?",
+    "answer": "For two functions $y_1$ and $y_2$: $W = y_1 y_2' - y_2 y_1'$. If $W \\neq 0$, the functions are linearly independent.",
+    "explanation": "Used to verify you have a complete set of solutions to a second-order ODE. If $W = 0$ everywhere, the solutions are linearly dependent.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "odes"
+    ]
+  },
+  {
+    "name": "Frobenius method",
+    "question": "What is the Frobenius method?",
+    "answer": "A method to find series solutions of ODEs near regular singular points by assuming $y = \\sum a_n x^{n+s}$, where $s$ is determined by the indicial equation.",
+    "explanation": "Essential for solving Bessel's equation, Legendre's equation, and the hydrogen atom radial equation near the origin.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "odes"
+    ]
+  },
+  {
+    "name": "Laplace's equation",
+    "question": "What is Laplace's equation and what are its solutions called?",
+    "answer": "$\\nabla^2 u = 0$. Its solutions are called harmonic functions.",
+    "explanation": "Describes electrostatic potential in charge-free regions, steady-state heat flow, and gravitational potential in vacuum. Solutions satisfy the mean value property.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "pdes"
+    ]
+  },
+  {
+    "name": "Airy function",
+    "question": "The Airy function $\\mathrm{Ai}(x)$ solves which ODE, and what is its qualitative behavior?",
+    "answer": "$\\frac{d^2y}{dx^2} - xy = 0$. It oscillates for $x < 0$ and decays exponentially $\\sim e^{-\\frac{2}{3}x^{3/2}}$ for $x > 0$.",
+    "explanation": "Airy functions arise wherever a WKB solution transitions between oscillatory and exponential behavior (classical turning points). They also appear in random matrix theory via the Tracy-Widom distribution, and in optics near caustics.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "special-functions"
+    ]
+  },
+  {
+    "name": "Cauchy's integral theorem",
+    "question": "State Cauchy's integral theorem.",
+    "answer": "If $f(z)$ is analytic (holomorphic) inside and on a simple closed contour $C$, then $\\oint_C f(z) \\, dz = 0$.",
+    "explanation": "Analytic functions have zero 'circulation.' This is the complex-variable analog of a conservative field having zero line integral around a closed loop.",
+    "subject": "math-complex-analysis",
+    "difficulty": "basic",
+    "labels": [
+      "cauchy-theorem"
+    ]
+  },
+  {
+    "name": "residue theorem",
+    "question": "State the residue theorem.",
+    "answer": "The contour integral of $f(z)$ around a closed curve $C$ equals $2\\pi i$ times the sum of residues of $f$ at its poles enclosed by $C$: $\\oint_C f(z) \\, dz = 2\\pi i \\sum_k \\text{Res}(f, z_k)$.",
+    "explanation": "The primary tool for evaluating difficult real integrals by extending to the complex plane.",
+    "subject": "math-complex-analysis",
+    "difficulty": "basic",
+    "labels": [
+      "residues"
+    ]
+  },
+  {
+    "name": "$\\int \\frac{dx}{x^2+a^2}$ by contour",
+    "question": "Evaluate $\\int_{-\\infty}^{\\infty} \\frac{dx}{x^2 + a^2}$ for $a > 0$ using contour integration.",
+    "answer": "$\\frac{\\pi}{a}$",
+    "explanation": "Close in the upper half-plane. Simple pole at $z = ia$ with residue $\\frac{1}{2ia}$. Result: $2\\pi i \\cdot \\frac{1}{2ia} = \\frac{\\pi}{a}$. This is the prototype contour integral every physicist should know.",
+    "subject": "math-complex-analysis",
+    "difficulty": "basic",
+    "labels": [
+      "contour-integrals"
+    ]
+  },
+  {
+    "name": "residue at a simple pole",
+    "question": "How do you compute the residue at a simple pole $z_0$ of $f(z) = \\frac{g(z)}{h(z)}$ where $h(z_0) = 0$ and $h'(z_0) \\neq 0$?",
+    "answer": "$\\text{Res}(f, z_0) = \\frac{g(z_0)}{h'(z_0)}$",
+    "explanation": "This follows from L'Hopital-style reasoning: $\\frac{z - z_0}{h(z)} \\to \\frac{1}{h'(z_0)}$ as $z \\to z_0$.",
+    "subject": "math-complex-analysis",
+    "difficulty": "intermediate",
+    "labels": [
+      "residues"
+    ]
+  },
+  {
+    "name": "branch cuts",
+    "question": "What is a branch cut, and why is it needed for functions like $\\log(z)$ or $z^{1/2}$?",
+    "answer": "A branch cut is a curve in the complex plane across which a multi-valued function is discontinuous, chosen so the function becomes single-valued on the cut plane.",
+    "explanation": "$\\log(z) = \\ln|z| + i\\arg(z)$ is multi-valued because $\\arg(z)$ changes by $2\\pi$ around the origin. The standard branch cut for $\\log(z)$ is the negative real axis.",
+    "subject": "math-complex-analysis",
+    "difficulty": "intermediate",
+    "labels": [
+      "branch-cuts"
+    ]
+  },
+  {
+    "name": "Cauchy-Riemann equations",
+    "question": "What are the Cauchy-Riemann equations?",
+    "answer": "For $f(z) = u(x,y) + iv(x,y)$ to be analytic: $\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}$ and $\\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$.",
+    "explanation": "These are the necessary and sufficient conditions (given continuity of partials) for complex differentiability. They imply both $u$ and $v$ are harmonic: $\\nabla^2 u = \\nabla^2 v = 0$.",
+    "subject": "math-complex-analysis",
+    "difficulty": "basic",
+    "labels": [
+      "analyticity"
+    ]
+  },
+  {
+    "name": "analytic continuation",
+    "question": "What is analytic continuation and why does a physicist care about it?",
+    "answer": "Given an analytic function $f(z)$ defined on a domain $D \\subset \\mathbb{C}$, an analytic continuation is an analytic function $g(z)$ on a larger domain $D' \\supset D$ such that $g|_D = f$. By the identity theorem, if two analytic functions agree on a set with an accumulation point, they agree everywhere on their common domain -- so the continuation is unique when it exists. Physics applications: (1) Zeta function regularization -- $\\zeta(s) = \\sum_{n=1}^\\infty n^{-s}$ converges only for $\\text{Re}(s) > 1$, but its analytic continuation to $s = -1$ gives $\\zeta(-1) = -\\frac{1}{12}$, used to regularize the Casimir energy $\\sum_{n=1}^\\infty n$ in string theory and QFT. (2) Wick rotation -- continuing $t \\to -i\\tau$ maps the Minkowski metric to Euclidean signature, turning oscillatory path integrals $e^{iS}$ into convergent ones $e^{-S_E}$. (3) Feynman propagator -- the $i\\epsilon$ prescription $1/(p^2 - m^2 + i\\epsilon)$ selects the correct causal boundary conditions by deforming the integration contour in the complex energy plane.",
+    "explanation": "The continuation of $\\zeta(s)$ is constructed via the functional equation $\\zeta(s) = 2^s \\pi^{s-1} \\sin(\\pi s/2)\\,\\Gamma(1-s)\\,\\zeta(1-s)$, which relates values at $s$ to values at $1-s$. The statement $\\sum n = -1/12$ is shorthand: the divergent series does not equal $-1/12$ in the ordinary sense, but the analytic continuation of the function it defines assigns that value at $s = -1$. In the Casimir effect, this regularization gives a finite, experimentally confirmed force between conducting plates. For Wick rotation, the key requirement is that the integrand has no singularities in the quadrant being rotated through -- the $i\\epsilon$ prescription ensures this. References: Boas, Mathematical Methods in the Physical Sciences, Chapter 14; Ablowitz & Fokas, Complex Variables, Chapter 4; Peskin & Schroeder, Section 9.3 (Wick rotation and Euclidean field theory).",
+    "subject": "math-complex-analysis",
+    "difficulty": "intermediate",
+    "labels": [
+      "analytic-continuation"
+    ]
+  },
+  {
+    "name": "$\\int \\frac{e^{iz}}{z^2+a^2}\\, dz$",
+    "question": "What is $\\int_{-\\infty}^{+\\infty} \\frac{e^{iz}}{z^2 + a^2} \\, dz$ for $a > 0$?",
+    "answer": "$\\frac{\\pi}{a} e^{-a}$",
+    "explanation": "Close the contour in the upper half-plane (since $e^{iz}$ decays there). The pole at $z = ia$ is enclosed. $\\text{Res} = \\frac{e^{-a}}{2ia}$. Result: $2\\pi i \\cdot \\frac{e^{-a}}{2ia} = \\frac{\\pi e^{-a}}{a}$.",
+    "subject": "math-complex-analysis",
+    "difficulty": "intermediate",
+    "labels": [
+      "contour-integrals"
+    ]
+  },
+  {
+    "name": "extracting coefficients via contour integral",
+    "question": "Given a generating function $f(z) = \\sum_{N=0}^{\\infty} a_N z^N$, how do you extract the coefficient $a_N$ using a contour integral?",
+    "answer": "$a_N = \\frac{1}{2\\pi i} \\oint \\frac{f(z)}{z^{N+1}} \\, dz$",
+    "explanation": "This is Cauchy's integral formula applied to Taylor coefficients. In practice it is how fixed-$N$ quantities are extracted from generating functions  --  the contour integral can then be evaluated by saddle-point methods for large $N$.",
+    "subject": "math-complex-analysis",
+    "difficulty": "intermediate",
+    "labels": [
+      "contour-integrals"
+    ]
+  },
+  {
+    "name": "$\\sum_{i=1}^{n} i$",
+    "question": "What is $\\sum_{i=1}^{n} i$?",
+    "answer": "$\\frac{n(n+1)}{2}$",
+    "explanation": "Gauss's trick: pair the first and last terms. Appears when counting pairwise interactions among $n$ particles or summing energy levels of a linear spectrum.",
+    "subject": "math-discrete",
+    "difficulty": "basic",
+    "labels": [
+      "summation-formulas"
+    ]
+  },
+  {
+    "name": "$\\sum_{i=1}^{n} i^2$",
+    "question": "What is $\\sum_{i=1}^{n} i^2$?",
+    "answer": "$\\frac{n(n+1)(2n+1)}{6}$",
+    "explanation": "Appears in moment-of-inertia calculations for discrete mass distributions and in evaluating second moments of angular momentum quantum numbers.",
+    "subject": "math-discrete",
+    "difficulty": "basic",
+    "labels": [
+      "summation-formulas"
+    ]
+  },
+  {
+    "name": "binomial coefficient $\\binom{n}{k}$",
+    "question": "What is the binomial coefficient $\\binom{n}{k}$?",
+    "answer": "$\\binom{n}{k} = \\frac{n!}{(n-k)!\\,k!}$",
+    "explanation": "Counts the number of ways to choose $k$ items from $n$. In quantum mechanics, it counts the degeneracy of states when distributing $k$ excitations among $n$ modes.",
+    "subject": "math-discrete",
+    "difficulty": "basic",
+    "labels": [
+      "combinatorics"
+    ]
+  },
+  {
+    "name": "$\\sum_{k=0}^{n} \\binom{n}{k}$",
+    "question": "What is $\\sum_{k=0}^{n} \\binom{n}{k}$?",
+    "answer": "$2^n$",
+    "explanation": "This is the total number of subsets of an $n$-element set, since each element is either included or not. Follows from the binomial theorem with $x = y = 1$.",
+    "subject": "math-discrete",
+    "difficulty": "basic",
+    "labels": [
+      "combinatorics"
+    ]
+  },
+  {
+    "name": "binomial coefficient symmetry",
+    "question": "State the symmetry property of binomial coefficients.",
+    "answer": "$\\binom{n}{k} = \\binom{n}{n-k}$",
+    "explanation": "Choosing $k$ items to include is the same as choosing $n-k$ items to exclude. This symmetry is visible in Pascal's triangle.",
+    "subject": "math-discrete",
+    "difficulty": "basic",
+    "labels": [
+      "combinatorics"
+    ]
+  },
+  {
+    "name": "expectation value $E[X]$",
+    "question": "What is the expectation value $E[X]$ for a discrete and for a continuous random variable?",
+    "answer": "Discrete: $E[g(X)] = \\sum_x g(x) \\Pr[X = x]$. Continuous: $E[g(X)] = \\int_{-\\infty}^{\\infty} g(x) p(x) \\, dx$",
+    "explanation": "In quantum mechanics, the expectation value of an observable $\\hat{A}$ is $\\langle \\hat{A} \\rangle = \\langle \\psi|\\hat{A}|\\psi \\rangle$, which is the continuous analog weighted by $|\\psi|^2$.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "expectation"
+    ]
+  },
+  {
+    "name": "formula for variance and STD",
+    "question": "Express the variance $\\text{Var}[X]$ in terms of expectations. What is the standard deviation?",
+    "answer": "$\\text{Var}[X] = E[X^2] - (E[X])^2$. The standard deviation is $\\sigma = \\sqrt{\\text{Var}[X]}$.",
+    "explanation": "This 'computational formula' is often easier to use than the definition $E[(X - \\mu)^2]$. In physics, $\\sigma$ quantifies fluctuations  --  e.g., energy fluctuations in the canonical ensemble: $\\langle (\\Delta E)^2 \\rangle = k_B T^2 C_V$.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "variance"
+    ]
+  },
+  {
+    "name": "Bayes' theorem",
+    "question": "State Bayes' theorem.",
+    "answer": "$\\Pr[A_i | B] = \\frac{\\Pr[B | A_i] \\Pr[A_i]}{\\sum_{j=1}^{n} \\Pr[A_j] \\Pr[B | A_j]}$",
+    "explanation": "Bayes' theorem updates prior probabilities given new evidence. Used in data analysis, parameter estimation, and interpreting detector signals with known false-positive rates.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "bayes-theorem"
+    ]
+  },
+  {
+    "name": "linearity of expectation",
+    "question": "State the linearity of expectation. When does $E[XY] = E[X] \\cdot E[Y]$?",
+    "answer": "$E[X + Y] = E[X] + E[Y]$ (always), $E[cX] = cE[X]$ (always). But $E[XY] = E[X] \\cdot E[Y]$ only when $X$ and $Y$ are independent.",
+    "explanation": "Linearity holds even for correlated variables  --  a surprisingly powerful result. The product rule requires independence.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "expectation"
+    ]
+  },
+  {
+    "name": "Markov and Chebyshev inequalities",
+    "question": "State the Markov and Chebyshev inequalities.",
+    "answer": "Markov: $\\Pr[|X| \\geq \\lambda E[X]] \\leq \\frac{1}{\\lambda}$. Chebyshev: $\\Pr[|X - E[X]| \\geq \\lambda \\sigma] \\leq \\frac{1}{\\lambda^2}$.",
+    "explanation": "These bound the probability of large deviations from the mean without knowing the full distribution. Chebyshev guarantees at least $1 - 1/k^2$ of the probability lies within $k$ standard deviations.",
+    "subject": "math-probability",
+    "difficulty": "intermediate",
+    "labels": [
+      "inequalities"
+    ]
+  },
+  {
+    "name": "inclusion-exclusion for two events",
+    "question": "State the inclusion-exclusion formula for $\\Pr[A \\cup B]$. When does it simplify?",
+    "answer": "$\\Pr[A \\cup B] = \\Pr[A] + \\Pr[B] - \\Pr[A \\cap B]$. If $A$ and $B$ are mutually exclusive ($A \\cap B = \\emptyset$), this simplifies to $\\Pr[A] + \\Pr[B]$. Separately, if $A$ and $B$ are independent, $\\Pr[A \\cap B] = \\Pr[A]\\Pr[B]$.",
+    "explanation": "Mutually exclusive (no overlap) and independent (knowing one doesn't affect the other) are different conditions. For $n$ events, inclusion-exclusion generalizes: $\\Pr[\\bigcup_i A_i] = \\sum_i \\Pr[A_i] - \\sum_{i<j} \\Pr[A_i \\cap A_j] + \\cdots$",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "probability-rules"
+    ]
+  },
+  {
+    "name": "conditional probability",
+    "question": "State the conditional probability formula.",
+    "answer": "$\\Pr[A|B] = \\frac{\\Pr[A \\cap B]}{\\Pr[B]}$",
+    "explanation": "This defines the probability of $A$ given that $B$ has occurred. It is the starting point for deriving Bayes' theorem.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "probability-rules"
+    ]
+  },
+  {
+    "name": "binomial distribution",
+    "question": "What is the binomial distribution? Give its PMF and expected value.",
+    "answer": "$\\Pr[X = k] = \\binom{n}{k} p^k (1-p)^{n-k}$ with $E[X] = np$.",
+    "explanation": "Describes $k$ successes in $n$ independent trials, each with probability $p$. In quantum mechanics: the probability of getting $k$ spin-up outcomes in $n$ Stern-Gerlach measurements on identically prepared spin-$\\frac{1}{2}$ particles.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "distributions"
+    ]
+  },
+  {
+    "name": "Poisson distribution",
+    "question": "What is the Poisson distribution? Give its PMF and expected value.",
+    "answer": "$\\Pr[X = k] = \\frac{e^{-\\lambda} \\lambda^k}{k!}$ with $E[X] = \\lambda$.",
+    "explanation": "Describes the number of events in a fixed interval when events occur independently at a constant average rate $\\lambda$  --  radioactive decays, photon counts, cosmic ray arrivals.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "distributions"
+    ]
+  },
+  {
+    "name": "Gaussian distribution",
+    "question": "Write the probability density function for the normal (Gaussian) distribution.",
+    "answer": "$p(x) = \\frac{1}{\\sqrt{2\\pi}\\sigma} e^{-(x-\\mu)^2 / 2\\sigma^2}$ with $E[X] = \\mu$.",
+    "explanation": "The central limit theorem explains why the Gaussian appears everywhere: the sum of many independent random variables tends toward a normal distribution regardless of their individual distributions.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "distributions"
+    ]
+  },
+  {
+    "name": "geometric distribution",
+    "question": "What is the geometric distribution? Give its PMF and expected value.",
+    "answer": "$\\Pr[X = k] = p(1-p)^{k-1}$ with $E[X] = \\frac{1}{p}$.",
+    "explanation": "Models the number of trials until the first success. The 'memoryless' property of radioactive decay is connected: the waiting time for the first decay is geometrically (or exponentially) distributed.",
+    "subject": "math-probability",
+    "difficulty": "basic",
+    "labels": [
+      "distributions"
+    ]
+  },
+  {
+    "name": "coupon collector problem",
+    "question": "In the coupon collector problem, what is the expected number of draws to collect all $n$ types?",
+    "answer": "$nH_n = n\\sum_{i=1}^{n}\\frac{1}{i} \\approx n \\ln n$",
+    "explanation": "$H_n$ is the $n$-th harmonic number. This result is useful for estimating how many samples are needed to explore all states of a discrete system.",
+    "subject": "math-probability",
+    "difficulty": "intermediate",
+    "labels": [
+      "coupon-collector"
+    ]
+  },
+  {
+    "name": "trig definitions for right triangle",
+    "question": "Define $\\sin$, $\\cos$, and $\\tan$ for a right triangle with sides $A$ (opposite), $B$ (adjacent), and $C$ (hypotenuse).",
+    "answer": "$\\sin a = A/C$, $\\cos a = B/C$, $\\tan a = A/B = \\sin a / \\cos a$",
+    "explanation": "On the unit circle, $(\\cos\\theta, \\sin\\theta)$ gives the coordinates of a point at angle $\\theta$. The Pythagorean theorem $A^2 + B^2 = C^2$ immediately gives $\\sin^2 + \\cos^2 = 1$.",
+    "subject": "math-trigonometry",
+    "difficulty": "basic",
+    "labels": [
+      "definitions"
+    ]
+  },
+  {
+    "name": "Pythagorean identities",
+    "question": "State the Pythagorean identity and the two related identities involving $\\sec$ and $\\csc$.",
+    "answer": "$\\sin^2 x + \\cos^2 x = 1$, $1 + \\tan^2 x = \\sec^2 x$, $1 + \\cot^2 x = \\csc^2 x$",
+    "explanation": "All three follow from dividing $\\sin^2 + \\cos^2 = 1$ by $1$, $\\cos^2$, or $\\sin^2$ respectively.",
+    "subject": "math-trigonometry",
+    "difficulty": "basic",
+    "labels": [
+      "identities"
+    ]
+  },
+  {
+    "name": "angle addition formulas",
+    "question": "State the angle addition formulas for $\\sin(x \\pm y)$ and $\\cos(x \\pm y)$.",
+    "answer": "$\\sin(x \\pm y) = \\sin x \\cos y \\pm \\cos x \\sin y$ and $\\cos(x \\pm y) = \\cos x \\cos y \\mp \\sin x \\sin y$",
+    "explanation": "These are essential for decomposing wave superpositions and deriving beat frequencies. They follow directly from Euler's formula: $e^{i(x+y)} = e^{ix}e^{iy}$.",
+    "subject": "math-trigonometry",
+    "difficulty": "basic",
+    "labels": [
+      "identities"
+    ]
+  },
+  {
+    "name": "double-angle formulas",
+    "question": "State the double-angle formulas for $\\sin 2x$ and $\\cos 2x$.",
+    "answer": "$\\sin 2x = 2\\sin x \\cos x$. $\\cos 2x = \\cos^2 x - \\sin^2 x = 2\\cos^2 x - 1 = 1 - 2\\sin^2 x$.",
+    "explanation": "The $\\cos 2x$ forms are especially useful: rearranging gives the half-angle substitutions $\\cos^2 x = (1 + \\cos 2x)/2$ and $\\sin^2 x = (1 - \\cos 2x)/2$, which appear in time-averaged intensities.",
+    "subject": "math-trigonometry",
+    "difficulty": "basic",
+    "labels": [
+      "identities"
+    ]
+  },
+  {
+    "name": "trig values at standard angles",
+    "question": "What are $\\sin$, $\\cos$, and $\\tan$ of the standard angles $0, \\pi/6, \\pi/4, \\pi/3, \\pi/2$?",
+    "answer": "$\\sin: 0, \\frac{1}{2}, \\frac{\\sqrt{2}}{2}, \\frac{\\sqrt{3}}{2}, 1$. $\\cos: 1, \\frac{\\sqrt{3}}{2}, \\frac{\\sqrt{2}}{2}, \\frac{1}{2}, 0$. $\\tan: 0, \\frac{\\sqrt{3}}{3}, 1, \\sqrt{3}, \\infty$.",
+    "explanation": "These values should be known by heart. They follow from the geometry of 30-60-90 and 45-45-90 triangles.",
+    "subject": "math-trigonometry",
+    "difficulty": "basic",
+    "labels": [
+      "special-values"
+    ]
+  },
+  {
+    "name": "Legendre polynomials",
+    "question": "What ODE do the Legendre polynomials $P_l(x)$ satisfy, and where do they arise in physics?",
+    "answer": "$(1-x^2)P_l'' - 2xP_l' + l(l+1)P_l = 0$. They arise as the angular part of solutions to Laplace's equation in spherical coordinates.",
+    "explanation": "The first few: $P_0 = 1$, $P_1 = x$, $P_2 = (3x^2 - 1)/2$. Orthogonality: $\\int_{-1}^{1} P_l P_{l'} dx = \\frac{2}{2l+1}\\delta_{ll'}$. Every multipole expansion in electrostatics uses them.",
+    "subject": "math-special-functions",
+    "difficulty": "basic",
+    "labels": [
+      "legendre-polynomials"
+    ]
+  },
+  {
+    "name": "spherical harmonics $Y_l^m$",
+    "question": "What are the spherical harmonics $Y_l^m(\\theta, \\phi)$, and what is their orthonormality relation?",
+    "answer": "$Y_l^m(\\theta, \\phi) = N_{lm} P_l^m(\\cos\\theta) e^{im\\phi}$, where $P_l^m$ are associated Legendre functions. They satisfy $\\int Y_l^m Y_{l'}^{m'*} d\\Omega = \\delta_{ll'}\\delta_{mm'}$.",
+    "explanation": "Spherical harmonics are eigenfunctions of $\\hat{L}^2$ and $\\hat{L}_z$ on the sphere. Any function on the sphere can be expanded in them  --  the angular analog of a Fourier series. They appear in hydrogen atom wavefunctions, multipole expansions, and CMB analysis.",
+    "subject": "math-special-functions",
+    "difficulty": "basic",
+    "labels": [
+      "spherical-harmonics"
+    ]
+  },
+  {
+    "name": "Bessel functions",
+    "question": "What ODE do the Bessel functions $J_n(x)$ satisfy, and where do they appear in physics?",
+    "answer": "$x^2 y'' + xy' + (x^2 - n^2)y = 0$. The general solution is $y = AJ_n(x) + BY_n(x)$, where $Y_n$ is the Bessel function of the second kind (singular at the origin).",
+    "explanation": "Bessel functions appear whenever you separate the wave, Helmholtz, or diffusion equation in cylindrical coordinates: vibrating drum heads, waveguide modes, diffraction from circular apertures.",
+    "subject": "math-special-functions",
+    "difficulty": "intermediate",
+    "labels": [
+      "bessel-functions"
+    ]
+  },
+  {
+    "name": "Fourier transform",
+    "question": "Write the Fourier transform and its inverse for a function $f(x)$ (physicist's convention).",
+    "answer": "$$\\tilde{f}(k) = \\int_{-\\infty}^{\\infty} f(x) e^{-ikx} dx, \\qquad f(x) = \\int_{-\\infty}^{\\infty} \\tilde{f}(k) \\frac{e^{ikx}}{2\\pi} dk$$",
+    "explanation": "Key properties: convolution becomes multiplication, differentiation becomes $ik$, and the Fourier transform of a Gaussian is a Gaussian. Parseval's theorem: $\\int |f|^2 dx = \\int |\\tilde{f}|^2 dk/(2\\pi)$.",
+    "subject": "math-special-functions",
+    "difficulty": "basic",
+    "labels": [
+      "fourier-transform"
+    ]
+  },
+  {
+    "name": "Fourier transform of Gaussian",
+    "question": "What is the Fourier transform of a Gaussian $f(x) = e^{-ax^2}$?",
+    "answer": "$$\\tilde{f}(k) = \\sqrt{\\frac{\\pi}{a}} \\, e^{-k^2/(4a)}$$A narrow Gaussian in $x$ becomes wide in $k$, and vice versa.",
+    "explanation": "This is a manifestation of the uncertainty principle: $\\Delta x \\cdot \\Delta k \\geq 1/2$, with equality for Gaussians. The Gaussian is the unique function that minimizes the uncertainty product.",
+    "subject": "math-special-functions",
+    "difficulty": "intermediate",
+    "labels": [
+      "fourier-transform"
+    ]
+  },
+  {
+    "name": "Helmholtz Green's function",
+    "question": "What is the Green's function for the Helmholtz equation $(\\nabla^2 + k^2)G = -\\delta^3(\\vec{r})$ in 3D?",
+    "answer": "$$G(\\vec{r}) = \\frac{e^{\\pm ikr}}{4\\pi r}$$The $+$ sign gives the retarded (outgoing wave) Green's function; the $-$ sign gives the advanced (incoming wave) Green's function.",
+    "explanation": "This is the starting point for scattering theory. The scattered wave is constructed by convolving the Green's function with the source. It reduces to the electrostatic $1/(4\\pi r)$ when $k = 0$.",
+    "subject": "math-special-functions",
+    "difficulty": "intermediate",
+    "labels": [
+      "greens-functions"
+    ]
+  },
+  {
+    "name": "Laplace transform",
+    "question": "Write the definition of the Laplace transform and state two key properties.",
+    "answer": "$$F(s) = \\int_0^\\infty f(t) e^{-st} dt$$Properties: $\\mathcal{L}\\{f'(t)\\} = sF(s) - f(0)$ (derivatives become algebraic), and $\\mathcal{L}\\{e^{at}f(t)\\} = F(s-a)$ (frequency shifting).",
+    "explanation": "The Laplace transform converts ODEs with initial conditions into algebraic equations. Especially useful for linear circuits, control theory, and solving the damped driven harmonic oscillator.",
+    "subject": "math-special-functions",
+    "difficulty": "basic",
+    "labels": [
+      "laplace-transform"
+    ]
+  },
+  {
+    "name": "Hermite polynomials",
+    "question": "What ODE do the Hermite polynomials $H_n(x)$ satisfy, and where do they appear in quantum mechanics?",
+    "answer": "$H_n'' - 2xH_n' + 2nH_n = 0$. The harmonic oscillator wavefunctions are $\\psi_n(x) = N_n H_n(\\alpha x) e^{-\\alpha^2 x^2/2}$, where $\\alpha = \\sqrt{m\\omega/\\hbar}$.",
+    "explanation": "First few: $H_0 = 1$, $H_1 = 2x$, $H_2 = 4x^2 - 2$, $H_3 = 8x^3 - 12x$. Orthogonal with weight $e^{-x^2}$: $\\int H_m H_n e^{-x^2} dx = \\sqrt{\\pi} \\, 2^n n! \\, \\delta_{mn}$.",
+    "subject": "math-special-functions",
+    "difficulty": "intermediate",
+    "labels": [
+      "hermite-polynomials"
+    ]
+  },
+  {
+    "name": "Dirac delta representations",
+    "question": "Write three useful representations of the Dirac delta function $\\delta(x)$.",
+    "answer": "(1) Fourier: $\\delta(x) = \\int \\frac{e^{ikx}}{2\\pi} dk$. (2) Gaussian: $\\delta(x) = \\lim_{\\epsilon \\to 0} \\frac{1}{\\sqrt{2\\pi}\\epsilon} e^{-x^2/(2\\epsilon^2)}$. (3) Lorentzian: $\\delta(x) = \\lim_{\\epsilon \\to 0} \\frac{\\epsilon}{\\pi(x^2 + \\epsilon^2)}$.",
+    "explanation": "The Fourier representation is the most used  --  it is the completeness relation for plane waves. Also essential: $\\delta(ax) = \\delta(x)/|a|$ and $\\delta(g(x)) = \\sum_i \\delta(x - x_i)/|g'(x_i)|$.",
+    "subject": "math-special-functions",
+    "difficulty": "intermediate",
+    "labels": [
+      "delta-function"
+    ]
+  },
+  {
+    "name": "spherical Bessel functions",
+    "question": "What are the spherical Bessel functions, and where do they arise?",
+    "answer": "$j_l(x) = \\sqrt{\\frac{\\pi}{2x}} J_{l+1/2}(x)$. The first two: $j_0(x) = \\frac{\\sin x}{x}$, $j_1(x) = \\frac{\\sin x}{x^2} - \\frac{\\cos x}{x}$. They solve the radial Helmholtz equation in spherical coordinates.",
+    "explanation": "They appear in the partial wave expansion: $e^{ikr\\cos\\theta} = \\sum_l (2l+1) i^l j_l(kr) P_l(\\cos\\theta)$. This is the starting point for partial wave analysis in quantum scattering theory.",
+    "subject": "math-special-functions",
+    "difficulty": "advanced",
+    "labels": [
+      "spherical-bessel"
+    ]
+  },
+  {
+    "name": "orthogonal polynomial families",
+    "question": "What general structure do Legendre, Hermite, and Laguerre polynomials share?",
+    "answer": "They are families of orthogonal polynomials satisfying Sturm-Liouville problems with weight $w(x)$: $\\int p_m p_n w(x) dx = N_n \\delta_{mn}$. Legendre: $w = 1$ on $[-1,1]$; Hermite: $w = e^{-x^2}$ on $(-\\infty,\\infty)$; Laguerre: $w = x^\\alpha e^{-x}$ on $[0,\\infty)$.",
+    "explanation": "Laguerre polynomials appear in hydrogen radial wavefunctions. Sturm-Liouville theory guarantees completeness, so any reasonable function can be expanded in these polynomials on their domain.",
+    "subject": "math-special-functions",
+    "difficulty": "advanced",
+    "labels": [
+      "orthogonal-polynomials"
+    ]
+  },
+  {
+    "name": "Lie groups and generators",
+    "question": "What is a Lie group, and what are its generators?",
+    "answer": "A Lie group is a continuous group that is also a smooth manifold. Its generators $T^a$ are the basis of the Lie algebra, related to group elements near the identity by $g = e^{i\\alpha_a T^a}$. They satisfy $[T^a, T^b] = if^{abc} T^c$, where $f^{abc}$ are the structure constants.",
+    "explanation": "In physics, generators correspond to conserved charges via Noether's theorem. Angular momentum operators are the generators of $SO(3)$; the Hamiltonian generates time translations.",
+    "subject": "math-group-theory",
+    "difficulty": "basic",
+    "labels": [
+      "lie-groups"
+    ]
+  },
+  {
+    "name": "$SU(2)$ and $SO(3)$",
+    "question": "What is $SU(2)$, what are its generators, and how is it related to $SO(3)$?",
+    "answer": "$SU(2)$ is the group of $2 \\times 2$ unitary matrices with determinant 1. Its generators are $T^a = \\frac{1}{2}\\sigma^a$ (half the Pauli matrices), satisfying $[T^a, T^b] = i\\epsilon^{abc} T^c$. $SU(2)$ is the double cover of $SO(3)$: every rotation corresponds to two $SU(2)$ elements ($\\pm g$).",
+    "explanation": "This is why spinors pick up a minus sign under $2\\pi$ rotation. Integer-spin representations see only $SO(3)$; half-integer representations require the full $SU(2)$.",
+    "subject": "math-group-theory",
+    "difficulty": "basic",
+    "labels": [
+      "su2"
+    ]
+  },
+  {
+    "name": "$SU(2)$ irreps",
+    "question": "What are the irreducible representations of $SU(2)$, and what labels them?",
+    "answer": "The irreps are labeled by $j = 0, \\frac{1}{2}, 1, \\frac{3}{2}, 2, \\ldots$ with dimension $2j + 1$. Each has basis states $|j, m\\rangle$ with $m = -j, -j+1, \\ldots, j$.",
+    "explanation": "These are exactly the angular momentum multiplets in quantum mechanics. $j = 1/2$ is the fundamental (spinor), $j = 1$ is the adjoint (vector), etc.",
+    "subject": "math-group-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "representations"
+    ]
+  },
+  {
+    "name": "Schur's lemma",
+    "question": "State Schur's lemma and explain its importance in physics.",
+    "answer": "(1) Any operator that commutes with all generators of an irreducible representation is proportional to the identity. (2) Any intertwining map between inequivalent irreps is zero.",
+    "explanation": "This is why $\\hat{L}^2$ has a single eigenvalue $\\hbar^2 l(l+1)$ within a given angular momentum multiplet. It also underlies selection rules: matrix elements of operators between states in different irreps vanish unless the operator transforms appropriately.",
+    "subject": "math-group-theory",
+    "difficulty": "basic",
+    "labels": [
+      "schur-lemma"
+    ]
+  },
+  {
+    "name": "$SU(2)$ tensor product decomposition",
+    "question": "How do you decompose the tensor product of two $SU(2)$ irreps $j_1 \\otimes j_2$?",
+    "answer": "$$j_1 \\otimes j_2 = |j_1 - j_2| \\oplus (|j_1 - j_2| + 1) \\oplus \\cdots \\oplus (j_1 + j_2)$$This is the Clebsch-Gordan decomposition. Alternatively, this follows from characters: the character of the spin-$j$ irrep is $\\chi_j(\\theta) = \\frac{\\sin((2j+1)\\theta/2)}{\\sin(\\theta/2)}$, and the tensor product character is the product $\\chi_{j_1}\\chi_{j_2}$. Using the product-to-sum identity for sines, this decomposes as $\\chi_{j_1}\\chi_{j_2} = \\sum_{j=|j_1-j_2|}^{j_1+j_2} \\chi_j$, proving the decomposition.",
+    "explanation": "For example, $1/2 \\otimes 1/2 = 0 \\oplus 1$ (singlet + triplet). Via characters: $\\chi_{1/2}(\\theta) = 2\\cos(\\theta/2)$, so $\\chi_{1/2}^2 = 2\\cos^2(\\theta/2) = 1 + (2\\cos\\theta + 1)/(1) = \\chi_0 + \\chi_1$. The expansion coefficients in the state basis are the Clebsch-Gordan coefficients. This is the group-theoretic content of angular momentum addition.",
+    "subject": "math-group-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "tensor-products",
+      "lie-groups"
+    ]
+  },
+  {
+    "name": "$SU(3)$ in the Standard Model",
+    "question": "What is $SU(3)$, how many generators does it have, and what role does it play in the Standard Model?",
+    "answer": "$SU(3)$ is the group of $3 \\times 3$ unitary matrices with determinant 1, with $3^2 - 1 = 8$ generators (the Gell-Mann matrices $\\lambda^a/2$). It is the gauge group of QCD: quarks carry three color charges and gluons transform in the adjoint (octet) representation.",
+    "explanation": "The fundamental is $\\mathbf{3}$ (quarks), the conjugate is $\\bar{\\mathbf{3}}$ (antiquarks), the adjoint is $\\mathbf{8}$ (gluons). Mesons are $\\mathbf{3} \\otimes \\bar{\\mathbf{3}} = \\mathbf{1} \\oplus \\mathbf{8}$.",
+    "subject": "math-group-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "su3"
+    ]
+  },
+  {
+    "name": "Noether's theorem and symmetry groups",
+    "question": "How does Noether's theorem connect symmetry groups to conservation laws? Give three examples.",
+    "answer": "Every continuous symmetry of the action has a corresponding conserved quantity. Time translation gives energy; spatial translation gives momentum; rotation ($SO(3)$) gives angular momentum.",
+    "explanation": "Internal symmetries also apply: $U(1)$ phase invariance gives charge conservation, $SU(3)$ color symmetry gives color charge conservation. The conserved current is $j^\\mu = \\frac{\\partial \\mathcal{L}}{\\partial(\\partial_\\mu \\phi)} \\delta \\phi$.",
+    "subject": "math-group-theory",
+    "difficulty": "basic",
+    "labels": [
+      "noether"
+    ]
+  },
+  {
+    "name": "Lie algebra structure constants",
+    "question": "What are the structure constants $f^{abc}$ of a Lie algebra?",
+    "answer": "They are defined by $[T^a, T^b] = if^{abc} T^c$, are fully antisymmetric ($f^{abc} = -f^{bac}$), and satisfy the Jacobi identity: $f^{abe}f^{ecd} + f^{bce}f^{ead} + f^{cae}f^{ebd} = 0$.",
+    "explanation": "For $SU(2)$, $f^{abc} = \\epsilon^{abc}$. For $SU(3)$, the structure constants are more complex but tabulated. In gauge theory, structure constants determine gluon self-interaction vertices.",
+    "subject": "math-group-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "structure-constants"
+    ]
+  },
+  {
+    "name": "Young tableaux",
+    "question": "What are Young tableaux, and how are they used in physics?",
+    "answer": "Young tableaux are diagrams of boxes in left-justified rows of non-increasing length that label irreducible representations of $SU(N)$ and the permutation group $S_n$. Rows represent symmetrization and columns represent antisymmetrization of tensor indices.",
+    "explanation": "For $SU(3)$: one box is $\\mathbf{3}$, two boxes in a column is $\\bar{\\mathbf{3}}$, two in a row is $\\mathbf{6}$. They systematize tensor product decompositions and the classification of hadrons in the quark model.",
+    "subject": "math-group-theory",
+    "difficulty": "advanced",
+    "labels": [
+      "young-tableaux"
+    ]
+  },
+  {
+    "name": "Casimir operators",
+    "question": "What is a Casimir operator, and what is the quadratic Casimir of $SU(2)$?",
+    "answer": "A Casimir operator commutes with all generators of the Lie algebra. For $SU(2)$, the quadratic Casimir is $C_2 = T^a T^a$. In the spin-$j$ representation, its eigenvalue is $j(j+1)$.",
+    "explanation": "By Schur's lemma, a Casimir is proportional to the identity within each irrep, so its eigenvalue labels the representation. $SU(3)$ has two independent Casimirs (quadratic and cubic), matching the two labels needed for an $SU(3)$ irrep.",
+    "subject": "math-group-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "casimir"
+    ]
+  },
+  {
+    "name": "weight diagrams",
+    "question": "What is a weight diagram for a Lie algebra representation?",
+    "answer": "A weight diagram plots the eigenvalues of the Cartan (mutually commuting) generators for each state. The roots are the weights of the adjoint representation, corresponding to raising/lowering operators. For $SU(2)$, the single Cartan generator is $T^3$, and the roots are $\\pm 1$ (corresponding to $T^\\pm$).",
+    "explanation": "For $SU(3)$, the Cartan subalgebra is 2D ($T^3$, $T^8$), so weight diagrams are 2D. The fundamental $\\mathbf{3}$ has three weights forming a triangle; the adjoint $\\mathbf{8}$ has a hexagonal diagram with two states at the origin.",
+    "subject": "math-group-theory",
+    "difficulty": "advanced",
+    "labels": [
+      "weight-diagrams"
+    ]
+  },
+  {
+    "name": "Newton's second law",
+    "question": "State Newton's second law in its most general form (not assuming constant mass).",
+    "answer": "$\\vec{F} = \\frac{d\\vec{p}}{dt}$, where $\\vec{p}$ is the momentum of the body.",
+    "explanation": "The familiar $\\vec{F} = m\\vec{a}$ is a special case when mass is constant. The general form is the time derivative of momentum.",
+    "subject": "classical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "newtons-laws"
+    ]
+  },
+  {
+    "name": "Euler-Lagrange equation",
+    "question": "What is the Euler-Lagrange equation for a system with generalized coordinate $q$ and Lagrangian $L(q, \\dot{q}, t)$?",
+    "answer": "$\\frac{d}{dt} \\frac{\\partial L}{\\partial \\dot{q}} - \\frac{\\partial L}{\\partial q} = 0$",
+    "explanation": "Derived from Hamilton's principle (stationary action). This is the foundational equation of Lagrangian mechanics.",
+    "subject": "classical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "lagrangian-mechanics"
+    ]
+  },
+  {
+    "name": "Lagrangian to Hamiltonian",
+    "question": "What is the relationship between the Lagrangian $L$ and the Hamiltonian $H$?",
+    "answer": "$H = \\sum_i p_i \\dot{q}_i - L$, where $p_i = \\frac{\\partial L}{\\partial \\dot{q}_i}$ are the conjugate momenta.",
+    "explanation": "This is the Legendre transformation from $(q, \\dot{q})$ to $(q, p)$. For many systems $H$ equals the total energy $T + V$.",
+    "subject": "classical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "hamiltonian-mechanics"
+    ]
+  },
+  {
+    "name": "Noether's theorem",
+    "question": "Derive Noether's theorem: given an action $S = \\int L(q, \\dot{q}, t)\\,dt$ invariant under a continuous symmetry, show that there is a conserved quantity $Q$.",
+    "answer": "Consider an infinitesimal transformation $q \\to q + \\epsilon\\,\\delta q$ that leaves the action invariant ($\\delta S = 0$). Then $\\delta L = \\frac{\\partial L}{\\partial q}\\delta q + \\frac{\\partial L}{\\partial \\dot{q}}\\delta\\dot{q}$. Using the Euler-Lagrange equation $\\frac{\\partial L}{\\partial q} = \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}}$, this becomes $\\delta L = \\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}}\\delta q\\right)$. If the symmetry leaves $L$ invariant (or changes it by a total derivative $\\delta L = \\frac{d}{dt}\\Lambda$), then $Q = \\frac{\\partial L}{\\partial \\dot{q}}\\delta q - \\Lambda$ satisfies $\\frac{dQ}{dt} = 0$.",
+    "explanation": "Classic examples: time translation ($\\delta q = \\dot{q}\\,\\delta t$) gives energy $H = p\\dot{q} - L$; spatial translation ($\\delta q_i = \\epsilon_i$) gives momentum $p_i = \\partial L/\\partial \\dot{q}_i$; rotation ($\\delta \\vec{r} = \\vec{\\epsilon} \\times \\vec{r}$) gives angular momentum $\\vec{L} = \\vec{r} \\times \\vec{p}$. In field theory the same logic yields conserved currents $j^\\mu$ with $\\partial_\\mu j^\\mu = 0$ rather than conserved charges, and the conserved charge is $Q = \\int j^0\\,d^3x$. For example, the $U(1)$ phase symmetry $\\psi \\to e^{i\\alpha}\\psi$ of the Dirac Lagrangian gives the electromagnetic current $j^\\mu = \\bar{\\psi}\\gamma^\\mu\\psi$. References: Goldstein, Classical Mechanics, Section 13.7; Landau & Lifshitz, Mechanics, Sections 6--9; Peskin & Schroeder, Section 2.2 (field theory version).",
+    "subject": "classical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "noethers-theorem"
+    ]
+  },
+  {
+    "name": "angular momentum from $\\vec{r}$ and $\\vec{p}$",
+    "question": "What is the angular momentum $\\vec{L}$ of a particle with position $\\vec{r}$ and momentum $\\vec{p}$?",
+    "answer": "$\\vec{L} = \\vec{r} \\times \\vec{p}$. In components, $L_i = \\epsilon_{ijk} r_j p_k$. The magnitude is $|\\vec{L}| = |\\vec{r}||\\vec{p}|\\sin\\theta$, where $\\theta$ is the angle between $\\vec{r}$ and $\\vec{p}$.",
+    "explanation": "$\\vec{L}$ is conserved when the net torque $\\vec{\\tau} = \\vec{r} \\times \\vec{F} = \\frac{d\\vec{L}}{dt}$ vanishes, i.e. for central forces. In quantum mechanics, the components become operators satisfying $[\\hat{L}_i, \\hat{L}_j] = i\\hbar\\epsilon_{ijk}\\hat{L}_k$, and only $\\hat{L}^2$ and one component (conventionally $\\hat{L}_z$) can be simultaneously diagonalized.",
+    "subject": "classical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "angular-momentum"
+    ]
+  },
+  {
+    "name": "central force conserved quantities",
+    "question": "For a central force problem, what two quantities are conserved and why?",
+    "answer": "Energy (time-translation invariance) and angular momentum (rotational symmetry about the force center).",
+    "explanation": "Conservation of angular momentum confines the orbit to a plane. The effective 1D potential is $V_{\\text{eff}}(r) = V(r) + \\frac{L^2}{2mr^2}$.",
+    "subject": "classical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "central-force"
+    ]
+  },
+  {
+    "name": "Poisson bracket",
+    "question": "What is the definition of the Poisson bracket $\\{f, g\\}$ for two phase-space functions $f$ and $g$?",
+    "answer": "$\\{f, g\\} = \\sum_i \\left(\\frac{\\partial f}{\\partial q_i} \\frac{\\partial g}{\\partial p_i} - \\frac{\\partial f}{\\partial p_i} \\frac{\\partial g}{\\partial q_i}\\right)$",
+    "explanation": "Poisson brackets encode the symplectic structure of phase space and are the classical analogue of quantum commutators (up to a factor of $i\\hbar$).",
+    "subject": "classical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "poisson-brackets"
+    ]
+  },
+  {
+    "name": "Hamilton's equations",
+    "question": "What are Hamilton's equations of motion?",
+    "answer": "$\\dot{q}_i = \\frac{\\partial H}{\\partial p_i}$ and $\\dot{p}_i = -\\frac{\\partial H}{\\partial q_i}$",
+    "explanation": "These are $2N$ first-order ODEs equivalent to the $N$ second-order Euler-Lagrange equations.",
+    "subject": "classical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "hamiltonian-mechanics"
+    ]
+  },
+  {
+    "name": "Hamilton-Jacobi equation",
+    "question": "What is the physical significance of the Hamilton-Jacobi equation, and what is its form?",
+    "answer": "$H\\!\\left(q_i, \\frac{\\partial S}{\\partial q_i}, t\\right) + \\frac{\\partial S}{\\partial t} = 0$, where $S$ is Hamilton's principal function. Solving it yields a complete solution to the equations of motion via a canonical transformation to constant coordinates and momenta.",
+    "explanation": "Start from Hamilton's equations with a canonical transformation $(q,p) \\to (Q,P)$ chosen so that the new Hamiltonian $K = 0$. Then $\\dot{Q} = \\dot{P} = 0$, meaning the new variables are constants -- the problem is solved. The generating function $S(q, P, t)$ of this transformation satisfies $p_i = \\partial S/\\partial q_i$, and the condition $K = H + \\partial S/\\partial t = 0$ gives the Hamilton-Jacobi equation. For a time-independent $H$, write $S = W(q) - Et$ (separation of time), where $W$ is Hamilton's characteristic function satisfying $H(q_i, \\partial W/\\partial q_i) = E$. For separable systems you can further write $W = \\sum_i W_i(q_i)$, reducing the PDE to uncoupled ODEs -- one per degree of freedom. Example: for a 1D free particle, $H = p^2/2m$, the HJ equation gives $\\frac{1}{2m}(\\partial S/\\partial x)^2 + \\partial S/\\partial t = 0$. Trying $S = \\alpha x - \\frac{\\alpha^2}{2m}t$ yields $p = \\alpha$ (constant momentum), $x = (\\alpha/m)t + \\beta$ (uniform motion). The deep connection: $S$ equals the classical action $\\int L\\,dt$ evaluated along the actual trajectory, and its gradient gives the momentum field. This is why the Hamilton-Jacobi equation is the classical limit of the Schrodinger equation -- write $\\psi = A e^{iS/\\hbar}$ and take $\\hbar \\to 0$. References: Goldstein, Classical Mechanics, Chapter 10; Landau & Lifshitz, Mechanics, Sections 47--48; Arnold, Mathematical Methods of Classical Mechanics, Chapter 9.",
+    "subject": "classical-mechanics",
+    "difficulty": "advanced",
+    "labels": [
+      "hamilton-jacobi"
+    ]
+  },
+  {
+    "name": "moment of inertia tensor",
+    "question": "What is the moment of inertia tensor, and when can you describe rotation with a single scalar moment of inertia?",
+    "answer": "The moment of inertia tensor $I_{ij} = \\sum_a m_a (r_a^2 \\delta_{ij} - r_{a,i} r_{a,j})$. A single scalar suffices when the body rotates about a principal axis.",
+    "explanation": "The inertia tensor generalizes the scalar $I$ to 3D: the angular momentum is $L_i = I_{ij}\\omega_j$, so $\\mathbf{L}$ need not be parallel to $\\boldsymbol{\\omega}$ unless you rotate about a principal axis. Diagonalizing $I_{ij}$ gives three principal moments $I_1, I_2, I_3$ along orthogonal body-fixed axes. A single scalar $I$ works when $\\boldsymbol{\\omega}$ is along one of these axes, because then $\\mathbf{L} = I\\boldsymbol{\\omega}$. For a symmetric top ($I_1 = I_2 \\neq I_3$), the free rotation decomposes into spin about the symmetry axis plus precession of that axis around $\\mathbf{L}$. The parallel and perpendicular axis theorems relate moments about different axes. Euler's equations $I_i \\dot{\\omega}_i + \\epsilon_{ijk}\\omega_j I_k \\omega_k = \\tau_i$ (no sum on $i$) govern rigid body dynamics in the body frame. References: Goldstein, Classical Mechanics, Chapter 5 (especially 5.3--5.6); Landau & Lifshitz, Mechanics, Sections 32--36; Taylor, Classical Mechanics, Chapter 10.",
+    "subject": "classical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "rigid-body"
+    ]
+  },
+  {
+    "name": "normal modes",
+    "question": "What are normal modes of a coupled oscillator system?",
+    "answer": "Normal modes are independent patterns of oscillation in which all parts of the system move sinusoidally at the same frequency. They are the eigenvectors of the matrix $M^{-1}K$, where $M$ is the mass matrix and $K$ is the stiffness matrix.",
+    "explanation": "Any motion of the system can be expressed as a superposition of its normal modes.",
+    "subject": "classical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "normal-modes"
+    ]
+  },
+  {
+    "name": "relativistic free particle Lagrangian",
+    "question": "Write the Lagrangian for a free particle in special relativity.",
+    "answer": "$L = -mc^2 \\sqrt{1 - \\frac{v^2}{c^2}}$",
+    "explanation": "The action is $-mc^2 \\int d\\tau$, where $\\tau$ is proper time. This Lagrangian reproduces relativistic momentum $p = \\gamma m v$.",
+    "subject": "classical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "lagrangian-mechanics"
+    ]
+  },
+  {
+    "name": "Liouville's theorem",
+    "question": "State Liouville's theorem in classical mechanics.",
+    "answer": "The phase-space distribution function is constant along the trajectories of the system; equivalently, phase-space volume is preserved under Hamiltonian time evolution.",
+    "explanation": "Mathematically, $\\frac{d\\rho}{dt} = \\frac{\\partial \\rho}{\\partial t} + \\{\\rho, H\\} = 0$. This is foundational for statistical mechanics.",
+    "subject": "classical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "hamiltonian-mechanics"
+    ]
+  },
+  {
+    "name": "values of $\\mu_0$ and $\\epsilon_0$",
+    "question": "What are the values of the vacuum permeability $\\mu_0$ and vacuum permittivity $\\epsilon_0$ in SI units?",
+    "answer": "$\\mu_0 = 4\\pi \\times 10^{-7}\\;\\text{N/A}^2 \\approx 1.257 \\times 10^{-6}\\;\\text{N/A}^2$ (equivalently $\\text{H/m}$). $\\epsilon_0 = \\frac{1}{\\mu_0 c^2} \\approx 8.854 \\times 10^{-12}\\;\\text{F/m}$ (equivalently $\\text{C}^2/\\text{N}\\cdot\\text{m}^2$).",
+    "explanation": "Since the 2019 SI redefinition, $\\mu_0$ is no longer exact but is determined experimentally through the fine-structure constant: $\\mu_0 = 2\\alpha h/(e^2 c)$. Previously $\\mu_0 = 4\\pi \\times 10^{-7}$ was exact by definition. The relation $c = 1/\\sqrt{\\mu_0 \\epsilon_0}$ always holds, so knowing one determines the other. In Gaussian units these constants do not appear -- Coulomb's law is simply $F = q_1 q_2/r^2$.",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "constants"
+    ]
+  },
+  {
+    "name": "Maxwell's equations",
+    "question": "Write down all four of Maxwell's equations in differential form (in vacuum with sources).",
+    "answer": "1) $\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}$ (Gauss's law), 2) $\\nabla \\cdot \\vec{B} = 0$ (no magnetic monopoles), 3) $\\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}$ (Faraday's law), 4) $\\nabla \\times \\vec{B} = \\mu_0 \\vec{J} + \\mu_0 \\epsilon_0 \\frac{\\partial \\vec{E}}{\\partial t}$ (Ampere-Maxwell law).",
+    "explanation": "These four equations, together with the Lorentz force law, form the complete classical theory of electromagnetism.",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "maxwells-equations"
+    ]
+  },
+  {
+    "name": "Poynting vector",
+    "question": "What is the Poynting vector and what does it represent?",
+    "answer": "$\\vec{S} = \\frac{1}{\\mu_0} \\vec{E} \\times \\vec{B}$. It represents the energy flux (power per unit area) carried by the electromagnetic field.",
+    "explanation": "The Poynting theorem states $\\frac{\\partial u}{\\partial t} + \\nabla \\cdot \\vec{S} = -\\vec{J} \\cdot \\vec{E}$, where $u$ is the EM energy density.",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "poynting-vector"
+    ]
+  },
+  {
+    "name": "EM boundary conditions",
+    "question": "State the boundary conditions for $\\vec{E}$ and $\\vec{B}$ at an interface between two linear media (no free surface charge or current).",
+    "answer": "The tangential component of $\\vec{E}$ and the normal component of $\\vec{B}$ are continuous. Additionally, the normal component of $\\vec{D}$ and the tangential component of $\\vec{H}$ are continuous.",
+    "explanation": "Each condition comes from one of Maxwell's equations applied to a thin surface at the interface. (1) $\\nabla \\cdot \\vec{D} = \\rho_f$: apply Gauss's law to a pillbox straddling the surface. The flux through the sides vanishes as the height shrinks, giving $D_{1\\perp} = D_{2\\perp}$ (no free surface charge). (2) $\\nabla \\cdot \\vec{B} = 0$: same pillbox argument gives $B_{1\\perp} = B_{2\\perp}$ (always true -- no magnetic monopoles). (3) $\\nabla \\times \\vec{E} = -\\partial\\vec{B}/\\partial t$: apply Faraday's law to a thin rectangular loop with long sides parallel to the surface. As the height shrinks the flux through the loop vanishes, giving $E_{1\\parallel} = E_{2\\parallel}$ (always true). (4) $\\nabla \\times \\vec{H} = \\vec{J}_f + \\partial\\vec{D}/\\partial t$: same loop argument gives $H_{1\\parallel} = H_{2\\parallel}$ (no free surface current). In linear media, $\\vec{D} = \\epsilon\\vec{E}$ and $\\vec{B} = \\mu\\vec{H}$, so continuity of $D_\\perp$ means $\\epsilon_1 E_{1\\perp} = \\epsilon_2 E_{2\\perp}$ (the normal $E$ is discontinuous), and continuity of $H_\\parallel$ means $B_{1\\parallel}/\\mu_1 = B_{2\\parallel}/\\mu_2$ (the tangential $B$ is discontinuous). These conditions determine reflection and transmission coefficients (Fresnel equations) and are essential for waveguides, optical coatings, and cavity design. References: Griffiths, Introduction to Electrodynamics, Section 7.3.5 (boundary conditions) and Section 9.3.2 (Fresnel equations); Jackson, Classical Electrodynamics, Section 1.5.",
+    "subject": "electromagnetism",
+    "difficulty": "intermediate",
+    "labels": [
+      "boundary-conditions"
+    ]
+  },
+  {
+    "name": "EM energy density",
+    "question": "What is the electromagnetic energy density in vacuum?",
+    "answer": "$u = \\frac{1}{2}\\left(\\epsilon_0 E^2 + \\frac{B^2}{\\mu_0}\\right)$",
+    "explanation": "This is the energy stored per unit volume in the electric and magnetic fields.",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "energy"
+    ]
+  },
+  {
+    "name": "gauge transformations in EM",
+    "question": "What is a gauge transformation in electrodynamics, and what are the Lorenz and Coulomb gauges?",
+    "answer": "A gauge transformation is $\\vec{A} \\to \\vec{A} + \\nabla \\lambda$, $\\phi \\to \\phi - \\frac{\\partial \\lambda}{\\partial t}$, which leaves $\\vec{E}$ and $\\vec{B}$ unchanged. The Lorenz gauge requires $\\nabla \\cdot \\vec{A} + \\mu_0 \\epsilon_0 \\frac{\\partial \\phi}{\\partial t} = 0$. The Coulomb gauge requires $\\nabla \\cdot \\vec{A} = 0$.",
+    "explanation": "The physical fields $\\vec{E}$ and $\\vec{B}$ are gauge-invariant. Choosing a gauge simplifies the equations for the potentials.",
+    "subject": "electromagnetism",
+    "difficulty": "intermediate",
+    "labels": [
+      "gauge-transformations"
+    ]
+  },
+  {
+    "name": "multipole expansion",
+    "question": "What is the leading-order term in the multipole expansion of the potential of a localized charge distribution, far from the source?",
+    "answer": "The monopole term: $\\phi \\sim \\frac{1}{4\\pi\\epsilon_0} \\frac{Q}{r}$, where $Q$ is the total charge.",
+    "explanation": "If $Q = 0$, the next term is the dipole term proportional to $\\frac{1}{r^2}$, then the quadrupole proportional to $\\frac{1}{r^3}$, etc.",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "multipole-expansion"
+    ]
+  },
+  {
+    "name": "speed of EM waves",
+    "question": "What is the speed of electromagnetic waves in vacuum, expressed in terms of fundamental constants?",
+    "answer": "$c = \\frac{1}{\\sqrt{\\mu_0 \\epsilon_0}}$",
+    "explanation": "This follows directly from the wave equation derived from Maxwell's equations in vacuum. It was one of the great triumphs of Maxwell's theory.",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "electromagnetic-waves"
+    ]
+  },
+  {
+    "name": "retarded potentials",
+    "question": "What are retarded potentials and why are they called 'retarded'?",
+    "answer": "The retarded potentials are $\\phi(\\vec{r},t) = \\frac{1}{4\\pi\\epsilon_0} \\int \\frac{\\rho(\\vec{r}', t_r)}{|\\vec{r}-\\vec{r}'|} d^3r'$ (and similarly for $\\vec{A}$), where $t_r = t - \\frac{|\\vec{r}-\\vec{r}'|}{c}$ is the retarded time. They are 'retarded' because the field at $(\\vec{r},t)$ depends on the source at the earlier time $t_r$, reflecting the finite speed of light.",
+    "explanation": "This enforces causality. The advanced potentials (using $t + \\frac{|\\vec{r}-\\vec{r}'|}{c}$) are mathematically valid but physically rejected for radiation problems.",
+    "subject": "electromagnetism",
+    "difficulty": "intermediate",
+    "labels": [
+      "retarded-potentials"
+    ]
+  },
+  {
+    "name": "Lorentz force law",
+    "question": "Write the Lorentz force law for a charged particle in electric and magnetic fields.",
+    "answer": "$\\vec{F} = q(\\vec{E} + \\vec{v} \\times \\vec{B})$",
+    "explanation": "This is in SI units and is exact as written. In Gaussian units the form is $\\vec{F} = q(\\vec{E} + \\frac{\\vec{v}}{c} \\times \\vec{B})$. The electric force $q\\vec{E}$ is independent of velocity and can do work. The magnetic force $q\\vec{v} \\times \\vec{B}$ is always perpendicular to $\\vec{v}$, so $\\vec{F}_{\\text{mag}} \\cdot \\vec{v} = 0$ -- it changes the direction of motion but never the speed or kinetic energy. This is why magnetic fields alone cannot accelerate particles from rest. The Lorentz force is the foundation of charged particle dynamics: cyclotron motion ($r = mv/qB$, $\\omega_c = qB/m$), velocity selectors ($E = vB$), and the Hall effect. It also appears in the equation of motion for plasmas (magnetohydrodynamics) and underpins the $\\vec{J} \\times \\vec{B}$ force on current-carrying conductors. References: Griffiths, Introduction to Electrodynamics, Section 5.1; Jackson, Classical Electrodynamics, Section 1.2 and 12.1 (covariant form $f^\\mu = qF^{\\mu\\nu}u_\\nu$).",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "lorentz-force"
+    ]
+  },
+  {
+    "name": "Larmor formula",
+    "question": "What is Larmor's formula for the power radiated by an accelerating point charge?",
+    "answer": "$P = \\frac{q^2 a^2}{6\\pi \\epsilon_0 c^3}$, where $a$ is the magnitude of the acceleration.",
+    "explanation": "This is the nonrelativistic result. It shows that only accelerating charges radiate. The relativistic generalization involves the four-acceleration.",
+    "subject": "electromagnetism",
+    "difficulty": "intermediate",
+    "labels": [
+      "radiation"
+    ]
+  },
+  {
+    "name": "Gauss's law",
+    "question": "State Gauss's law in integral form and explain when it is most useful for computing $\\vec{E}$.",
+    "answer": "The flux of $\\vec{E}$ through a closed surface equals $\\frac{Q_{\\text{enc}}}{\\epsilon_0}$. It is most useful when the charge distribution has sufficient symmetry (spherical, cylindrical, or planar) so that $\\vec{E}$ can be pulled out of the integral.",
+    "explanation": "For a spherically symmetric charge distribution, $\\vec{E}$ is radial and constant on a concentric sphere, giving $E \\cdot 4\\pi r^2 = \\frac{Q_{\\text{enc}}}{\\epsilon_0}$.",
+    "subject": "electromagnetism",
+    "difficulty": "basic",
+    "labels": [
+      "gausss-law"
+    ]
+  },
+  {
+    "name": "field strength tensor $F^{\\mu\\nu}$",
+    "question": "What is the covariant (four-vector) form of the electromagnetic field, and how are $\\vec{E}$ and $\\vec{B}$ encoded in the field strength tensor $F^{\\mu\\nu}$?",
+    "answer": "$F^{\\mu\\nu}$ is an antisymmetric rank-2 tensor. Its components are: $F^{0i} = -E^i/c$ (electric field), and $F^{ij} = -\\epsilon^{ijk} B_k$ (magnetic field). Maxwell's equations become $\\partial_\\mu F^{\\mu\\nu} = \\mu_0 J^\\nu$ and $\\partial_{[\\alpha} F_{\\beta\\gamma]} = 0$.",
+    "explanation": "This formulation makes the Lorentz covariance of electrodynamics manifest and is essential for relativistic treatments.",
+    "subject": "electromagnetism",
+    "difficulty": "advanced",
+    "labels": [
+      "covariant-formulation"
+    ]
+  },
+  {
+    "name": "Wilson loop",
+    "question": "What is a Wilson loop in gauge theory, and what does it measure physically?",
+    "answer": "$W(\\mathcal{C}) = \\mathrm{Tr}\\left[\\mathcal{P} \\exp\\left(i \\oint_{\\mathcal{C}} A_\\mu \\, dx^\\mu\\right)\\right]$. It measures the holonomy  --  the net phase (or rotation in gauge space) acquired by parallel-transporting a charged particle around a closed path $\\mathcal{C}$.",
+    "explanation": "Wilson loops are gauge-invariant observables that probe the gauge field non-locally. In electromagnetism, the phase reduces to $e^{iq\\Phi_B/\\hbar}$ (Aharonov-Bohm effect). In non-abelian theories, the path-ordering $\\mathcal{P}$ is needed because gauge fields at different points don't commute.",
+    "subject": "electromagnetism",
+    "difficulty": "advanced",
+    "labels": [
+      "gauge-theory"
+    ]
+  },
+  {
+    "name": "de Broglie wavelength",
+    "question": "What is the de Broglie wavelength of a particle with momentum $p$, and what is its physical significance?",
+    "answer": "$\\lambda = \\frac{h}{p}$. It is the wavelength associated with a massive particle's matter wave—quantum effects become important when $\\lambda$ is comparable to the length scales of the system.",
+    "explanation": "Electrons at $\\sim$eV energies have $\\lambda \\sim$ angstroms, enabling electron diffraction off crystal lattices. The WKB approximation is valid when the potential varies slowly compared to $\\lambda$.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "wave-particle-duality"
+    ]
+  },
+  {
+    "name": "$[\\hat{x}, \\hat{p}]$ commutation relation",
+    "question": "What is the canonical commutation relation between position $\\hat{x}$ and momentum $\\hat{p}$?",
+    "answer": "$[\\hat{x}, \\hat{p}] = i\\hbar$",
+    "explanation": "This is the foundational commutation relation of quantum mechanics, from which the uncertainty principle follows directly.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "commutation-relations"
+    ]
+  },
+  {
+    "name": "Schrodinger equation",
+    "question": "Write the time-dependent Schrodinger equation.",
+    "answer": "$i\\hbar \\frac{\\partial \\psi}{\\partial t} = \\hat{H} \\psi$, where $\\hat{H}$ is the Hamiltonian operator.",
+    "explanation": "For a single particle in a potential, $\\hat{H} = -\\frac{\\hbar^2}{2m} \\nabla^2 + V(\\vec{r})$. The time-independent version is $\\hat{H}\\psi = E\\psi$.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "schrodinger-equation"
+    ]
+  },
+  {
+    "name": "quantum harmonic oscillator energies",
+    "question": "What are the energy eigenvalues of the quantum harmonic oscillator?",
+    "answer": "$E_n = \\hbar\\omega\\left(n + \\frac{1}{2}\\right)$, for $n = 0, 1, 2, \\ldots$",
+    "explanation": "The equally spaced energy levels and nonzero ground state energy ($\\frac{1}{2}\\hbar\\omega$) are hallmarks of the quantum harmonic oscillator. Solved elegantly via creation and annihilation operators.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "harmonic-oscillator"
+    ]
+  },
+  {
+    "name": "hydrogen atom energy levels",
+    "question": "What are the energy levels of the hydrogen atom (nonrelativistic, ignoring fine structure)?",
+    "answer": "$E_n = -\\frac{13.6 \\text{ eV}}{n^2}$, for $n = 1, 2, 3, \\ldots$",
+    "explanation": "The degeneracy of each level is $n^2$ (ignoring spin) or $2n^2$ (including spin). This follows from the Coulomb potential and the accidental $SO(4)$ symmetry.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "hydrogen-atom"
+    ]
+  },
+  {
+    "name": "$\\hat{L}^2$ and $\\hat{L}_z$ eigenvalues",
+    "question": "What are the eigenvalues of the angular momentum operators $\\hat{L}^2$ and $\\hat{L}_z$?",
+    "answer": "$\\hat{L}^2$ has eigenvalues $\\hbar^2 l(l+1)$ for $l = 0, 1, 2, \\ldots$ and $\\hat{L}_z$ has eigenvalues $\\hbar m$ for $m = -l, -l+1, \\ldots, l-1, l$.",
+    "explanation": "These follow from the commutation relations $[\\hat{L}_i, \\hat{L}_j] = i\\hbar \\epsilon_{ijk} \\hat{L}_k$ and $[\\hat{L}^2, \\hat{L}_i] = 0$.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "angular-momentum"
+    ]
+  },
+  {
+    "name": "electron spin",
+    "question": "What is the spin of an electron, and what are the possible measurement outcomes of $\\hat{S}_z$?",
+    "answer": "The electron has spin $\\frac{1}{2}$. The possible outcomes of $\\hat{S}_z$ are $+\\frac{\\hbar}{2}$ and $-\\frac{\\hbar}{2}$.",
+    "explanation": "Spin is an intrinsic angular momentum with no classical analogue. The spin-$\\frac{1}{2}$ operators are represented by $\\frac{\\hbar}{2}$ times the Pauli matrices.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "spin"
+    ]
+  },
+  {
+    "name": "generalized uncertainty principle",
+    "question": "State the generalized uncertainty principle for two observables $\\hat{A}$ and $\\hat{B}$.",
+    "answer": "$\\sigma_A \\sigma_B \\geq \\frac{1}{2}|\\langle[\\hat{A}, \\hat{B}]\\rangle|$",
+    "explanation": "For $\\hat{x}$ and $\\hat{p}$, this gives $\\sigma_x \\sigma_p \\geq \\frac{\\hbar}{2}$, the Heisenberg uncertainty principle.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "uncertainty-principle"
+    ]
+  },
+  {
+    "name": "first-order perturbation theory",
+    "question": "What is the first-order energy correction in non-degenerate perturbation theory?",
+    "answer": "$E_n^{(1)} = \\langle n^{(0)}| \\hat{H}' |n^{(0)}\\rangle$, the expectation value of the perturbation $\\hat{H}'$ in the unperturbed state.",
+    "explanation": "The first-order correction to the state is $|n^{(1)}\\rangle = \\sum_{m \\neq n} \\frac{\\langle m^{(0)}|\\hat{H}'|n^{(0)}\\rangle}{E_n^{(0)} - E_m^{(0)}} |m^{(0)}\\rangle$.",
+    "subject": "quantum-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "perturbation-theory"
+    ]
+  },
+  {
+    "name": "Fermi's golden rule",
+    "question": "What is Fermi's golden rule?",
+    "answer": "The transition rate from state $|i\\rangle$ to state $|f\\rangle$ under a time-dependent perturbation is $\\Gamma_{i \\to f} = \\frac{2\\pi}{\\hbar} |\\langle f|\\hat{H}'|i\\rangle|^2 \\rho(E_f)$, where $\\rho(E_f)$ is the density of final states.",
+    "explanation": "This is derived from first-order time-dependent perturbation theory in the long-time limit.",
+    "subject": "quantum-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "perturbation-theory"
+    ]
+  },
+  {
+    "name": "WKB approximation",
+    "question": "What is the WKB approximation for the allowed energies of a bound state in one dimension?",
+    "answer": "The Bohr-Sommerfeld quantization condition: $\\int_a^b p(x) \\, dx = \\left(n + \\frac{1}{2}\\right)\\pi\\hbar$, where $a$ and $b$ are the classical turning points and $p(x) = \\sqrt{2m(E - V(x))}$.",
+    "explanation": "WKB (Wentzel-Kramers-Brillouin) approximates the wavefunction when the potential varies slowly on the scale of the de Broglie wavelength $\\lambda = h/p(x)$. You write $\\psi(x) \\approx \\frac{C}{\\sqrt{p(x)}} e^{\\pm \\frac{i}{\\hbar}\\int p(x)\\,dx}$ in classically allowed regions ($E > V$) and an exponentially decaying form in forbidden regions ($E < V$). This breaks down at classical turning points where $p(x) \\to 0$; there you match to Airy function solutions. Each turning point introduces a phase shift of $\\pi/2$ (the Maslov index). For a bound state between turning points $a$ and $b$, demanding single-valuedness of the wavefunction after a round trip gives $\\int_a^b p\\,dx = (n + 1/2)\\pi\\hbar$, where the $1/2$ accounts for the two turning-point phase shifts. The full-period form $\\oint p\\,dq = 2\\pi\\hbar(n+1/2)$ is the Bohr-Sommerfeld condition. This beautifully connects quantum energy levels to classical phase-space areas: each state occupies an area $2\\pi\\hbar = h$ in phase space. For the harmonic oscillator $V = \\frac{1}{2}m\\omega^2 x^2$, the phase-space orbit is an ellipse with area $2\\pi E/\\omega$, and the WKB condition gives the exact result $E_n = \\hbar\\omega(n+1/2)$. References: Griffiths, Introduction to Quantum Mechanics, Chapter 8 (the WKB approximation); Landau & Lifshitz, Quantum Mechanics, Section 46--48; Sakurai, Modern Quantum Mechanics, Section 2.4 (WKB and semiclassical methods).",
+    "subject": "quantum-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "wkb"
+    ]
+  },
+  {
+    "name": "bosons vs fermions",
+    "question": "What is the difference between bosons and fermions regarding identical particles?",
+    "answer": "Bosons have symmetric wavefunctions under particle exchange and obey Bose-Einstein statistics (integer spin). Fermions have antisymmetric wavefunctions and obey Fermi-Dirac statistics (half-integer spin). Fermions satisfy the Pauli exclusion principle.",
+    "explanation": "The spin-statistics theorem connects spin to exchange symmetry. It is proven rigorously in relativistic quantum field theory.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "identical-particles"
+    ]
+  },
+  {
+    "name": "Feynman path integral",
+    "question": "What is the Feynman path integral expression for the quantum propagator?",
+    "answer": "$K(x_f, t_f; x_i, t_i) = \\int \\mathcal{D}[\\text{path}] \\, e^{iS[\\text{path}]/\\hbar}$, where $S$ is the classical action along the path.",
+    "explanation": "Every path contributes with a phase proportional to its action. Classical paths dominate in the limit $\\hbar \\to 0$ due to stationary phase.",
+    "subject": "quantum-mechanics",
+    "difficulty": "advanced",
+    "labels": [
+      "path-integrals"
+    ]
+  },
+  {
+    "name": "Pauli matrices",
+    "question": "What are the Pauli matrices?",
+    "answer": "$\\sigma_x = \\begin{pmatrix} 0 & 1 \\\\\\\\ 1 & 0 \\end{pmatrix}$, $\\sigma_y = \\begin{pmatrix} 0 & -i \\\\\\\\ i & 0 \\end{pmatrix}$, $\\sigma_z = \\begin{pmatrix} 1 & 0 \\\\\\\\ 0 & -1 \\end{pmatrix}$",
+    "explanation": "They satisfy $\\{\\sigma_i, \\sigma_j\\} = 2\\delta_{ij}I$ and $[\\sigma_i, \\sigma_j] = 2i\\epsilon_{ijk}\\sigma_k$. The spin operators are $\\hat{S}_i = \\frac{\\hbar}{2}\\sigma_i$.",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "spin"
+    ]
+  },
+  {
+    "name": "variational principle",
+    "question": "What is the variational principle (Rayleigh-Ritz) in quantum mechanics?",
+    "answer": "For any normalized trial wavefunction $|\\psi_{\\text{trial}}\\rangle$, the expectation value $\\langle\\psi_{\\text{trial}}|\\hat{H}|\\psi_{\\text{trial}}\\rangle \\geq E_0$, the true ground state energy. Equality holds only when $|\\psi_{\\text{trial}}\\rangle$ is the exact ground state.",
+    "explanation": "This gives an upper bound on the ground state energy and is the basis for variational methods.",
+    "subject": "quantum-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "variational-method"
+    ]
+  },
+  {
+    "name": "angular momentum addition",
+    "question": "What is the addition rule for angular momenta $j_1$ and $j_2$? What total angular momentum values $j$ are possible?",
+    "answer": "$j$ ranges from $|j_1 - j_2|$ to $j_1 + j_2$ in integer steps.",
+    "explanation": "When two angular momenta couple, the total $\\mathbf{J} = \\mathbf{J}_1 + \\mathbf{J}_2$ has $J_z = m_1 + m_2$ (always), but $j$ is not simply $j_1 + j_2$. The range $|j_1 - j_2| \\leq j \\leq j_1 + j_2$ follows from counting states: the uncoupled basis has $(2j_1+1)(2j_2+1)$ states, and so does the coupled basis $\\sum_{j=|j_1-j_2|}^{j_1+j_2}(2j+1)$. The Clebsch-Gordan coefficients $\\langle j_1, m_1; j_2, m_2 | j, m \\rangle$ are the unitary transformation between these bases. They vanish unless $m = m_1 + m_2$ and the triangle inequality holds. Example: two spin-1/2 particles give $j = 1$ (triplet, 3 states, symmetric) and $j = 0$ (singlet, 1 state, antisymmetric). For $j_1 = 1, j_2 = 1$: $j = 0, 1, 2$ with $1 + 3 + 5 = 9 = 3 \\times 3$ states. In group theory language this is the decomposition of the tensor product: $\\mathbf{j_1} \\otimes \\mathbf{j_2} = \\bigoplus_j \\mathbf{j}$. This is essential for atomic spectroscopy (LS coupling), nuclear physics (isospin), and particle physics ($SU(2)$ flavor). References: Griffiths, Introduction to Quantum Mechanics, Chapter 4.3--4.4; Sakurai, Modern Quantum Mechanics, Chapter 3.7--3.8; Shankar, Principles of Quantum Mechanics, Chapter 15.",
+    "subject": "quantum-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "angular-momentum"
+    ]
+  },
+  {
+    "name": "non-perturbative $e^{-A/g}$",
+    "question": "Why can't a contribution of the form $e^{-A/g}$ (with $A > 0$) be captured at any finite order in a perturbative expansion in $g$?",
+    "answer": "All derivatives of $e^{-A/g}$ at $g = 0$ vanish, so its Taylor series is identically zero  --  it is 'beyond all orders' of perturbation theory.",
+    "explanation": "This is why non-perturbative effects (tunneling, instantons, bound states in some cases) require methods beyond Feynman diagrams. They are exponentially suppressed and invisible to any finite-order perturbative calculation.",
+    "subject": "quantum-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "non-perturbative"
+    ]
+  },
+  {
+    "name": "Bohr-Sommerfeld quantization",
+    "question": "What is the Bohr-Sommerfeld (WKB) quantization condition for bound states in 1D?",
+    "answer": "$\\oint p \\, dq = 2\\pi\\hbar\\left(n + \\frac{1}{2}\\right)$, integrated over one full classical period.",
+    "explanation": "The semiclassical limit connects quantum energy levels to classical phase-space areas. The $1/2$ correction (Maslov index) comes from the phase shift at each classical turning point, where the WKB approximation breaks down and Airy function matching is needed.",
+    "subject": "quantum-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "semiclassical"
+    ]
+  },
+  {
+    "name": "canonical partition function",
+    "question": "What is the canonical partition function for a system at temperature $T$?",
+    "answer": "$Z = \\sum_i e^{-E_i / (k_B T)}$, where the sum runs over all microstates $i$ with energy $E_i$.",
+    "explanation": "All thermodynamic quantities can be derived from $Z$. For example, the free energy is $F = -k_B T \\ln Z$.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "partition-function"
+    ]
+  },
+  {
+    "name": "Boltzmann distribution",
+    "question": "What is the Boltzmann distribution? What is the probability of a system being in microstate $i$?",
+    "answer": "$P_i = \\frac{e^{-E_i / (k_B T)}}{Z}$, where $Z$ is the partition function.",
+    "explanation": "This applies to a system in thermal equilibrium with a heat bath at temperature $T$ (canonical ensemble).",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "boltzmann-distribution"
+    ]
+  },
+  {
+    "name": "two-level system partition function",
+    "question": "What is the partition function of a two-level system with energies $0$ and $\\epsilon$?",
+    "answer": "$Z = 1 + e^{-\\epsilon / (k_B T)}$",
+    "explanation": "The average energy is $\\langle E \\rangle = \\frac{\\epsilon}{e^{\\epsilon/(k_B T)} + 1}$. This is one of the most fundamental exactly solvable models.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "partition-function"
+    ]
+  },
+  {
+    "name": "equipartition theorem",
+    "question": "State the equipartition theorem.",
+    "answer": "Each quadratic degree of freedom in the Hamiltonian contributes $\\frac{1}{2} k_B T$ to the average energy in thermal equilibrium.",
+    "explanation": "For example, a classical ideal gas molecule with 3 translational degrees of freedom has $\\langle E \\rangle = \\frac{3}{2} k_B T$. This breaks down at low temperatures where quantum effects dominate.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "equipartition"
+    ]
+  },
+  {
+    "name": "Fermi-Dirac and Bose-Einstein distributions",
+    "question": "What are the Fermi-Dirac and Bose-Einstein distribution functions?",
+    "answer": "Fermi-Dirac: $f(E) = \\frac{1}{e^{(E - \\mu)/(k_B T)} + 1}$. Bose-Einstein: $f(E) = \\frac{1}{e^{(E - \\mu)/(k_B T)} - 1}$.",
+    "explanation": "The $+1$ for fermions enforces the Pauli exclusion principle ($f \\leq 1$). The $-1$ for bosons allows unlimited occupation and can lead to Bose-Einstein condensation.",
+    "subject": "statistical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "quantum-statistics"
+    ]
+  },
+  {
+    "name": "statistical ensembles",
+    "question": "What are the three standard statistical ensembles and what variables are held fixed in each?",
+    "answer": "\\u2022 Microcanonical (NVE): fixed $E$, $V$, $N$. All accessible microstates equally probable. Partition function: $\\Omega(E)$ = number of microstates. Thermodynamic potential: entropy $S = k_B \\ln \\Omega$. Temperature emerges as $1/T = \\partial S/\\partial E$. Models an isolated system.\\n\\u2022 Canonical (NVT): fixed $T$, $V$, $N$. System exchanges energy with a heat bath. Partition function: $Z = \\sum_i e^{-\\beta E_i}$, $\\beta = 1/(k_B T)$. Probability of microstate $i$: $P_i = e^{-\\beta E_i}/Z$ (Boltzmann distribution). Thermodynamic potential: Helmholtz free energy $F = -k_B T \\ln Z$. Energy fluctuations: $\\langle (\\Delta E)^2 \\rangle = k_B T^2 C_V$.\\n\\u2022 Grand canonical ($\\mu$VT): fixed $T$, $V$, $\\mu$. System exchanges both energy and particles with a reservoir. Partition function: $\\mathcal{Z} = \\sum_N \\sum_i e^{-\\beta(E_i - \\mu N)}$. Thermodynamic potential: grand potential $\\Phi = -k_B T \\ln \\mathcal{Z} = F - \\mu N$. Particle number fluctuations: $\\langle (\\Delta N)^2 \\rangle = k_B T (\\partial \\langle N \\rangle / \\partial \\mu)_T$.",
+    "explanation": "The ensembles are equivalent in the thermodynamic limit ($N \\to \\infty$): relative fluctuations scale as $1/\\sqrt{N}$, so $\\Delta E/\\langle E \\rangle \\sim 1/\\sqrt{N} \\to 0$. Each ensemble is obtained from the previous by a Legendre transform -- canonical from microcanonical by trading $E$ for $T$, grand canonical from canonical by trading $N$ for $\\mu$. The canonical ensemble is most commonly used because most lab systems are in thermal contact with their surroundings. The grand canonical ensemble is essential for quantum gases (Bose-Einstein and Fermi-Dirac statistics), where fixing $N$ exactly is impractical and the fugacity $z = e^{\\beta\\mu}$ controls the mean particle number. The microcanonical ensemble is the most fundamental (no assumptions about a bath) and is the starting point for deriving the other two. References: Pathria & Beale, Statistical Mechanics, Chapters 2--4; Kardar, Statistical Physics of Particles, Chapters 4--5; Reif, Fundamentals of Statistical and Thermal Physics, Chapters 6--7.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "ensembles"
+    ]
+  },
+  {
+    "name": "entropy (statistical)",
+    "question": "What is the statistical definition of entropy?",
+    "answer": "$S = k_B \\ln \\Omega$, where $\\Omega$ is the number of accessible microstates (Boltzmann entropy). More generally, $S = -k_B \\sum_i P_i \\ln P_i$ (Gibbs entropy).",
+    "explanation": "The Boltzmann formula applies to the microcanonical ensemble. The Gibbs formula is more general and reduces to Boltzmann's when all accessible states are equally probable.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "entropy"
+    ]
+  },
+  {
+    "name": "phase transitions",
+    "question": "What is a phase transition, and what distinguishes first-order from second-order (continuous) phase transitions?",
+    "answer": "A phase transition is a non-analyticity in the free energy. In a first-order transition, the first derivative of the free energy (e.g., entropy, volume) is discontinuous, involving latent heat. In a second-order transition, first derivatives are continuous but second derivatives (e.g., heat capacity, susceptibility) diverge.",
+    "explanation": "Examples: melting is first-order; the ferromagnetic transition at the Curie point is second-order.",
+    "subject": "statistical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "phase-transitions"
+    ]
+  },
+  {
+    "name": "Ising model",
+    "question": "What is the Ising model?",
+    "answer": "A lattice model where spin variables $s_i = \\pm 1$ interact via $H = -J \\sum_{\\langle i,j \\rangle} s_i s_j - h \\sum_i s_i$, where $J$ is the coupling constant, $h$ is an external field, and the first sum is over nearest neighbors.",
+    "explanation": "The 1D Ising model has no phase transition (solved by Ising). The 2D model has a phase transition at $T_c$ (solved exactly by Onsager). The 3D model has no known exact solution.",
+    "subject": "statistical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "ising-model"
+    ]
+  },
+  {
+    "name": "Helmholtz free energy",
+    "question": "What is the Helmholtz free energy and when is it minimized?",
+    "answer": "$F = U - TS$, where $U$ is internal energy, $T$ is temperature, and $S$ is entropy. It is minimized at equilibrium for a system at constant $T$ and $V$.",
+    "explanation": "The Gibbs free energy $G = U - TS + PV$ is minimized at constant $T$ and $P$ instead. These are related to the partition function by $F = -k_B T \\ln Z$.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "free-energy"
+    ]
+  },
+  {
+    "name": "Fermi gas ground-state energy",
+    "question": "What is the total ground-state energy of $N$ non-interacting fermions in 3D, in terms of the Fermi energy $E_F$?",
+    "answer": "$E = \\frac{3}{5} N E_F$",
+    "explanation": "The 3D density of states is $g(E) = C E^{1/2}$ where $C = \\frac{V}{2\\pi^2}\\left(\\frac{2m}{\\hbar^2}\\right)^{3/2}$. At $T=0$, all states up to $E_F$ are filled, so $N = \\int_0^{E_F} g(E)\\,dE = C \\cdot \\frac{2}{3} E_F^{3/2}$. The total energy is $E_{\\text{tot}} = \\int_0^{E_F} E\\,g(E)\\,dE = C \\int_0^{E_F} E^{3/2}\\,dE = C \\cdot \\frac{2}{5} E_F^{5/2}$. Dividing: $E_{\\text{tot}}/N = \\frac{C \\cdot \\frac{2}{5} E_F^{5/2}}{C \\cdot \\frac{2}{3} E_F^{3/2}} = \\frac{3}{5} E_F$. The factor $3/5$ (not $1/2$) arises because $g(E) \\propto E^{1/2}$ weights higher energies more heavily -- there are more states near $E_F$ than near $E = 0$.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "fermi-gas"
+    ]
+  },
+  {
+    "name": "$PV = U/3$ for ultrarelativistic gas",
+    "question": "Show that for an extreme relativistic noninteracting Fermi or Bose gas with dispersion $E(\\vec{k}) = c\\hbar |\\vec{k}|$, the relation $PV = \\frac{1}{3}U$ holds. Hint: use $PV = k_BT \\ln \\mathcal{Z}$, where $\\mathcal{Z}(\\mu, T)$ is the grand partition function.",
+    "answer": "The grand partition function gives $\\ln \\mathcal{Z} = \\mp \\sum_{\\vec{k}} \\ln(1 \\mp z e^{-\\beta \\epsilon_k})$, with $z = e^{\\beta\\mu}$ and $\\epsilon_k = c\\hbar k$ (upper signs for bosons).\n\nReplace the sum with an integral: $\\sum_{\\vec{k}} \\to \\frac{V}{(2\\pi)^3} \\int d^3k = \\frac{V}{2\\pi^2} \\int_0^\\infty k^2 \\, dk$.\n\nSubstitute $u = \\beta c\\hbar k$, so $k = u/(\\beta c\\hbar)$ and $dk = du/(\\beta c\\hbar)$:\n$$\\ln \\mathcal{Z} = \\frac{V}{2\\pi^2 (\\beta c\\hbar)^3} \\underbrace{\\int_0^\\infty (\\mp) u^2 \\ln(1 \\mp z e^{-u})\\, du}_{\\equiv\\, I(z)}$$\nThe crucial point: at fixed fugacity $z$, $I(z)$ is independent of $\\beta$, so $\\ln \\mathcal{Z} \\propto \\beta^{-3}$.\n\nSince $PV = k_BT \\ln \\mathcal{Z} = \\beta^{-1} \\ln \\mathcal{Z}$, and $U = -\\frac{\\partial \\ln \\mathcal{Z}}{\\partial \\beta}\\bigg|_z = 3\\beta^{-1} \\ln \\mathcal{Z} = 3PV$. $\\quad\\square$",
+    "explanation": "The linear dispersion $\\epsilon \\propto k$ produces the $\\beta^{-3}$ scaling that gives $U = 3PV$. Photon and phonon gases obey the same relation for the same reason. By contrast, nonrelativistic gases ($\\epsilon \\propto k^2$) give $\\ln \\mathcal{Z} \\propto \\beta^{-5/2}$ and $PV = \\frac{2}{3}U$. (MIT Fall 1997 Qualifying Exam.)",
+    "subject": "statistical-mechanics",
+    "difficulty": "advanced",
+    "labels": [
+      "fermi-gas",
+      "bose-gas",
+      "equation-of-state"
+    ]
+  },
+  {
+    "name": "grand canonical partition function",
+    "question": "How is the grand canonical partition function $\\Xi$ related to the canonical partition functions $Z(N)$?",
+    "answer": "$\\Xi(\\mu) = \\sum_{N=0}^{\\infty} e^{\\beta \\mu N} Z(N)$",
+    "explanation": "$\\Xi$ is the generating function for $Z(N)$ weighted by the fugacity $z = e^{\\beta\\mu}$. This relation lets you move between fixed-$N$ and variable-$N$ descriptions, which is essential whenever a quantum system is easier to solve in one ensemble than the other.",
+    "subject": "statistical-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "grand-canonical"
+    ]
+  },
+  {
+    "name": "Lorentz transformation",
+    "question": "Write down the Lorentz transformation for coordinates $(t, x)$ between two inertial frames with relative velocity $v$ along the $x$-axis.",
+    "answer": "$t' = \\gamma\\left(t - \\frac{vx}{c^2}\\right)$, $x' = \\gamma(x - vt)$, where $\\gamma = \\frac{1}{\\sqrt{1 - v^2/c^2}}$.",
+    "explanation": "$y$ and $z$ are unchanged. These reduce to the Galilean transformation in the limit $v \\ll c$.",
+    "subject": "relativity",
+    "difficulty": "basic",
+    "labels": [
+      "lorentz-transformations"
+    ]
+  },
+  {
+    "name": "spacetime interval",
+    "question": "What is the spacetime interval in special relativity and why is it important?",
+    "answer": "$ds^2 = -c^2 dt^2 + dx^2 + dy^2 + dz^2$ (in the $-+++$ convention). It is invariant under Lorentz transformations, meaning all observers agree on its value.",
+    "explanation": "Timelike intervals ($ds^2 < 0$) connect causally related events; spacelike intervals ($ds^2 > 0$) connect causally unrelated events; null intervals ($ds^2 = 0$) describe light signals.",
+    "subject": "relativity",
+    "difficulty": "basic",
+    "labels": [
+      "metric-tensor"
+    ]
+  },
+  {
+    "name": "equivalence principle",
+    "question": "What is the equivalence principle?",
+    "answer": "The effects of gravity are locally indistinguishable from the effects of acceleration. Equivalently, inertial mass equals gravitational mass.",
+    "explanation": "This is the foundational physical principle of general relativity. It implies that gravity is described by the geometry of spacetime.",
+    "subject": "relativity",
+    "difficulty": "basic",
+    "labels": [
+      "equivalence-principle"
+    ]
+  },
+  {
+    "name": "Einstein field equations",
+    "question": "Write the Einstein field equations.",
+    "answer": "$G_{\\mu\\nu} = R_{\\mu\\nu} - \\frac{1}{2} g_{\\mu\\nu} R = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}$, where $G_{\\mu\\nu}$ is the Einstein tensor, $R_{\\mu\\nu}$ is the Ricci tensor, $R$ is the Ricci scalar, and $T_{\\mu\\nu}$ is the stress-energy tensor.",
+    "explanation": "The left side encodes spacetime geometry; the right side encodes matter and energy content. Sometimes a cosmological constant term $\\Lambda g_{\\mu\\nu}$ is added.",
+    "subject": "relativity",
+    "difficulty": "intermediate",
+    "labels": [
+      "einstein-field-equations"
+    ]
+  },
+  {
+    "name": "geodesic equation",
+    "question": "What is the geodesic equation?",
+    "answer": "$\\frac{d^2 x^\\mu}{d\\tau^2} + \\Gamma^\\mu_{\\alpha\\beta} \\frac{dx^\\alpha}{d\\tau} \\frac{dx^\\beta}{d\\tau} = 0$, where $\\Gamma^\\mu_{\\alpha\\beta}$ are the Christoffel symbols and $\\tau$ is proper time.",
+    "explanation": "This describes the motion of a free particle in curved spacetime. Geodesics extremize the proper time between two events.",
+    "subject": "relativity",
+    "difficulty": "intermediate",
+    "labels": [
+      "geodesic-equation"
+    ]
+  },
+  {
+    "name": "Schwarzschild metric",
+    "question": "What is the Schwarzschild metric?",
+    "answer": "$ds^2 = -\\left(1 - \\frac{2GM}{c^2 r}\\right)c^2 dt^2 + \\left(1 - \\frac{2GM}{c^2 r}\\right)^{-1} dr^2 + r^2 (d\\theta^2 + \\sin^2\\theta \\, d\\phi^2)$",
+    "explanation": "This is the unique spherically symmetric vacuum solution to the Einstein field equations (Birkhoff's theorem). The coordinate singularity at $r = \\frac{2GM}{c^2}$ is the event horizon.",
+    "subject": "relativity",
+    "difficulty": "intermediate",
+    "labels": [
+      "schwarzschild-solution"
+    ]
+  },
+  {
+    "name": "four-vectors",
+    "question": "What is a four-vector? Give three examples.",
+    "answer": "A four-vector is a quantity with four components that transforms as a vector under Lorentz transformations. Examples: four-position $(ct, x, y, z)$, four-momentum $(E/c, p_x, p_y, p_z)$, four-velocity $(\\gamma c, \\gamma v_x, \\gamma v_y, \\gamma v_z)$.",
+    "explanation": "Four-vectors are elements of Minkowski spacetime. Their Lorentz-invariant norm is computed using the metric: $A_\\mu A^\\mu$.",
+    "subject": "relativity",
+    "difficulty": "basic",
+    "labels": [
+      "four-vectors"
+    ]
+  },
+  {
+    "name": "stress-energy tensor",
+    "question": "What is the stress-energy tensor for a perfect fluid?",
+    "answer": "$T^{\\mu\\nu} = \\left(\\rho + \\frac{P}{c^2}\\right) u^\\mu u^\\nu + P g^{\\mu\\nu}$, where $\\rho$ is the energy density, $P$ is the pressure, and $u^\\mu$ is the four-velocity of the fluid.",
+    "explanation": "In the rest frame of the fluid, $T^{00} = \\rho c^2$, $T^{ii} = P$ (no sum), and all off-diagonal components vanish.",
+    "subject": "relativity",
+    "difficulty": "intermediate",
+    "labels": [
+      "stress-energy-tensor"
+    ]
+  },
+  {
+    "name": "energy-momentum relation",
+    "question": "What is the relativistic energy-momentum relation?",
+    "answer": "$E^2 = (pc)^2 + (mc^2)^2$, where $E$ is total energy, $p$ is the magnitude of three-momentum, and $m$ is the rest mass.",
+    "explanation": "For massless particles ($m = 0$), $E = pc$. For particles at rest ($p = 0$), $E = mc^2$. This is the Lorentz-invariant norm of the four-momentum.",
+    "subject": "relativity",
+    "difficulty": "basic",
+    "labels": [
+      "four-vectors"
+    ]
+  },
+  {
+    "name": "gravitational time dilation",
+    "question": "What is gravitational time dilation in the Schwarzschild geometry?",
+    "answer": "A clock at radial coordinate $r$ runs slower than a clock at infinity by a factor $\\sqrt{1 - \\frac{2GM}{c^2 r}}$. That is, $d\\tau = \\sqrt{1 - \\frac{2GM}{c^2 r}} \\, dt$.",
+    "explanation": "The connection to $g_{tt}$ is direct. The Schwarzschild line element is $ds^2 = -\\left(1 - \\frac{2GM}{c^2 r}\\right)c^2 dt^2 + \\left(1 - \\frac{2GM}{c^2 r}\\right)^{-1}dr^2 + r^2 d\\Omega^2$. For a clock sitting at fixed $r$ (i.e. $dr = d\\theta = d\\phi = 0$), the line element reduces to $ds^2 = g_{tt}\\,c^2 dt^2$. Since proper time is $d\\tau^2 = -ds^2/c^2$ (with our $-+++$ signature), we get $d\\tau = \\sqrt{-g_{tt}}\\,dt = \\sqrt{1 - 2GM/(c^2 r)}\\,dt$. So $g_{tt}$ directly controls the rate at which proper time accumulates relative to coordinate time $t$ (which is the proper time of a distant observer at $r \\to \\infty$, where $g_{tt} \\to -1$). This generalizes: in any stationary spacetime, $d\\tau/dt = \\sqrt{-g_{tt}}$ for a static observer. At the event horizon $r_s = 2GM/c^2$, $g_{tt} = 0$, so $d\\tau/dt \\to 0$ -- a distant observer sees the clock freeze. GPS satellites must correct for this: clocks in orbit at $r \\approx 26{,}600$ km run ~45 microseconds/day faster than ground clocks due to weaker gravity (partially offset by ~7 microseconds/day slower from special-relativistic time dilation due to orbital velocity). The Pound-Rebka experiment (1959) confirmed gravitational redshift to 1% by measuring the frequency shift of gamma rays over a 22.5 m tower. References: Carroll, Spacetime and Geometry, Sections 5.1--5.2; Hartle, Gravity, Chapter 9; Schutz, A First Course in General Relativity, Section 10.1.",
+    "subject": "relativity",
+    "difficulty": "intermediate",
+    "labels": [
+      "schwarzschild-solution"
+    ]
+  },
+  {
+    "name": "Dirac equation",
+    "question": "Write the Dirac equation for a free particle of mass $m$.",
+    "answer": "$(i\\gamma^\\mu \\partial_\\mu - m)\\psi = 0$, where $\\gamma^\\mu$ are the $4 \\times 4$ Dirac gamma matrices satisfying $\\{\\gamma^\\mu, \\gamma^\\nu\\} = 2\\eta^{\\mu\\nu}$ (in natural units $\\hbar = c = 1$).",
+    "explanation": "The Dirac equation is the relativistic wave equation for spin-$1/2$ particles. It naturally predicts antiparticles and the correct electron magnetic moment. The four-component spinor $\\psi$ encodes both particle and antiparticle, each with two spin states.",
+    "subject": "quantum-field-theory",
+    "difficulty": "basic",
+    "labels": [
+      "dirac-equation"
+    ]
+  },
+  {
+    "name": "Klein-Gordon equation",
+    "question": "What is the Klein-Gordon equation, and what kind of particle does it describe?",
+    "answer": "$(\\partial_\\mu \\partial^\\mu + m^2)\\phi = 0$, i.e., $(\\Box + m^2)\\phi = 0$. It describes relativistic spin-$0$ (scalar) particles.",
+    "explanation": "This is the simplest relativistic field equation. It follows from the energy-momentum relation $E^2 = p^2 + m^2$ by the substitution $E \\to i\\partial_t$, $\\vec{p} \\to -i\\nabla$. The Higgs boson is a physical spin-0 particle.",
+    "subject": "quantum-field-theory",
+    "difficulty": "basic",
+    "labels": [
+      "klein-gordon"
+    ]
+  },
+  {
+    "name": "Feynman propagator",
+    "question": "What is the Feynman propagator for a free scalar field, and what does it represent physically?",
+    "answer": "Using the mostly-minus convention $\\eta_{\\mu\\nu} = \\mathrm{diag}(+,-,-,-)$ so that $k^2 = k_0^2 - |\\vec{k}|^2$: $$D_F(x - y) = \\int \\frac{d^4 k}{(2\\pi)^4} \\frac{i}{k^2 - m^2 + i\\epsilon}$$ It represents the amplitude for a particle to propagate from $y$ to $x$ (equivalently, the time-ordered two-point function $\\langle 0|T\\{\\phi(x)\\phi(y)\\}|0\\rangle$).",
+    "explanation": "The $i\\epsilon$ prescription selects the Feynman boundary condition: positive-frequency modes propagate forward in time, negative-frequency backward (antiparticles). Each internal line in a Feynman diagram contributes one propagator factor.",
+    "subject": "quantum-field-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "propagators"
+    ]
+  },
+  {
+    "name": "Feynman rules in $\\lambda\\phi^4$",
+    "question": "In $\\lambda \\phi^4$ scalar field theory, what are the Feynman rules in momentum space?",
+    "answer": "Propagator: $\\frac{i}{k^2 - m^2 + i\\epsilon}$ for each internal line. Vertex: $-i\\lambda$ for each four-point vertex. Impose momentum conservation at each vertex, integrate $\\int \\frac{d^4k}{(2\\pi)^4}$ over each undetermined loop momentum, and include symmetry factors.",
+    "explanation": "These rules translate Feynman diagrams into integrals. The symmetry factor accounts for overcounting due to identical internal lines or vertices related by symmetry.",
+    "subject": "quantum-field-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "feynman-rules"
+    ]
+  },
+  {
+    "name": "Wick's theorem",
+    "question": "What does Wick's theorem state, and why is it important for computing scattering amplitudes?",
+    "answer": "The time-ordered product of free fields equals the normal-ordered product plus all possible contractions: $T\\{\\phi_1 \\phi_2 \\cdots \\phi_n\\} = :\\!\\phi_1 \\phi_2 \\cdots \\phi_n\\!: + \\text{all contractions}$. Each contraction equals the Feynman propagator $D_F$.",
+    "explanation": "This is the bridge between the operator formalism and Feynman diagrams. Only fully contracted terms survive in vacuum expectation values, since $\\langle 0|:\\!\\cdots\\!:|0\\rangle = 0$.",
+    "subject": "quantum-field-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "wick-theorem"
+    ]
+  },
+  {
+    "name": "gauge invariance in QED",
+    "question": "What is a local gauge transformation in QED, and what does gauge invariance require?",
+    "answer": "$\\psi(x) \\to e^{i\\alpha(x)}\\psi(x)$, $A_\\mu \\to A_\\mu - \\frac{1}{e}\\partial_\\mu \\alpha(x)$. Gauge invariance requires replacing $\\partial_\\mu$ with the covariant derivative $D_\\mu = \\partial_\\mu + ieA_\\mu$ and forbids a photon mass term $m^2 A_\\mu A^\\mu$.",
+    "explanation": "The requirement of local gauge invariance generates the entire interaction between matter and gauge fields. In QED it dictates the electron-photon coupling. The masslessness of the photon is a direct consequence.",
+    "subject": "quantum-field-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "gauge-invariance"
+    ]
+  },
+  {
+    "name": "renormalization",
+    "question": "What is the basic idea of renormalization? Why do loop integrals in QFT diverge, and how is this handled?",
+    "answer": "Loop integrals diverge because we integrate over arbitrarily high momenta (UV divergence). Renormalization absorbs these infinities into redefinitions of physical parameters (mass, charge, field strength). A theory is renormalizable if only finitely many types of divergent diagrams appear.",
+    "explanation": "QED is renormalizable: only the electron self-energy, vacuum polarization, and vertex correction are primitively divergent. The physical predictions (like the anomalous magnetic moment $g-2$) are finite and spectacularly confirmed by experiment.",
+    "subject": "quantum-field-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "renormalization"
+    ]
+  },
+  {
+    "name": "Dirac spinor components",
+    "question": "How many independent components does a Dirac spinor have, and what do they represent physically?",
+    "answer": "A Dirac spinor has 4 complex components. In the rest frame, two correspond to particle states (spin up/down) and two to antiparticle states (spin up/down).",
+    "explanation": "The four-component structure arises because the Dirac equation combines two irreducible representations of the Lorentz group (left-handed and right-handed Weyl spinors). A Weyl spinor has 2 components; a Majorana spinor has 4 components with a reality condition.",
+    "subject": "quantum-field-theory",
+    "difficulty": "basic",
+    "labels": [
+      "spinors"
+    ]
+  },
+  {
+    "name": "LSZ reduction formula",
+    "question": "What is the LSZ reduction formula, and what role does it play in QFT?",
+    "answer": "The LSZ formula relates $S$-matrix elements (scattering amplitudes) to time-ordered correlation functions of the interacting theory. Each external particle contributes an inverse propagator that amputates the external leg and puts it on-shell.",
+    "explanation": "LSZ is the formal justification for computing scattering amplitudes from Feynman diagrams. It tells you to compute the connected, amputated Green's function and evaluate it with external momenta on-shell ($k^2 = m^2$).",
+    "subject": "quantum-field-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "lsz"
+    ]
+  },
+  {
+    "name": "beta function and asymptotic freedom",
+    "question": "What is the beta function in QFT, and what does asymptotic freedom mean?",
+    "answer": "The beta function $\\beta(g) = \\mu \\frac{dg}{d\\mu}$ describes how the coupling $g$ changes with the energy scale $\\mu$. Asymptotic freedom means $\\beta(g) < 0$: the coupling decreases at high energies. Non-abelian gauge theories like QCD (with $N_f < 33/2$) are asymptotically free.",
+    "explanation": "QCD becomes weakly coupled at high energies, enabling perturbative calculations for hard scattering. At low energies the coupling grows, leading to confinement. QED has $\\beta > 0$, so its coupling grows at high energies.",
+    "subject": "quantum-field-theory",
+    "difficulty": "advanced",
+    "labels": [
+      "running-coupling"
+    ]
+  },
+  {
+    "name": "differential cross-section from $\\mathcal{M}$",
+    "question": "How is a differential cross-section related to the matrix element $\\mathcal{M}$ for a $2 \\to 2$ process?",
+    "answer": "$$\\frac{d\\sigma}{d\\Omega} = \\frac{|\\mathcal{M}|^2}{64\\pi^2 s}$$in the center-of-mass frame for massless or equal-mass particles, where $s$ is the Mandelstam variable. More generally, $d\\sigma$ involves a flux factor and Lorentz-invariant phase space.",
+    "explanation": "The full formula is $d\\sigma = \\frac{1}{2E_A 2E_B |v_A - v_B|}|\\mathcal{M}|^2 d\\Pi_{\\text{LIPS}}$, where the prefactor is the flux factor (accounting for beam densities and relative velocity) and $d\\Pi_{\\text{LIPS}}$ is the Lorentz-invariant phase space measure that enforces 4-momentum conservation. For $2 \\to 2$ scattering in the CM frame, integrating over the constrained final-state momenta reduces $d\\Pi_{\\text{LIPS}}$ to $\\frac{|\\mathbf{p}_f|}{16\\pi^2 \\sqrt{s}} d\\Omega$, and combining with the flux factor $4|\\mathbf{p}_i|\\sqrt{s}$ yields $d\\sigma/d\\Omega = |\\mathcal{M}|^2/(64\\pi^2 s)$ when $|\\mathbf{p}_f| = |\\mathbf{p}_i|$ (equal-mass or massless case). The matrix element $\\mathcal{M}$ is read off from Feynman diagrams: draw all contributing diagrams, write down the amplitude using Feynman rules, then square it. For unpolarized scattering, average over initial spins (factor of $1/(2s_i+1)$ per particle) and sum over final spins. In QCD, also average over initial colors and sum over final colors. The total cross-section $\\sigma = \\int d\\sigma$ is directly proportional to event rates measured in colliders: $R = \\mathcal{L}\\sigma$, where $\\mathcal{L}$ is the luminosity. References: Peskin & Schroeder, Section 4.5 (cross sections and the S-matrix) and Section 4.6 (worked example: $e^+e^- \\to \\mu^+\\mu^-$); Schwartz, Quantum Field Theory and the Standard Model, Chapter 5; Griffiths, Introduction to Elementary Particles, Section 6.2 (Fermi's Golden Rule to cross-sections).",
+    "subject": "quantum-field-theory",
+    "difficulty": "advanced",
+    "labels": [
+      "cross-sections"
+    ]
+  },
+  {
+    "name": "Noether stress-energy tensor",
+    "question": "In field theory, what conserved current does spacetime translation invariance give via Noether's theorem?",
+    "answer": "The energy-momentum tensor $T^{\\mu\\nu}$. The conserved charges are $P^\\nu = \\int T^{0\\nu} \\, d^3x$, and conservation is $\\partial_\\mu T^{\\mu\\nu} = 0$.",
+    "explanation": "Lorentz invariance gives angular momentum conservation. Internal symmetries like $U(1)$ phase symmetry give conserved currents such as $j^\\mu = \\bar{\\psi}\\gamma^\\mu\\psi$ (electromagnetic current).",
+    "subject": "quantum-field-theory",
+    "difficulty": "intermediate",
+    "labels": [
+      "noether-qft"
+    ]
+  }
 ];

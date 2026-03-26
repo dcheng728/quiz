@@ -25,27 +25,70 @@ A static flashcard quiz app for GitHub Pages that helps a theoretical physics st
 ## File Structure
 
 ```
-docs/
-  index.html      -- main page (minimal structure, controls populated by JS)
-  style.css       -- light theme styles
-  app.js          -- quiz logic, filters, search, queue nav, localStorage, gist sync
-  config.js       -- tunable parameters (grade scores, familiarity decay)
-  questions.js    -- all 190 questions bundled as JS
+src/
+  index.html        -- main page (minimal structure, controls populated by JS)
+  style.css          -- light theme styles
+  app.js             -- quiz logic, filters, search, queue nav, localStorage, gist sync
+  config.js          -- tunable parameters (grade scores, familiarity decay)
+questions/           -- one .md file per subject (e.g., quantum-mechanics.md)
+docs/                -- generated output (do not edit), deployed via GitHub Pages
+build.py             -- builds docs/ from src/ and questions/
 ```
 
-## Question Schema
+## Question Format
 
-Each question in `questions.js` has:
+Questions live in `docs/questions/`, one file per subject (e.g., `quantum-mechanics.md`). The subject is determined by the filename — there is no `subject:` line inside the file.
 
-| Field         | Type     | Description                                    |
-|---------------|----------|------------------------------------------------|
-| `name`        | string   | Very succinct summary used as unique identifier (e.g., `derivative of $\sin(x)$`). Should be as short as possible while remaining unambiguous. Displayed in the queue list with KaTeX rendering. |
-| `question`    | string   | Full question text with LaTeX                  |
-| `answer`      | string   | Answer text with LaTeX                         |
-| `explanation` | string   | Explanation connecting to physics              |
-| `subject`     | string   | Exactly one subject (e.g., `math-calculus`)    |
-| `difficulty`  | string   | One of `"basic"`, `"intermediate"`, `"advanced"` |
-| `labels`      | string[] | Freeform tags (e.g., `["derivatives"]`)        |
+### Adding a new question
+
+Open the file for the subject (e.g., `docs/questions/quantum-mechanics.md`) and append:
+
+```
+### name of question
+difficulty: basic
+labels: tag1, tag2
+
+Full question text with $\LaTeX$?
+
+---
+
+Answer text. Can be multiple lines.
+Blank lines become paragraph breaks.
+
+---
+
+Explanation text.
+
+===
+```
+
+### Structure
+
+- **`### {name}`** — the question's unique identifier. Keep it as short as possible.
+- **Metadata lines** — one per line, immediately after the name:
+  - `difficulty:` — one of `basic`, `intermediate`, `advanced`
+  - `labels:` — comma-separated freeform tags
+- **Blank line** — signals end of metadata, start of question text
+- **`---`** — separates question → answer → explanation (two per question)
+- **`===`** — separates one question from the next
+
+### Rules
+
+- Use **single backslashes** for LaTeX: `\frac`, `\vec`, `\hat` (not `\\frac`)
+- **Newlines** within any section are preserved and rendered as line breaks
+- Do **not** use `---` or `===` inside question/answer/explanation text
+- Every question must end with `===` (including the last one in the file)
+
+### Fields
+
+| Field         | Description                                    |
+|---------------|------------------------------------------------|
+| `name`        | Very succinct summary used as unique identifier (e.g., `derivative of $\sin(x)$`). Think "index entry." |
+| `difficulty`  | One of `basic`, `intermediate`, `advanced`     |
+| `labels`      | Comma-separated freeform tags (e.g., `derivatives, chain-rule`) |
+| question text | Full question a student should answer from memory |
+| answer text   | The answer, with LaTeX. Can be multiline.      |
+| explanation   | Explanation connecting to physics              |
 
 ### Subjects (15)
 
@@ -59,7 +102,7 @@ Each question in `questions.js` has:
 
 ## Deployment
 
-Target: GitHub Pages (static hosting). Also works with `file://` since questions are bundled in JS, not fetched as JSON.
+Target: GitHub Pages (static hosting). `docs/questions.js` is the generated build artifact — do not edit it directly. See `README.md` for setup and build instructions.
 
 ## Writing `name` vs `question`
 
