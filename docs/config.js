@@ -13,12 +13,21 @@ const CONFIG = {
     conventionNotes: 'Natural units: $\\hbar = c = 1$ unless stated otherwise. SI units for electromagnetism.',
 
     // AI queue curation
-    // Auto-detects provider from key: sk-ant-* → Anthropic, otherwise → OpenRouter
-    // Override with provider: 'anthropic' or 'openrouter'
+    // Auto-detects provider from key format:
+    //   sk-ant-* → Anthropic, sk-or-* → OpenRouter, ghp_/github_pat_* → GitHub Models
+    // Override with provider: 'anthropic', 'openrouter', or 'github'
     ai: {
-        provider: 'github',
-        model: 'gpt-4o',
-        maxTokens: 512,
+        model: {
+            anthropic: 'claude-sonnet-4-20250514',
+            openrouter: 'google/gemini-2.5-flash',
+            github: 'gpt-4o',
+        },
+        anthropicModels: [
+            { id: 'claude-sonnet-4-20250514', label: 'Sonnet 4' },
+            { id: 'claude-opus-4-20250514', label: 'Opus 4' },
+            { id: 'claude-haiku-4-5-20251001', label: 'Haiku 4.5' },
+        ],
+        maxTokens: 1024,
         questionsPerBatch: 15,
     },
 };

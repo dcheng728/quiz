@@ -32,7 +32,6 @@
 
                 <select id="sort-order" title="Question order"></select>
                 <button id="shuffle-btn" class="btn btn-shuffle" title="Reshuffle questions">Shuffle</button>
-                <button id="ai-generate-btn" class="btn btn-ai" title="Build a personalized study queue with AI">AI Queue</button>
             </div>
         </div>
 
@@ -41,6 +40,37 @@
             <span class="label-filter-hint" id="label-filter-hint">none (showing all)</span>
             <div id="active-labels"></div>
         </div>
+
+        <details class="ai-panel" id="ai-panel">
+            <summary>Intelligent Queue</summary>
+            <div class="ai-panel-body">
+                <div id="ai-key-section" class="hidden">
+                    <p>Enter an API key (stored locally). Supports Anthropic, OpenRouter, or GitHub PAT.</p>
+                    <input type="password" id="ai-key-input" placeholder="sk-ant-..., sk-or-..., or ghp_..." autocomplete="off">
+                    <div id="ai-key-status" class="ai-status"></div>
+                    <button class="btn btn-ai" id="ai-key-save">Save key</button>
+                </div>
+                <div id="ai-gen-section" class="hidden">
+                    <p id="ai-provider-label" class="ai-provider-label"></p>
+                    <textarea id="ai-topic-input" rows="3" placeholder="e.g. prep for reading about path integrals, review angular momentum..." autocomplete="off"></textarea>
+                    <div id="ai-anthropic-options" class="ai-options hidden">
+                        <label>
+                            Model:
+                            <select id="ai-model-select"></select>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="ai-web-search"> Internet access
+                        </label>
+                    </div>
+                    <div class="ai-panel-buttons">
+                        <button class="btn btn-ai" id="ai-submit">Build queue</button>
+                        <button class="btn btn-sync btn-sync-danger" id="ai-clear-key">Remove API key</button>
+                    </div>
+                    <div id="ai-status" class="ai-status"></div>
+                    <div id="ai-results" class="ai-results hidden"></div>
+                </div>
+            </div>
+        </details>
 
         <div class="counter-bar">
             <div class="counter-left">

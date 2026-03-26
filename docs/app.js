@@ -690,8 +690,8 @@ nextBtn.addEventListener('click', goNext);
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    // Don't capture if typing in search
-    if (e.target.tagName === 'INPUT') return;
+    // Don't capture if typing in an input or textarea
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
     if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
@@ -886,9 +886,6 @@ async function gistPull() {
         if (localOnly > 0) msg += ` — push to upload ${localOnly} local-only`;
         syncStatus.textContent = msg;
 
-        buildQueue();
-        currentIndex = 0;
-        displayQuestion();
         updateStats();
     } catch (err) {
         syncStatus.textContent = 'Pull failed: ' + err.message;
@@ -938,14 +935,20 @@ function buildAIPrompt(topic) {
         return `"${safeName}"|${s.subject}|${s.difficulty}|${s.familiarity}|${s.attempts}`;
     }).join('\n');
 
-    return `Select ${CONFIG.ai.questionsPerBatch} flashcard questions for a physics student. Return ONLY a JSON array of question name strings.
+    return `Select ${CONFIG.ai.questionsPerBatch} flashcard questions for a physics student.
 
 Questions (name|subject|difficulty|familiarity|attempts):
 ${summaryText}
 
 ${topic
     ? `Focus: ${topic}. Pick questions DIRECTLY relevant. Do NOT pad with prerequisites. Order from most essential to least.`
-    : `Personalized review. Prioritize low familiarity and unseen. Mix subjects but cluster related questions.`}`;
+    : `Personalized review. Prioritize low familiarity and unseen. Mix subjects but cluster related questions.`}
+
+Return a JSON object with two fields:
+- "reasoning": a 1-2 sentence explanation of why you chose these questions and how they address the request
+- "questions": an array of question name strings in study order
+
+Example: {"reasoning": "...", "questions": ["name1", "name2"]}`;
 }
 
 function detectProvider(key) {
@@ -955,18 +958,70 @@ function detectProvider(key) {
     return 'anthropic';
 }
 
+function parseAIResponse(text) {
+    // Try parsing as {reasoning, questions} object first
+    const objMatch = text.match(/\{[\s\S]*\}/);
+    if (objMatch) {
+        let jsonStr = objMatch[0];
+        try {
+            const obj = JSON.parse(jsonStr);
+            if (obj.questions && Array.isArray(obj.questions)) {
+                return { reasoning: obj.reasoning || '', questions: obj.questions };
+            }
+        } catch {
+            jsonStr = jsonStr.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+            try {
+                const obj = JSON.parse(jsonStr);
+                if (obj.questions && Array.isArray(obj.questions)) {
+                    return { reasoning: obj.reasoning || '', questions: obj.questions };
+                }
+            } catch { /* fall through */ }
+        }
+    }
+    // Fallback: bare array
+    const arrMatch = text.match(/\[[\s\S]*\]/);
+    if (!arrMatch) throw new Error('No JSON found in response');
+    let jsonStr = arrMatch[0];
+    try {
+        return { reasoning: '', questions: JSON.parse(jsonStr) };
+    } catch {
+        jsonStr = jsonStr.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+        return { reasoning: '', questions: JSON.parse(jsonStr) };
+    }
+}
+
 async function callAI(prompt) {
     const token = getAIToken();
     if (!token) throw new Error('No API key');
 
     const provider = CONFIG.ai.provider || detectProvider(token);
+    let model = typeof CONFIG.ai.model === 'object' ? CONFIG.ai.model[provider] : CONFIG.ai.model;
+
+    // Anthropic-specific: selected model and web search
+    const modelSelect = document.getElementById('ai-model-select');
+    const webSearchCheck = document.getElementById('ai-web-search');
+    if (provider === 'anthropic' && modelSelect && modelSelect.value) {
+        model = modelSelect.value;
+    }
+    const useWebSearch = provider === 'anthropic' && webSearchCheck && webSearchCheck.checked;
+
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 30000);
+    const timeout = useWebSearch ? 120000 : 60000;
+    const timer = setTimeout(() => controller.abort(), timeout);
 
     try {
         let res;
 
         if (provider === 'anthropic') {
+            const maxTokens = useWebSearch ? 16000 : CONFIG.ai.maxTokens;
+            const body = {
+                model,
+                max_tokens: maxTokens,
+                messages: [{ role: 'user', content: prompt }],
+            };
+            if (useWebSearch) {
+                body.tools = [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }];
+            }
             res = await fetch('https://api.anthropic.com/v1/messages', {
                 signal: controller.signal,
                 method: 'POST',
@@ -976,11 +1031,7 @@ async function callAI(prompt) {
                     'anthropic-dangerous-direct-browser-access': 'true',
                     'content-type': 'application/json',
                 },
-                body: JSON.stringify({
-                    model: CONFIG.ai.model,
-                    max_tokens: CONFIG.ai.maxTokens,
-                    messages: [{ role: 'user', content: prompt }],
-                }),
+                body: JSON.stringify(body),
             });
 
             if (!res.ok) {
@@ -989,10 +1040,13 @@ async function callAI(prompt) {
             }
 
             const data = await res.json();
-            const text = data.content[0].text;
-            const match = text.match(/\[[\s\S]*\]/);
-            if (!match) throw new Error('No JSON array found in response');
-            return JSON.parse(match[0]);
+            // Concatenate all text blocks (web search produces multiple)
+            const allText = data.content
+                .filter(b => b.type === 'text')
+                .map(b => b.text)
+                .join('\n');
+            if (!allText) throw new Error('No text in response');
+            return parseAIResponse(allText);
 
         } else {
             // OpenAI-compatible providers: OpenRouter, GitHub Models
@@ -1005,11 +1059,11 @@ async function callAI(prompt) {
             };
             if (provider === 'openrouter') headers['HTTP-Referer'] = window.location.href;
             const body = JSON.stringify({
-                model: CONFIG.ai.model,
+                model,
                 max_tokens: CONFIG.ai.maxTokens,
                 messages: [{ role: 'user', content: prompt }],
             });
-            console.log('AI request:', { provider, model: CONFIG.ai.model, tokenPrefix: token.substring(0, 8) + '...' });
+            console.log('AI request:', { provider, model, tokenPrefix: token.substring(0, 8) + '...' });
             res = await fetch(endpoint, { signal: controller.signal, method: 'POST', headers, body });
 
             if (!res.ok) {
@@ -1019,15 +1073,7 @@ async function callAI(prompt) {
 
             const data = await res.json();
             const text = data.choices[0].message.content;
-            const match = text.match(/\[[\s\S]*\]/);
-            if (!match) throw new Error('No JSON array found in response');
-            let jsonStr = match[0];
-            try {
-                return JSON.parse(jsonStr);
-            } catch {
-                jsonStr = jsonStr.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
-                return JSON.parse(jsonStr);
-            }
+            return parseAIResponse(text);
         }
     } catch (e) {
         if (e.name === 'AbortError') throw new Error('Request timed out (30s)');
@@ -1037,132 +1083,186 @@ async function callAI(prompt) {
     }
 }
 
-function showAIModal() {
+// ── AI Panel (inline collapsible) ──
+
+const PROVIDER_LABELS = {
+    anthropic: 'Anthropic (Claude)',
+    openrouter: 'OpenRouter',
+    github: 'GitHub Models',
+};
+
+function updateAIPanel() {
     const token = getAIToken();
-
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
-    overlay.innerHTML = `
-        <div class="modal modal-ai">
-            <h2>AI Study Queue</h2>
-            ${!token ? `
-                <div id="ai-key-section">
-                    <p>Enter an API key (stored locally). Supports Anthropic, OpenRouter, or GitHub PAT with <code>models:read</code> scope.</p>
-                    <input type="password" id="ai-key-input" placeholder="ghp_..., sk-or-..., or sk-ant-..." autocomplete="off">
-                    <button class="btn btn-ai" id="ai-key-save">Save key</button>
-                </div>
-            ` : `
-                <div id="ai-gen-section">
-                    <p>Describe what you want to study, or leave blank for a personalized review of your weak areas.</p>
-                    <input type="text" id="ai-topic-input" placeholder="e.g. prep for reading about path integrals, review angular momentum..." autocomplete="off">
-                    <div class="modal-buttons">
-                        <button class="btn btn-cancel" id="ai-cancel">Cancel</button>
-                        <button class="btn btn-ai" id="ai-submit">Build queue</button>
-                    </div>
-                    <div id="ai-status" class="ai-status"></div>
-                    <div id="ai-results" class="ai-results hidden"></div>
-                    <div class="ai-key-footer">
-                        <button class="btn btn-sync btn-sync-danger" id="ai-clear-key">Remove API key</button>
-                    </div>
-                </div>
-            `}
-        </div>
-    `;
-    document.body.appendChild(overlay);
-
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    const keySection = document.getElementById('ai-key-section');
+    const genSection = document.getElementById('ai-gen-section');
+    const anthropicOptions = document.getElementById('ai-anthropic-options');
+    const modelSelect = document.getElementById('ai-model-select');
 
     if (!token) {
-        const keyInput = overlay.querySelector('#ai-key-input');
-        keyInput.focus();
-        overlay.querySelector('#ai-key-save').addEventListener('click', () => {
-            const k = keyInput.value.replace(/\s/g, '');
-            if (!k) return;
-            setAIToken(k);
-            overlay.remove();
-            showAIModal();
-        });
+        keySection.classList.remove('hidden');
+        genSection.classList.add('hidden');
     } else {
-        const topicInput = overlay.querySelector('#ai-topic-input');
-        const status = overlay.querySelector('#ai-status');
-        const results = overlay.querySelector('#ai-results');
-        const submitBtn = overlay.querySelector('#ai-submit');
-        topicInput.focus();
+        keySection.classList.add('hidden');
+        genSection.classList.remove('hidden');
+        const provider = detectProvider(token);
+        document.getElementById('ai-provider-label').textContent = `Using: ${PROVIDER_LABELS[provider]}`;
 
-        overlay.querySelector('#ai-cancel').addEventListener('click', () => overlay.remove());
-        overlay.querySelector('#ai-clear-key').addEventListener('click', () => {
-            clearAIToken();
-            overlay.remove();
-        });
-
-        submitBtn.addEventListener('click', async () => {
-            const topic = topicInput.value.trim();
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Building...';
-            status.textContent = '';
-            results.classList.add('hidden');
-
-            try {
-                const prompt = buildAIPrompt(topic);
-                const names = await callAI(prompt);
-
-                // Resolve names to question objects
-                const nameMap = new Map(ALL_QUESTIONS.map(q => [q.name, q]));
-                const matched = [];
-                const unmatched = [];
-                for (const name of names) {
-                    const q = nameMap.get(name);
-                    if (q) matched.push(q);
-                    else unmatched.push(name);
-                }
-
-                if (matched.length === 0) {
-                    status.textContent = 'No matching questions found. Try a different topic.';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Build queue';
-                    return;
-                }
-
-                status.textContent = `Selected ${matched.length} questions.` +
-                    (unmatched.length > 0 ? ` (${unmatched.length} not found in bank)` : '');
-
-                // Show preview
-                const famMap = buildFamiliarityMap();
-                results.classList.remove('hidden');
-                results.innerHTML = matched.map((q, i) => {
-                    const rec = famMap[q.name];
-                    const famText = rec ? `${Math.round(rec.score * 100)}%` : 'new';
-                    return `<div class="ai-result-item">
-                        <span class="ai-result-num">${i + 1}</span>
-                        <span class="ai-result-name">${q.name}</span>
-                        <span class="ai-result-subject">${q.subject}</span>
-                        <span class="ai-result-diff">${famText}</span>
-                    </div>`;
-                }).join('') + `
-                    <div class="modal-buttons">
-                        <button class="btn btn-ai" id="ai-apply">Start this queue</button>
-                    </div>
-                `;
-                renderMath(results);
-
-                results.querySelector('#ai-apply').addEventListener('click', () => {
-                    queue = matched;
-                    currentIndex = 0;
-                    displayQuestion();
-                    renderQueueList();
-                    overlay.remove();
-                });
-            } catch (err) {
-                status.textContent = 'Error: ' + err.message;
-            }
-
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Build queue';
-        });
+        if (provider === 'anthropic') {
+            anthropicOptions.classList.remove('hidden');
+            // Populate model dropdown
+            const currentModel = CONFIG.ai.model.anthropic;
+            modelSelect.innerHTML = (CONFIG.ai.anthropicModels || []).map(m =>
+                `<option value="${m.id}"${m.id === currentModel ? ' selected' : ''}>${m.label}</option>`
+            ).join('');
+        } else {
+            anthropicOptions.classList.add('hidden');
+        }
     }
 }
 
-document.getElementById('ai-generate-btn').addEventListener('click', showAIModal);
+document.getElementById('ai-panel').addEventListener('toggle', function () {
+    if (this.open) updateAIPanel();
+});
+
+// Key input: detect provider as user types
+document.getElementById('ai-key-input').addEventListener('input', function () {
+    const k = this.value.replace(/\s/g, '');
+    const status = document.getElementById('ai-key-status');
+    if (k) {
+        status.textContent = `Detected: ${PROVIDER_LABELS[detectProvider(k)]}`;
+        status.style.color = '';
+    } else {
+        status.textContent = '';
+    }
+});
+
+// Save key with verification
+document.getElementById('ai-key-save').addEventListener('click', async function () {
+    const keyInput = document.getElementById('ai-key-input');
+    const keyStatus = document.getElementById('ai-key-status');
+    const k = keyInput.value.replace(/\s/g, '');
+    if (!k) return;
+
+    const provider = detectProvider(k);
+    const model = typeof CONFIG.ai.model === 'object' ? CONFIG.ai.model[provider] : CONFIG.ai.model;
+    this.disabled = true;
+    this.textContent = 'Verifying...';
+    keyStatus.textContent = `Checking ${PROVIDER_LABELS[provider]} key...`;
+    keyStatus.style.color = '';
+
+    try {
+        let res;
+        if (provider === 'anthropic') {
+            res = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'x-api-key': k,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true',
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({ model, max_tokens: 1, messages: [{ role: 'user', content: 'hi' }] }),
+            });
+        } else {
+            const endpoint = provider === 'github'
+                ? 'https://models.inference.ai.azure.com/chat/completions'
+                : 'https://openrouter.ai/api/v1/chat/completions';
+            const headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + k };
+            if (provider === 'openrouter') headers['HTTP-Referer'] = window.location.href;
+            res = await fetch(endpoint, {
+                method: 'POST', headers,
+                body: JSON.stringify({ model, max_tokens: 1, messages: [{ role: 'user', content: 'hi' }] }),
+            });
+        }
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error?.message || `HTTP ${res.status}`);
+        }
+
+        setAIToken(k);
+        keyInput.value = '';
+        updateAIPanel();
+    } catch (err) {
+        keyStatus.textContent = 'Invalid key: ' + err.message;
+        keyStatus.style.color = '#c44';
+    }
+    this.disabled = false;
+    this.textContent = 'Save key';
+});
+
+// Clear key
+document.getElementById('ai-clear-key').addEventListener('click', () => {
+    clearAIToken();
+    updateAIPanel();
+});
+
+// Build queue
+document.getElementById('ai-submit').addEventListener('click', async function () {
+    const topicInput = document.getElementById('ai-topic-input');
+    const status = document.getElementById('ai-status');
+    const results = document.getElementById('ai-results');
+    const topic = topicInput.value.trim();
+
+    this.disabled = true;
+    this.textContent = 'Building...';
+    status.textContent = '';
+    results.classList.add('hidden');
+
+    try {
+        const prompt = buildAIPrompt(topic);
+        const { reasoning, questions: names } = await callAI(prompt);
+
+        const nameMap = new Map(ALL_QUESTIONS.map(q => [q.name, q]));
+        const matched = [];
+        const unmatched = [];
+        for (const name of names) {
+            const q = nameMap.get(name);
+            if (q) matched.push(q);
+            else unmatched.push(name);
+        }
+
+        if (matched.length === 0) {
+            status.textContent = 'No matching questions found. Try a different topic.';
+            this.disabled = false;
+            this.textContent = 'Build queue';
+            return;
+        }
+
+        status.innerHTML = (reasoning ? `<em>${reasoning}</em><br>` : '') +
+            `Selected ${matched.length} questions.` +
+            (unmatched.length > 0 ? ` (${unmatched.length} not found in bank)` : '');
+
+        const famMap = buildFamiliarityMap();
+        results.classList.remove('hidden');
+        results.innerHTML = matched.map((q, i) => {
+            const rec = famMap[q.name];
+            const famText = rec ? `${Math.round(rec.score * 100)}%` : 'new';
+            return `<div class="ai-result-item">
+                <span class="ai-result-num">${i + 1}</span>
+                <span class="ai-result-name">${q.name}</span>
+                <span class="ai-result-subject">${q.subject}</span>
+                <span class="ai-result-diff">${famText}</span>
+            </div>`;
+        }).join('') + `<div style="margin-top:0.5rem;">
+            <button class="btn btn-ai" id="ai-apply">Start this queue</button>
+        </div>`;
+        renderMath(results);
+
+        results.querySelector('#ai-apply').addEventListener('click', () => {
+            queue = matched;
+            currentIndex = 0;
+            displayQuestion();
+            renderQueueList();
+            document.getElementById('ai-panel').open = false;
+        });
+    } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+    }
+
+    this.disabled = false;
+    this.textContent = 'Build queue';
+});
 
 // ── Familiarity Info Panel ──
 
