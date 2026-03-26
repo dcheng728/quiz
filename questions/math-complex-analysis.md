@@ -11,6 +11,7 @@ If $f(z)$ is analytic (holomorphic) inside and on a simple closed contour $C$, t
 ---
 
 Analytic functions have zero 'circulation.' This is the complex-variable analog of a conservative field having zero line integral around a closed loop.
+
 ===
 
 ### residue theorem
@@ -26,6 +27,7 @@ The contour integral of $f(z)$ around a closed curve $C$ equals $2\pi i$ times t
 ---
 
 The primary tool for evaluating difficult real integrals by extending to the complex plane.
+
 ===
 
 ### $\int \frac{dx}{x^2+a^2}$ by contour
@@ -41,6 +43,7 @@ $\frac{\pi}{a}$
 ---
 
 Close in the upper half-plane. Simple pole at $z = ia$ with residue $\frac{1}{2ia}$. Result: $2\pi i \cdot \frac{1}{2ia} = \frac{\pi}{a}$. This is the prototype contour integral every physicist should know.
+
 ===
 
 ### residue at a simple pole
@@ -56,6 +59,7 @@ $\text{Res}(f, z_0) = \frac{g(z_0)}{h'(z_0)}$
 ---
 
 This follows from L'Hopital-style reasoning: $\frac{z - z_0}{h(z)} \to \frac{1}{h'(z_0)}$ as $z \to z_0$.
+
 ===
 
 ### branch cuts
@@ -71,6 +75,7 @@ A branch cut is a curve in the complex plane across which a multi-valued functio
 ---
 
 $\log(z) = \ln|z| + i\arg(z)$ is multi-valued because $\arg(z)$ changes by $2\pi$ around the origin. The standard branch cut for $\log(z)$ is the negative real axis.
+
 ===
 
 ### Cauchy-Riemann equations
@@ -86,6 +91,7 @@ For $f(z) = u(x,y) + iv(x,y)$ to be analytic: $\frac{\partial u}{\partial x} = \
 ---
 
 These are the necessary and sufficient conditions (given continuity of partials) for complex differentiability. They imply both $u$ and $v$ are harmonic: $\nabla^2 u = \nabla^2 v = 0$.
+
 ===
 
 ### analytic continuation
@@ -101,6 +107,7 @@ Given an analytic function $f(z)$ defined on a domain $D \subset \mathbb{C}$, an
 ---
 
 The continuation of $\zeta(s)$ is constructed via the functional equation $\zeta(s) = 2^s \pi^{s-1} \sin(\pi s/2)\,\Gamma(1-s)\,\zeta(1-s)$, which relates values at $s$ to values at $1-s$. The statement $\sum n = -1/12$ is shorthand: the divergent series does not equal $-1/12$ in the ordinary sense, but the analytic continuation of the function it defines assigns that value at $s = -1$. In the Casimir effect, this regularization gives a finite, experimentally confirmed force between conducting plates. For Wick rotation, the key requirement is that the integrand has no singularities in the quadrant being rotated through -- the $i\epsilon$ prescription ensures this. References: Boas, Mathematical Methods in the Physical Sciences, Chapter 14; Ablowitz & Fokas, Complex Variables, Chapter 4; Peskin & Schroeder, Section 9.3 (Wick rotation and Euclidean field theory).
+
 ===
 
 ### $\int \frac{e^{iz}}{z^2+a^2}\, dz$
@@ -116,6 +123,7 @@ $\frac{\pi}{a} e^{-a}$
 ---
 
 Close the contour in the upper half-plane (since $e^{iz}$ decays there). The pole at $z = ia$ is enclosed. $\text{Res} = \frac{e^{-a}}{2ia}$. Result: $2\pi i \cdot \frac{e^{-a}}{2ia} = \frac{\pi e^{-a}}{a}$.
+
 ===
 
 ### extracting coefficients via contour integral
@@ -131,4 +139,5 @@ $a_N = \frac{1}{2\pi i} \oint \frac{f(z)}{z^{N+1}} \, dz$
 ---
 
 This is Cauchy's integral formula applied to Taylor coefficients. In practice it is how fixed-$N$ quantities are extracted from generating functions  --  the contour integral can then be evaluated by saddle-point methods for large $N$.
+
 ===

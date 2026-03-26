@@ -11,6 +11,23 @@ $y(x) = A e^{kx}$, where $A$ is determined by initial conditions.
 ---
 
 The exponential function is the eigenfunction of the derivative operator. Ubiquitous in radioactive decay ($k < 0$) and population growth ($k > 0$).
+
+===
+
+### derivative of $\frac{1}{r}$
+difficulty: basic
+labels:
+
+What is the derivative of $\frac{1}{r}$ where $r =\sqrt{x^m x^m}$?
+
+---
+
+$-\frac{x^m}{r}\frac{1}{r}$
+
+---
+
+Should compute in 5 sec.
+
 ===
 
 ### simple harmonic oscillator
@@ -26,6 +43,7 @@ $x(t) = A \cos(\omega t) + B \sin(\omega t)$, equivalently $x(t) = C e^{i\omega 
 ---
 
 The most important ODE in physics. Appears in mass-spring systems, LC circuits, small oscillations about equilibrium, and quantum harmonic oscillator.
+
 ===
 
 ### separation of variables
@@ -41,6 +59,7 @@ Assume the solution factors as a product of functions of each variable, e.g., $u
 ---
 
 Each separated ODE involves only one variable, so both sides must equal a constant (the separation constant). Standard technique for wave, heat, and Laplace equations.
+
 ===
 
 ### Green's function
@@ -56,6 +75,7 @@ The response of a linear differential operator $L$ to a point source: $L G(x, x'
 ---
 
 Green's functions are propagators in physics. In electrostatics, the Green's function for the Laplacian is $\frac{1}{4\pi |\vec{x} - \vec{x}'|}$.
+
 ===
 
 ### heat equation
@@ -71,6 +91,7 @@ $\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}$, wher
 ---
 
 Parabolic PDE. Solutions smooth out over time (irreversible). The fundamental solution is a spreading Gaussian.
+
 ===
 
 ### wave equation
@@ -86,6 +107,7 @@ $\frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}$, whe
 ---
 
 Hyperbolic PDE. General solution is $u = f(x - ct) + g(x + ct)$  --  two counter-propagating waves (d'Alembert's solution).
+
 ===
 
 ### Sturm-Liouville problem
@@ -101,6 +123,7 @@ An eigenvalue problem of the form: $\frac{d}{dx}\left[p(x) \frac{dy}{dx}\right] 
 ---
 
 A regular Sturm-Liouville problem (with $p, w > 0$ on $[a,b]$) has countably infinite real eigenvalues $\lambda_1 < \lambda_2 < \cdots \to \infty$, each with a unique eigenfunction $y_n(x)$. These eigenfunctions form an orthonormal basis of $L^2([a,b], w)$: $\int_a^b y_m(x) y_n(x) w(x)\,dx = \delta_{mn}$, and any square-integrable function can be expanded as $f(x) = \sum c_n y_n(x)$. Many physics eigenvalue problems are Sturm-Liouville: Legendre ($p = 1-x^2$, $w = 1$), Bessel, Hermite, and Laguerre equations. The Schrodinger equation $-\frac{\hbar^2}{2m}\psi'' + V\psi = E\psi$ is also Sturm-Liouville, which is why energy eigenstates form a complete orthonormal set.
+
 ===
 
 ### Wronskian
@@ -116,6 +139,7 @@ For two functions $y_1$ and $y_2$: $W = y_1 y_2' - y_2 y_1'$. If $W \neq 0$, the
 ---
 
 Used to verify you have a complete set of solutions to a second-order ODE. If $W = 0$ everywhere, the solutions are linearly dependent.
+
 ===
 
 ### Frobenius method
@@ -131,6 +155,7 @@ A method to find series solutions of ODEs near regular singular points by assumi
 ---
 
 Essential for solving Bessel's equation, Legendre's equation, and the hydrogen atom radial equation near the origin.
+
 ===
 
 ### Laplace's equation
@@ -146,6 +171,7 @@ $\nabla^2 u = 0$. Its solutions are called harmonic functions.
 ---
 
 Describes electrostatic potential in charge-free regions, steady-state heat flow, and gravitational potential in vacuum. Solutions satisfy the mean value property.
+
 ===
 
 ### Airy function
@@ -161,4 +187,5 @@ $\frac{d^2y}{dx^2} - xy = 0$. It oscillates for $x < 0$ and decays exponentially
 ---
 
 Airy functions arise wherever a WKB solution transitions between oscillatory and exponential behavior (classical turning points). They also appear in random matrix theory via the Tracy-Widom distribution, and in optics near caustics.
+
 ===

@@ -11,6 +11,7 @@ $Z = \sum_i e^{-E_i / (k_B T)}$, where the sum runs over all microstates $i$ wit
 ---
 
 All thermodynamic quantities can be derived from $Z$. For example, the free energy is $F = -k_B T \ln Z$.
+
 ===
 
 ### Boltzmann distribution
@@ -26,6 +27,7 @@ $P_i = \frac{e^{-E_i / (k_B T)}}{Z}$, where $Z$ is the partition function.
 ---
 
 This applies to a system in thermal equilibrium with a heat bath at temperature $T$ (canonical ensemble).
+
 ===
 
 ### two-level system partition function
@@ -41,6 +43,7 @@ $Z = 1 + e^{-\epsilon / (k_B T)}$
 ---
 
 The average energy is $\langle E \rangle = \frac{\epsilon}{e^{\epsilon/(k_B T)} + 1}$. This is one of the most fundamental exactly solvable models.
+
 ===
 
 ### equipartition theorem
@@ -56,6 +59,7 @@ Each quadratic degree of freedom in the Hamiltonian contributes $\frac{1}{2} k_B
 ---
 
 For example, a classical ideal gas molecule with 3 translational degrees of freedom has $\langle E \rangle = \frac{3}{2} k_B T$. This breaks down at low temperatures where quantum effects dominate.
+
 ===
 
 ### Fermi-Dirac and Bose-Einstein distributions
@@ -71,6 +75,7 @@ Fermi-Dirac: $f(E) = \frac{1}{e^{(E - \mu)/(k_B T)} + 1}$. Bose-Einstein: $f(E) 
 ---
 
 The $+1$ for fermions enforces the Pauli exclusion principle ($f \leq 1$). The $-1$ for bosons allows unlimited occupation and can lead to Bose-Einstein condensation.
+
 ===
 
 ### statistical ensembles
@@ -86,6 +91,7 @@ What are the three standard statistical ensembles and what variables are held fi
 ---
 
 The ensembles are equivalent in the thermodynamic limit ($N \to \infty$): relative fluctuations scale as $1/\sqrt{N}$, so $\Delta E/\langle E \rangle \sim 1/\sqrt{N} \to 0$. Each ensemble is obtained from the previous by a Legendre transform -- canonical from microcanonical by trading $E$ for $T$, grand canonical from canonical by trading $N$ for $\mu$. The canonical ensemble is most commonly used because most lab systems are in thermal contact with their surroundings. The grand canonical ensemble is essential for quantum gases (Bose-Einstein and Fermi-Dirac statistics), where fixing $N$ exactly is impractical and the fugacity $z = e^{\beta\mu}$ controls the mean particle number. The microcanonical ensemble is the most fundamental (no assumptions about a bath) and is the starting point for deriving the other two. References: Pathria & Beale, Statistical Mechanics, Chapters 2--4; Kardar, Statistical Physics of Particles, Chapters 4--5; Reif, Fundamentals of Statistical and Thermal Physics, Chapters 6--7.
+
 ===
 
 ### entropy (statistical)
@@ -101,6 +107,7 @@ $S = k_B \ln \Omega$, where $\Omega$ is the number of accessible microstates (Bo
 ---
 
 The Boltzmann formula applies to the microcanonical ensemble. The Gibbs formula is more general and reduces to Boltzmann's when all accessible states are equally probable.
+
 ===
 
 ### phase transitions
@@ -116,6 +123,7 @@ A phase transition is a non-analyticity in the free energy. In a first-order tra
 ---
 
 Examples: melting is first-order; the ferromagnetic transition at the Curie point is second-order.
+
 ===
 
 ### Ising model
@@ -131,6 +139,7 @@ A lattice model where spin variables $s_i = \pm 1$ interact via $H = -J \sum_{\l
 ---
 
 The 1D Ising model has no phase transition (solved by Ising). The 2D model has a phase transition at $T_c$ (solved exactly by Onsager). The 3D model has no known exact solution.
+
 ===
 
 ### Helmholtz free energy
@@ -146,6 +155,7 @@ $F = U - TS$, where $U$ is internal energy, $T$ is temperature, and $S$ is entro
 ---
 
 The Gibbs free energy $G = U - TS + PV$ is minimized at constant $T$ and $P$ instead. These are related to the partition function by $F = -k_B T \ln Z$.
+
 ===
 
 ### Fermi gas ground-state energy
@@ -161,6 +171,7 @@ $E = \frac{3}{5} N E_F$
 ---
 
 The 3D density of states is $g(E) = C E^{1/2}$ where $C = \frac{V}{2\pi^2}\left(\frac{2m}{\hbar^2}\right)^{3/2}$. At $T=0$, all states up to $E_F$ are filled, so $N = \int_0^{E_F} g(E)\,dE = C \cdot \frac{2}{3} E_F^{3/2}$. The total energy is $E_{\text{tot}} = \int_0^{E_F} E\,g(E)\,dE = C \int_0^{E_F} E^{3/2}\,dE = C \cdot \frac{2}{5} E_F^{5/2}$. Dividing: $E_{\text{tot}}/N = \frac{C \cdot \frac{2}{5} E_F^{5/2}}{C \cdot \frac{2}{3} E_F^{3/2}} = \frac{3}{5} E_F$. The factor $3/5$ (not $1/2$) arises because $g(E) \propto E^{1/2}$ weights higher energies more heavily -- there are more states near $E_F$ than near $E = 0$.
+
 ===
 
 ### $PV = U/3$ for ultrarelativistic gas
@@ -184,6 +195,7 @@ Since $PV = k_BT \ln \mathcal{Z} = \beta^{-1} \ln \mathcal{Z}$, and $U = -\frac{
 ---
 
 The linear dispersion $\epsilon \propto k$ produces the $\beta^{-3}$ scaling that gives $U = 3PV$. Photon and phonon gases obey the same relation for the same reason. By contrast, nonrelativistic gases ($\epsilon \propto k^2$) give $\ln \mathcal{Z} \propto \beta^{-5/2}$ and $PV = \frac{2}{3}U$. (MIT Fall 1997 Qualifying Exam.)
+
 ===
 
 ### grand canonical partition function
@@ -199,4 +211,5 @@ $\Xi(\mu) = \sum_{N=0}^{\infty} e^{\beta \mu N} Z(N)$
 ---
 
 $\Xi$ is the generating function for $Z(N)$ weighted by the fugacity $z = e^{\beta\mu}$. This relation lets you move between fixed-$N$ and variable-$N$ descriptions, which is essential whenever a quantum system is easier to solve in one ensemble than the other.
+
 ===

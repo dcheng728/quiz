@@ -11,6 +11,7 @@ Discrete: $E[g(X)] = \sum_x g(x) \Pr[X = x]$. Continuous: $E[g(X)] = \int_{-\inf
 ---
 
 In quantum mechanics, the expectation value of an observable $\hat{A}$ is $\langle \hat{A} \rangle = \langle \psi|\hat{A}|\psi \rangle$, which is the continuous analog weighted by $|\psi|^2$.
+
 ===
 
 ### formula for variance and STD
@@ -26,6 +27,7 @@ $\text{Var}[X] = E[X^2] - (E[X])^2$. The standard deviation is $\sigma = \sqrt{\
 ---
 
 This 'computational formula' is often easier to use than the definition $E[(X - \mu)^2]$. In physics, $\sigma$ quantifies fluctuations  --  e.g., energy fluctuations in the canonical ensemble: $\langle (\Delta E)^2 \rangle = k_B T^2 C_V$.
+
 ===
 
 ### Bayes' theorem
@@ -41,6 +43,7 @@ $\Pr[A_i | B] = \frac{\Pr[B | A_i] \Pr[A_i]}{\sum_{j=1}^{n} \Pr[A_j] \Pr[B | A_j
 ---
 
 Bayes' theorem updates prior probabilities given new evidence. Used in data analysis, parameter estimation, and interpreting detector signals with known false-positive rates.
+
 ===
 
 ### linearity of expectation
@@ -56,6 +59,7 @@ $E[X + Y] = E[X] + E[Y]$ (always), $E[cX] = cE[X]$ (always). But $E[XY] = E[X] \
 ---
 
 Linearity holds even for correlated variables  --  a surprisingly powerful result. The product rule requires independence.
+
 ===
 
 ### Markov and Chebyshev inequalities
@@ -71,6 +75,7 @@ Markov: $\Pr[|X| \geq \lambda E[X]] \leq \frac{1}{\lambda}$. Chebyshev: $\Pr[|X 
 ---
 
 These bound the probability of large deviations from the mean without knowing the full distribution. Chebyshev guarantees at least $1 - 1/k^2$ of the probability lies within $k$ standard deviations.
+
 ===
 
 ### inclusion-exclusion for two events
@@ -86,6 +91,7 @@ $\Pr[A \cup B] = \Pr[A] + \Pr[B] - \Pr[A \cap B]$. If $A$ and $B$ are mutually e
 ---
 
 Mutually exclusive (no overlap) and independent (knowing one doesn't affect the other) are different conditions. For $n$ events, inclusion-exclusion generalizes: $\Pr[\bigcup_i A_i] = \sum_i \Pr[A_i] - \sum_{i<j} \Pr[A_i \cap A_j] + \cdots$
+
 ===
 
 ### conditional probability
@@ -101,6 +107,7 @@ $\Pr[A|B] = \frac{\Pr[A \cap B]}{\Pr[B]}$
 ---
 
 This defines the probability of $A$ given that $B$ has occurred. It is the starting point for deriving Bayes' theorem.
+
 ===
 
 ### binomial distribution
@@ -116,6 +123,7 @@ $\Pr[X = k] = \binom{n}{k} p^k (1-p)^{n-k}$ with $E[X] = np$.
 ---
 
 Describes $k$ successes in $n$ independent trials, each with probability $p$. In quantum mechanics: the probability of getting $k$ spin-up outcomes in $n$ Stern-Gerlach measurements on identically prepared spin-$\frac{1}{2}$ particles.
+
 ===
 
 ### Poisson distribution
@@ -131,6 +139,7 @@ $\Pr[X = k] = \frac{e^{-\lambda} \lambda^k}{k!}$ with $E[X] = \lambda$.
 ---
 
 Describes the number of events in a fixed interval when events occur independently at a constant average rate $\lambda$  --  radioactive decays, photon counts, cosmic ray arrivals.
+
 ===
 
 ### Gaussian distribution
@@ -146,6 +155,7 @@ $p(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-(x-\mu)^2 / 2\sigma^2}$ with $E[X] = \mu
 ---
 
 The central limit theorem explains why the Gaussian appears everywhere: the sum of many independent random variables tends toward a normal distribution regardless of their individual distributions.
+
 ===
 
 ### geometric distribution
@@ -161,6 +171,7 @@ $\Pr[X = k] = p(1-p)^{k-1}$ with $E[X] = \frac{1}{p}$.
 ---
 
 Models the number of trials until the first success. The 'memoryless' property of radioactive decay is connected: the waiting time for the first decay is geometrically (or exponentially) distributed.
+
 ===
 
 ### coupon collector problem
@@ -176,4 +187,5 @@ $nH_n = n\sum_{i=1}^{n}\frac{1}{i} \approx n \ln n$
 ---
 
 $H_n$ is the $n$-th harmonic number. This result is useful for estimating how many samples are needed to explore all states of a discrete system.
+
 ===

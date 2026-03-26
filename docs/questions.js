@@ -539,6 +539,15 @@ const ALL_QUESTIONS = [
     ]
   },
   {
+    "name": "derivative of $\\frac{1}{r}$",
+    "question": "What is the derivative of $\\frac{1}{r}$ where $r =\\sqrt{x^m x^m}$?",
+    "answer": "$-\\frac{x^m}{r}\\frac{1}{r}$",
+    "explanation": "Should compute in 5 sec.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": []
+  },
+  {
     "name": "simple harmonic oscillator",
     "question": "What is the general solution to the simple harmonic oscillator equation: $\\frac{d^2x}{dt^2} + \\omega^2 x = 0$?",
     "answer": "$x(t) = A \\cos(\\omega t) + B \\sin(\\omega t)$, equivalently $x(t) = C e^{i\\omega t} + D e^{-i\\omega t}$.",
@@ -1389,7 +1398,7 @@ const ALL_QUESTIONS = [
   {
     "name": "Maxwell's equations",
     "question": "Write down all four of Maxwell's equations in differential form (in vacuum with sources).",
-    "answer": "1) $\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}$ (Gauss's law), 2) $\\nabla \\cdot \\vec{B} = 0$ (no magnetic monopoles), 3) $\\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}$ (Faraday's law), 4) $\\nabla \\times \\vec{B} = \\mu_0 \\vec{J} + \\mu_0 \\epsilon_0 \\frac{\\partial \\vec{E}}{\\partial t}$ (Ampere-Maxwell law).",
+    "answer": "1. $\\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon_0}$ (Gauss's law),\n2. $\\nabla \\cdot \\vec{B} = 0$ (no magnetic monopoles), \n3. $\\nabla \\times \\vec{E} = -\\frac{\\partial \\vec{B}}{\\partial t}$ (Faraday's law), \n4. $\\nabla \\times \\vec{B} = \\mu_0 \\vec{J} + \\mu_0 \\epsilon_0 \\frac{\\partial \\vec{E}}{\\partial t}$ (Ampere-Maxwell law).",
     "explanation": "These four equations, together with the Lorentz force law, form the complete classical theory of electromagnetism.",
     "subject": "electromagnetism",
     "difficulty": "basic",

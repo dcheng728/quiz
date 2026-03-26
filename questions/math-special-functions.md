@@ -11,6 +11,7 @@ $(1-x^2)P_l'' - 2xP_l' + l(l+1)P_l = 0$. They arise as the angular part of solut
 ---
 
 The first few: $P_0 = 1$, $P_1 = x$, $P_2 = (3x^2 - 1)/2$. Orthogonality: $\int_{-1}^{1} P_l P_{l'} dx = \frac{2}{2l+1}\delta_{ll'}$. Every multipole expansion in electrostatics uses them.
+
 ===
 
 ### spherical harmonics $Y_l^m$
@@ -26,6 +27,7 @@ $Y_l^m(\theta, \phi) = N_{lm} P_l^m(\cos\theta) e^{im\phi}$, where $P_l^m$ are a
 ---
 
 Spherical harmonics are eigenfunctions of $\hat{L}^2$ and $\hat{L}_z$ on the sphere. Any function on the sphere can be expanded in them  --  the angular analog of a Fourier series. They appear in hydrogen atom wavefunctions, multipole expansions, and CMB analysis.
+
 ===
 
 ### Bessel functions
@@ -41,6 +43,7 @@ $x^2 y'' + xy' + (x^2 - n^2)y = 0$. The general solution is $y = AJ_n(x) + BY_n(
 ---
 
 Bessel functions appear whenever you separate the wave, Helmholtz, or diffusion equation in cylindrical coordinates: vibrating drum heads, waveguide modes, diffraction from circular apertures.
+
 ===
 
 ### Fourier transform
@@ -56,6 +59,7 @@ $$\tilde{f}(k) = \int_{-\infty}^{\infty} f(x) e^{-ikx} dx, \qquad f(x) = \int_{-
 ---
 
 Key properties: convolution becomes multiplication, differentiation becomes $ik$, and the Fourier transform of a Gaussian is a Gaussian. Parseval's theorem: $\int |f|^2 dx = \int |\tilde{f}|^2 dk/(2\pi)$.
+
 ===
 
 ### Fourier transform of Gaussian
@@ -71,6 +75,7 @@ $$\tilde{f}(k) = \sqrt{\frac{\pi}{a}} \, e^{-k^2/(4a)}$$A narrow Gaussian in $x$
 ---
 
 This is a manifestation of the uncertainty principle: $\Delta x \cdot \Delta k \geq 1/2$, with equality for Gaussians. The Gaussian is the unique function that minimizes the uncertainty product.
+
 ===
 
 ### Helmholtz Green's function
@@ -86,6 +91,7 @@ $$G(\vec{r}) = \frac{e^{\pm ikr}}{4\pi r}$$The $+$ sign gives the retarded (outg
 ---
 
 This is the starting point for scattering theory. The scattered wave is constructed by convolving the Green's function with the source. It reduces to the electrostatic $1/(4\pi r)$ when $k = 0$.
+
 ===
 
 ### Laplace transform
@@ -101,6 +107,7 @@ $$F(s) = \int_0^\infty f(t) e^{-st} dt$$Properties: $\mathcal{L}\{f'(t)\} = sF(s
 ---
 
 The Laplace transform converts ODEs with initial conditions into algebraic equations. Especially useful for linear circuits, control theory, and solving the damped driven harmonic oscillator.
+
 ===
 
 ### Hermite polynomials
@@ -116,6 +123,7 @@ $H_n'' - 2xH_n' + 2nH_n = 0$. The harmonic oscillator wavefunctions are $\psi_n(
 ---
 
 First few: $H_0 = 1$, $H_1 = 2x$, $H_2 = 4x^2 - 2$, $H_3 = 8x^3 - 12x$. Orthogonal with weight $e^{-x^2}$: $\int H_m H_n e^{-x^2} dx = \sqrt{\pi} \, 2^n n! \, \delta_{mn}$.
+
 ===
 
 ### Dirac delta representations
@@ -131,6 +139,7 @@ Write three useful representations of the Dirac delta function $\delta(x)$.
 ---
 
 The Fourier representation is the most used  --  it is the completeness relation for plane waves. Also essential: $\delta(ax) = \delta(x)/|a|$ and $\delta(g(x)) = \sum_i \delta(x - x_i)/|g'(x_i)|$.
+
 ===
 
 ### spherical Bessel functions
@@ -146,6 +155,7 @@ $j_l(x) = \sqrt{\frac{\pi}{2x}} J_{l+1/2}(x)$. The first two: $j_0(x) = \frac{\s
 ---
 
 They appear in the partial wave expansion: $e^{ikr\cos\theta} = \sum_l (2l+1) i^l j_l(kr) P_l(\cos\theta)$. This is the starting point for partial wave analysis in quantum scattering theory.
+
 ===
 
 ### orthogonal polynomial families
@@ -161,4 +171,5 @@ They are families of orthogonal polynomials satisfying Sturm-Liouville problems 
 ---
 
 Laguerre polynomials appear in hydrogen radial wavefunctions. Sturm-Liouville theory guarantees completeness, so any reasonable function can be expanded in these polynomials on their domain.
+
 ===

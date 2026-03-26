@@ -11,6 +11,7 @@ A Lie group is a continuous group that is also a smooth manifold. Its generators
 ---
 
 In physics, generators correspond to conserved charges via Noether's theorem. Angular momentum operators are the generators of $SO(3)$; the Hamiltonian generates time translations.
+
 ===
 
 ### $SU(2)$ and $SO(3)$
@@ -26,6 +27,7 @@ $SU(2)$ is the group of $2 \times 2$ unitary matrices with determinant 1. Its ge
 ---
 
 This is why spinors pick up a minus sign under $2\pi$ rotation. Integer-spin representations see only $SO(3)$; half-integer representations require the full $SU(2)$.
+
 ===
 
 ### $SU(2)$ irreps
@@ -41,6 +43,7 @@ The irreps are labeled by $j = 0, \frac{1}{2}, 1, \frac{3}{2}, 2, \ldots$ with d
 ---
 
 These are exactly the angular momentum multiplets in quantum mechanics. $j = 1/2$ is the fundamental (spinor), $j = 1$ is the adjoint (vector), etc.
+
 ===
 
 ### Schur's lemma
@@ -56,6 +59,7 @@ State Schur's lemma and explain its importance in physics.
 ---
 
 This is why $\hat{L}^2$ has a single eigenvalue $\hbar^2 l(l+1)$ within a given angular momentum multiplet. It also underlies selection rules: matrix elements of operators between states in different irreps vanish unless the operator transforms appropriately.
+
 ===
 
 ### $SU(2)$ tensor product decomposition
@@ -71,6 +75,7 @@ $$j_1 \otimes j_2 = |j_1 - j_2| \oplus (|j_1 - j_2| + 1) \oplus \cdots \oplus (j
 ---
 
 For example, $1/2 \otimes 1/2 = 0 \oplus 1$ (singlet + triplet). Via characters: $\chi_{1/2}(\theta) = 2\cos(\theta/2)$, so $\chi_{1/2}^2 = 2\cos^2(\theta/2) = 1 + (2\cos\theta + 1)/(1) = \chi_0 + \chi_1$. The expansion coefficients in the state basis are the Clebsch-Gordan coefficients. This is the group-theoretic content of angular momentum addition.
+
 ===
 
 ### $SU(3)$ in the Standard Model
@@ -86,6 +91,7 @@ $SU(3)$ is the group of $3 \times 3$ unitary matrices with determinant 1, with $
 ---
 
 The fundamental is $\mathbf{3}$ (quarks), the conjugate is $\bar{\mathbf{3}}$ (antiquarks), the adjoint is $\mathbf{8}$ (gluons). Mesons are $\mathbf{3} \otimes \bar{\mathbf{3}} = \mathbf{1} \oplus \mathbf{8}$.
+
 ===
 
 ### Noether's theorem and symmetry groups
@@ -101,6 +107,7 @@ Every continuous symmetry of the action has a corresponding conserved quantity. 
 ---
 
 Internal symmetries also apply: $U(1)$ phase invariance gives charge conservation, $SU(3)$ color symmetry gives color charge conservation. The conserved current is $j^\mu = \frac{\partial \mathcal{L}}{\partial(\partial_\mu \phi)} \delta \phi$.
+
 ===
 
 ### Lie algebra structure constants
@@ -116,6 +123,7 @@ They are defined by $[T^a, T^b] = if^{abc} T^c$, are fully antisymmetric ($f^{ab
 ---
 
 For $SU(2)$, $f^{abc} = \epsilon^{abc}$. For $SU(3)$, the structure constants are more complex but tabulated. In gauge theory, structure constants determine gluon self-interaction vertices.
+
 ===
 
 ### Young tableaux
@@ -131,6 +139,7 @@ Young tableaux are diagrams of boxes in left-justified rows of non-increasing le
 ---
 
 For $SU(3)$: one box is $\mathbf{3}$, two boxes in a column is $\bar{\mathbf{3}}$, two in a row is $\mathbf{6}$. They systematize tensor product decompositions and the classification of hadrons in the quark model.
+
 ===
 
 ### Casimir operators
@@ -146,6 +155,7 @@ A Casimir operator commutes with all generators of the Lie algebra. For $SU(2)$,
 ---
 
 By Schur's lemma, a Casimir is proportional to the identity within each irrep, so its eigenvalue labels the representation. $SU(3)$ has two independent Casimirs (quadratic and cubic), matching the two labels needed for an $SU(3)$ irrep.
+
 ===
 
 ### weight diagrams
@@ -161,4 +171,5 @@ A weight diagram plots the eigenvalues of the Cartan (mutually commuting) genera
 ---
 
 For $SU(3)$, the Cartan subalgebra is 2D ($T^3$, $T^8$), so weight diagrams are 2D. The fundamental $\mathbf{3}$ has three weights forming a triangle; the adjoint $\mathbf{8}$ has a hexagonal diagram with two states at the origin.
+
 ===

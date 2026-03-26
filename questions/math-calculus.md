@@ -11,6 +11,7 @@ $\cos(x)$
 ---
 
 Follows directly from the limit definition or from the Taylor series of $\sin(x)$.
+
 ===
 
 ### derivative of $e^{ax}$
@@ -26,6 +27,7 @@ $a e^{ax}$
 ---
 
 The exponential function is its own derivative, scaled by the chain rule factor $a$.
+
 ===
 
 ### derivative of $\ln(x)$
@@ -41,6 +43,7 @@ $\frac{1}{x}$
 ---
 
 Follows from the inverse function theorem applied to $e^x$.
+
 ===
 
 ### Gaussian integral
@@ -56,6 +59,7 @@ $\sqrt{\pi}$
 ---
 
 Classic trick: square the integral, convert to polar coordinates, and evaluate the resulting $r$ integral.
+
 ===
 
 ### $\int \frac{1}{x}\, dx$
@@ -71,6 +75,7 @@ $\ln|x| + C$
 ---
 
 This is the antiderivative definition of the natural logarithm.
+
 ===
 
 ### Gamma function integral
@@ -86,6 +91,7 @@ $\Gamma(n) = (n-1)!$ for positive integers $n$
 ---
 
 This defines the Gamma function, which generalizes the factorial to non-integer arguments.
+
 ===
 
 ### divergence theorem
@@ -101,6 +107,7 @@ The volume integral of $\nabla \cdot \vec{F}$ equals the surface integral of $\v
 ---
 
 Converts a volume integral of a divergence into a flux integral over the enclosing surface. Fundamental in electrostatics (Gauss's law).
+
 ===
 
 ### Stokes' theorem
@@ -116,6 +123,7 @@ The surface integral of $\nabla \times \vec{F}$ equals the line integral of $\ve
 ---
 
 Relates the curl of a vector field over a surface to its circulation around the boundary. Underlies Faraday's law and Ampere's law.
+
 ===
 
 ### $\nabla \cdot (\nabla \times \vec{F})$
@@ -131,6 +139,7 @@ Zero
 ---
 
 $\nabla \cdot (\nabla \times \vec{F}) = 0$ identically. This is why magnetic monopoles are absent in Maxwell's equations: $\nabla \cdot \vec{B} = 0$ follows from $\vec{B} = \nabla \times \vec{A}$.
+
 ===
 
 ### $\nabla \times (\nabla f)$
@@ -146,6 +155,7 @@ Zero
 ---
 
 $\nabla \times (\nabla f) = 0$ identically. This is why conservative forces have zero curl: if $\vec{F} = -\nabla V$, then $\nabla \times \vec{F} = 0$.
+
 ===
 
 ### $e^x$ expansion
@@ -161,6 +171,7 @@ $1 + x + \frac{x^2}{2} + \frac{x^3}{6} + \cdots$
 ---
 
 The general pattern is $\sum \frac{x^n}{n!}$. Used everywhere  --  thermal factors $e^{-\beta E}$, time evolution $e^{-iHt/\hbar}$, etc.
+
 ===
 
 ### $\frac{1}{1-x}$ expansion
@@ -176,6 +187,7 @@ $1 + x + x^2 + \cdots$
 ---
 
 The geometric series. In physics, used constantly for perturbative expansions  --  e.g., expanding $\frac{1}{1 - \frac{v^2}{c^2}}$ or gravitational potentials with small corrections.
+
 ===
 
 ### radial Laplacian in spherical coordinates
@@ -191,6 +203,7 @@ $\frac{1}{r^2} \frac{d}{dr}\left(r^2 \frac{df}{dr}\right)$
 ---
 
 The angular parts vanish for spherically symmetric functions. Equivalently, $\frac{1}{r} \frac{d^2}{dr^2}(r f)$.
+
 ===
 
 ### gradient in spherical coordinates
@@ -206,6 +219,7 @@ $\nabla f = \frac{\partial f}{\partial r} \hat{r} + \frac{1}{r}\frac{\partial f}
 ---
 
 The scale factors $1$, $r$, and $r \sin\theta$ come from the metric of spherical coordinates.
+
 ===
 
 ### Leibniz integral rule
@@ -221,6 +235,7 @@ $\frac{d}{dt} \int_{a(t)}^{b(t)} f(x,t) \, dx = \int_{a(t)}^{b(t)} \frac{\partia
 ---
 
 Feynman's favorite trick: introduce a parameter to make a hard integral tractable. The constant-limits case ($\partial_t \int_a^b f\,dx = \int_a^b \partial_t f\,dx$) is just swapping the derivative inside. The power of the technique is in choosing the right parametrization -- here, the $e^{-tx}$ regulator turns $\sin(x)/x$ into a Laplace transform that can be done in closed form.
+
 ===
 
 ### finite geometric sum
@@ -236,6 +251,7 @@ $\frac{c^{n+1} - 1}{c - 1}$
 ---
 
 Used when truncating perturbation series after $n$ terms. For $c = 1$, the sum is simply $n + 1$.
+
 ===
 
 ### infinite geometric series
@@ -251,6 +267,7 @@ $\frac{1}{1-c}$ for $|c| < 1$. Also: $\sum_{i=1}^{\infty} c^i = \frac{c}{1-c}$
 ---
 
 The convergence condition $|c| < 1$ is crucial. This is the foundation of perturbative expansions throughout physics.
+
 ===
 
 ### values of $\pi$ and $e$
@@ -266,6 +283,7 @@ $\pi \approx 3.14159$, $e \approx 2.71828$
 ---
 
 Essential for quick order-of-magnitude estimates. Useful mnemonics: $\pi \approx 22/7$ and $e \approx 19/7$.
+
 ===
 
 ### change-of-base formula
@@ -281,6 +299,7 @@ $\log_b x = \frac{\log_a x}{\log_a b}$
 ---
 
 This lets you convert between any two logarithm bases. In physics, you often switch between $\ln$ (natural) and $\log_{10}$.
+
 ===
 
 ### quadratic formula
@@ -296,6 +315,7 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
 ---
 
 The discriminant $b^2 - 4ac$ determines the nature of roots: positive gives two real roots, zero gives one degenerate root, negative gives complex conjugate pairs.
+
 ===
 
 ### $e$ as series
@@ -311,6 +331,7 @@ $e = \sum_{n=0}^{\infty} \frac{1}{n!} = 1 + 1 + \frac{1}{2} + \frac{1}{6} + \fra
 ---
 
 This follows from evaluating the Taylor series of $e^x$ at $x = 1$. Also: $e = \lim_{n \to \infty} (1 + 1/n)^n$.
+
 ===
 
 ### product rule
@@ -326,6 +347,7 @@ $\frac{d(uv)}{dx} = u\frac{dv}{dx} + v\frac{du}{dx}$
 ---
 
 In quantum mechanics, this appears when differentiating products of wavefunctions, e.g., computing $\hat{p}(\psi_1 \psi_2)$.
+
 ===
 
 ### quotient rule
@@ -341,6 +363,7 @@ $\frac{d(u/v)}{dx} = \frac{v\frac{du}{dx} - u\frac{dv}{dx}}{v^2}$
 ---
 
 Less commonly needed than the product rule in physics, but useful when differentiating ratios like efficiency or transition rates.
+
 ===
 
 ### $\frac{d}{dx}(\arctan u)$
@@ -356,6 +379,7 @@ $\frac{1}{1+u^2}\frac{du}{dx}$
 ---
 
 Appears when integrating Lorentzian line shapes and in scattering phase shifts. The integral form $\int \frac{dx}{1+x^2} = \arctan x$ is equally important.
+
 ===
 
 ### $\frac{d}{dx}(\arcsin u)$
@@ -371,6 +395,7 @@ $\frac{1}{\sqrt{1-u^2}}\frac{du}{dx}$
 ---
 
 The domain restriction $|u| < 1$ reflects the range of $\sin$. Related: $\frac{d}{dx}(\arccos u) = \frac{-1}{\sqrt{1-u^2}}\frac{du}{dx}$.
+
 ===
 
 ### integration by parts
@@ -386,6 +411,7 @@ $\int u \frac{dv}{dx} dx = uv - \int v \frac{du}{dx} dx$
 ---
 
 The integral analog of the product rule. Essential for evaluating matrix elements in quantum mechanics, e.g., showing that $\hat{p}$ is Hermitian.
+
 ===
 
 ### $\int \frac{dx}{1+x^2}$
@@ -401,6 +427,7 @@ $\arctan x + C$
 ---
 
 The Fourier transform of a Lorentzian peak. Also appears in scattering cross-section integrals.
+
 ===
 
 ### $\int \sec x\, dx$
@@ -416,6 +443,7 @@ $\ln|\sec x + \tan x| + C$
 ---
 
 Multiply top and bottom by $(\sec x + \tan x)$; the numerator is $d(\sec x + \tan x)$, giving $\int du/u$.
+
 ===
 
 ### $\ln(1+x)$ expansion
@@ -431,6 +459,7 @@ $x - \frac{x^2}{2} + \frac{x^3}{3} - \frac{x^4}{4} + \cdots = \sum_{i=1}^{\infty
 ---
 
 Converges for $-1 < x \leq 1$. In thermodynamics, $\ln(1+x) \approx x$ for small $x$ is used constantly  --  e.g., in Stirling's approximation and entropy of mixing.
+
 ===
 
 ### $\sin x$ expansion
@@ -446,6 +475,7 @@ $x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots = \sum_{i=0}^{\infty}(-1)^i \frac{
 ---
 
 Only odd powers appear (since $\sin$ is an odd function). The small-angle approximation $\sin x \approx x$ is the leading term.
+
 ===
 
 ### $\cos x$ expansion
@@ -461,6 +491,7 @@ $1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \cdots = \sum_{i=0}^{\infty}(-1)^i \frac{
 ---
 
 Only even powers appear (since $\cos$ is an even function). For small oscillations, $\cos \theta \approx 1 - \theta^2/2$ gives the harmonic potential.
+
 ===
 
 ### binomial series $(1+x)^n$
@@ -476,6 +507,7 @@ $(1+x)^n = \sum_{i=0}^{\infty} \binom{n}{i} x^i = 1 + nx + \frac{n(n-1)}{2}x^2 +
 ---
 
 For integer $n \geq 0$ the series terminates. For non-integer or negative $n$ it is infinite but converges for $|x|<1$. Physicists use this for $(1+\epsilon)^n \approx 1 + n\epsilon$ constantly  --  e.g., relativistic $\gamma \approx 1 + v^2/2c^2$.
+
 ===
 
 ### Euler's formula
@@ -491,6 +523,7 @@ $e^{ix} = \cos x + i\sin x$, and the special case $e^{i\pi} = -1$
 ---
 
 The most important identity in physics. Plane waves $e^{i(kx - \omega t)}$, phasors, Fourier transforms, and quantum wavefunctions all follow from this.
+
 ===
 
 ### $\sinh x$ and $\cosh x$
@@ -506,6 +539,7 @@ $\sinh x = \frac{e^x - e^{-x}}{2}$, $\cosh x = \frac{e^x + e^{-x}}{2}$
 ---
 
 The catenary curve is $y = a\cosh(x/a)$. In special relativity, Lorentz boosts are hyperbolic rotations: $ct' = ct\cosh\phi - x\sinh\phi$ where $\phi$ is the rapidity.
+
 ===
 
 ### $\cosh^2 x - \sinh^2 x$
@@ -521,6 +555,7 @@ $1$
 ---
 
 The hyperbolic analog of $\sin^2 + \cos^2 = 1$. This identity reflects the invariance of the spacetime interval under Lorentz boosts, since $\cosh^2\phi - \sinh^2\phi = 1$.
+
 ===
 
 ### $\tanh x$ and hyperbolic identities
@@ -536,6 +571,7 @@ $\tanh x = \frac{e^x - e^{-x}}{e^x + e^{-x}} = \frac{\sinh x}{\cosh x}$. Also: $
 ---
 
 In relativity, the velocity addition formula $\beta = \tanh\phi$ maps the rapidity $\phi$ to velocity. The addition formula for $\sinh$ gives the rapidity addition rule.
+
 ===
 
 ### saddle-point approximation
@@ -551,6 +587,7 @@ $I \approx e^{N f(x_0)} \sqrt{\frac{2\pi}{N |f''(x_0)|}}$, where $f'(x_0) = 0$
 ---
 
 The integral is dominated by the neighborhood of the maximum of $f(x)$, with Gaussian fluctuations giving the prefactor. This is the workhorse for evaluating partition functions, path integrals, and matrix model integrals in the large-$N$ limit.
+
 ===
 
 ### asymptotic series
@@ -566,4 +603,5 @@ No. The partial sum $\sum_{n=0}^{N} a_n x^n$ approximates $f(x)$ with error $O(x
 ---
 
 Perturbative expansions in physics are almost always asymptotic, not convergent. The optimal truncation point is typically around $N \sim 1/g$, after which adding more terms makes the approximation worse.
+
 ===

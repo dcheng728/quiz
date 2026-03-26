@@ -11,6 +11,7 @@ $\lambda = \frac{h}{p}$. It is the wavelength associated with a massive particle
 ---
 
 Electrons at $\sim$eV energies have $\lambda \sim$ angstroms, enabling electron diffraction off crystal lattices. The WKB approximation is valid when the potential varies slowly compared to $\lambda$.
+
 ===
 
 ### $[\hat{x}, \hat{p}]$ commutation relation
@@ -26,6 +27,7 @@ $[\hat{x}, \hat{p}] = i\hbar$
 ---
 
 This is the foundational commutation relation of quantum mechanics, from which the uncertainty principle follows directly.
+
 ===
 
 ### Schrodinger equation
@@ -41,6 +43,7 @@ $i\hbar \frac{\partial \psi}{\partial t} = \hat{H} \psi$, where $\hat{H}$ is the
 ---
 
 For a single particle in a potential, $\hat{H} = -\frac{\hbar^2}{2m} \nabla^2 + V(\vec{r})$. The time-independent version is $\hat{H}\psi = E\psi$.
+
 ===
 
 ### quantum harmonic oscillator energies
@@ -56,6 +59,7 @@ $E_n = \hbar\omega\left(n + \frac{1}{2}\right)$, for $n = 0, 1, 2, \ldots$
 ---
 
 The equally spaced energy levels and nonzero ground state energy ($\frac{1}{2}\hbar\omega$) are hallmarks of the quantum harmonic oscillator. Solved elegantly via creation and annihilation operators.
+
 ===
 
 ### hydrogen atom energy levels
@@ -71,6 +75,7 @@ $E_n = -\frac{13.6 \text{ eV}}{n^2}$, for $n = 1, 2, 3, \ldots$
 ---
 
 The degeneracy of each level is $n^2$ (ignoring spin) or $2n^2$ (including spin). This follows from the Coulomb potential and the accidental $SO(4)$ symmetry.
+
 ===
 
 ### $\hat{L}^2$ and $\hat{L}_z$ eigenvalues
@@ -86,6 +91,7 @@ $\hat{L}^2$ has eigenvalues $\hbar^2 l(l+1)$ for $l = 0, 1, 2, \ldots$ and $\hat
 ---
 
 These follow from the commutation relations $[\hat{L}_i, \hat{L}_j] = i\hbar \epsilon_{ijk} \hat{L}_k$ and $[\hat{L}^2, \hat{L}_i] = 0$.
+
 ===
 
 ### electron spin
@@ -101,6 +107,7 @@ The electron has spin $\frac{1}{2}$. The possible outcomes of $\hat{S}_z$ are $+
 ---
 
 Spin is an intrinsic angular momentum with no classical analogue. The spin-$\frac{1}{2}$ operators are represented by $\frac{\hbar}{2}$ times the Pauli matrices.
+
 ===
 
 ### generalized uncertainty principle
@@ -116,6 +123,7 @@ $\sigma_A \sigma_B \geq \frac{1}{2}|\langle[\hat{A}, \hat{B}]\rangle|$
 ---
 
 For $\hat{x}$ and $\hat{p}$, this gives $\sigma_x \sigma_p \geq \frac{\hbar}{2}$, the Heisenberg uncertainty principle.
+
 ===
 
 ### first-order perturbation theory
@@ -131,6 +139,7 @@ $E_n^{(1)} = \langle n^{(0)}| \hat{H}' |n^{(0)}\rangle$, the expectation value o
 ---
 
 The first-order correction to the state is $|n^{(1)}\rangle = \sum_{m \neq n} \frac{\langle m^{(0)}|\hat{H}'|n^{(0)}\rangle}{E_n^{(0)} - E_m^{(0)}} |m^{(0)}\rangle$.
+
 ===
 
 ### Fermi's golden rule
@@ -146,6 +155,7 @@ The transition rate from state $|i\rangle$ to state $|f\rangle$ under a time-dep
 ---
 
 This is derived from first-order time-dependent perturbation theory in the long-time limit.
+
 ===
 
 ### WKB approximation
@@ -161,6 +171,7 @@ The Bohr-Sommerfeld quantization condition: $\int_a^b p(x) \, dx = \left(n + \fr
 ---
 
 WKB (Wentzel-Kramers-Brillouin) approximates the wavefunction when the potential varies slowly on the scale of the de Broglie wavelength $\lambda = h/p(x)$. You write $\psi(x) \approx \frac{C}{\sqrt{p(x)}} e^{\pm \frac{i}{\hbar}\int p(x)\,dx}$ in classically allowed regions ($E > V$) and an exponentially decaying form in forbidden regions ($E < V$). This breaks down at classical turning points where $p(x) \to 0$; there you match to Airy function solutions. Each turning point introduces a phase shift of $\pi/2$ (the Maslov index). For a bound state between turning points $a$ and $b$, demanding single-valuedness of the wavefunction after a round trip gives $\int_a^b p\,dx = (n + 1/2)\pi\hbar$, where the $1/2$ accounts for the two turning-point phase shifts. The full-period form $\oint p\,dq = 2\pi\hbar(n+1/2)$ is the Bohr-Sommerfeld condition. This beautifully connects quantum energy levels to classical phase-space areas: each state occupies an area $2\pi\hbar = h$ in phase space. For the harmonic oscillator $V = \frac{1}{2}m\omega^2 x^2$, the phase-space orbit is an ellipse with area $2\pi E/\omega$, and the WKB condition gives the exact result $E_n = \hbar\omega(n+1/2)$. References: Griffiths, Introduction to Quantum Mechanics, Chapter 8 (the WKB approximation); Landau & Lifshitz, Quantum Mechanics, Section 46--48; Sakurai, Modern Quantum Mechanics, Section 2.4 (WKB and semiclassical methods).
+
 ===
 
 ### bosons vs fermions
@@ -176,6 +187,7 @@ Bosons have symmetric wavefunctions under particle exchange and obey Bose-Einste
 ---
 
 The spin-statistics theorem connects spin to exchange symmetry. It is proven rigorously in relativistic quantum field theory.
+
 ===
 
 ### Feynman path integral
@@ -191,6 +203,7 @@ $K(x_f, t_f; x_i, t_i) = \int \mathcal{D}[\text{path}] \, e^{iS[\text{path}]/\hb
 ---
 
 Every path contributes with a phase proportional to its action. Classical paths dominate in the limit $\hbar \to 0$ due to stationary phase.
+
 ===
 
 ### Pauli matrices
@@ -206,6 +219,7 @@ $\sigma_x = \begin{pmatrix} 0 & 1 \\\\ 1 & 0 \end{pmatrix}$, $\sigma_y = \begin{
 ---
 
 They satisfy $\{\sigma_i, \sigma_j\} = 2\delta_{ij}I$ and $[\sigma_i, \sigma_j] = 2i\epsilon_{ijk}\sigma_k$. The spin operators are $\hat{S}_i = \frac{\hbar}{2}\sigma_i$.
+
 ===
 
 ### variational principle
@@ -221,6 +235,7 @@ For any normalized trial wavefunction $|\psi_{\text{trial}}\rangle$, the expecta
 ---
 
 This gives an upper bound on the ground state energy and is the basis for variational methods.
+
 ===
 
 ### angular momentum addition
@@ -236,6 +251,7 @@ $j$ ranges from $|j_1 - j_2|$ to $j_1 + j_2$ in integer steps.
 ---
 
 When two angular momenta couple, the total $\mathbf{J} = \mathbf{J}_1 + \mathbf{J}_2$ has $J_z = m_1 + m_2$ (always), but $j$ is not simply $j_1 + j_2$. The range $|j_1 - j_2| \leq j \leq j_1 + j_2$ follows from counting states: the uncoupled basis has $(2j_1+1)(2j_2+1)$ states, and so does the coupled basis $\sum_{j=|j_1-j_2|}^{j_1+j_2}(2j+1)$. The Clebsch-Gordan coefficients $\langle j_1, m_1; j_2, m_2 | j, m \rangle$ are the unitary transformation between these bases. They vanish unless $m = m_1 + m_2$ and the triangle inequality holds. Example: two spin-1/2 particles give $j = 1$ (triplet, 3 states, symmetric) and $j = 0$ (singlet, 1 state, antisymmetric). For $j_1 = 1, j_2 = 1$: $j = 0, 1, 2$ with $1 + 3 + 5 = 9 = 3 \times 3$ states. In group theory language this is the decomposition of the tensor product: $\mathbf{j_1} \otimes \mathbf{j_2} = \bigoplus_j \mathbf{j}$. This is essential for atomic spectroscopy (LS coupling), nuclear physics (isospin), and particle physics ($SU(2)$ flavor). References: Griffiths, Introduction to Quantum Mechanics, Chapter 4.3--4.4; Sakurai, Modern Quantum Mechanics, Chapter 3.7--3.8; Shankar, Principles of Quantum Mechanics, Chapter 15.
+
 ===
 
 ### non-perturbative $e^{-A/g}$
@@ -251,6 +267,7 @@ All derivatives of $e^{-A/g}$ at $g = 0$ vanish, so its Taylor series is identic
 ---
 
 This is why non-perturbative effects (tunneling, instantons, bound states in some cases) require methods beyond Feynman diagrams. They are exponentially suppressed and invisible to any finite-order perturbative calculation.
+
 ===
 
 ### Bohr-Sommerfeld quantization
@@ -266,4 +283,5 @@ $\oint p \, dq = 2\pi\hbar\left(n + \frac{1}{2}\right)$, integrated over one ful
 ---
 
 The semiclassical limit connects quantum energy levels to classical phase-space areas. The $1/2$ correction (Maslov index) comes from the phase shift at each classical turning point, where the WKB approximation breaks down and Airy function matching is needed.
+
 ===
