@@ -174,6 +174,110 @@ Describes electrostatic potential in charge-free regions, steady-state heat flow
 
 ===
 
+### sifting property of $\delta(x)$
+difficulty: basic
+labels: dirac-delta
+
+What is the sifting (sampling) property of the Dirac delta function?
+
+---
+
+$\int_{-\infty}^{\infty} f(x)\,\delta(x - a)\,dx = f(a)$, provided $f$ is continuous at $x = a$.
+
+---
+
+This is the defining property of $\delta(x)$ as a distribution: it "picks out" the value of $f$ at the point $a$. In quantum mechanics, $\langle x | \psi \rangle = \int \delta(x - x')\psi(x')\,dx'$ is precisely this property applied to wavefunctions.
+
+===
+
+### $\delta(x)$ and $\theta(x)$
+difficulty: basic
+labels: dirac-delta
+
+What is the relationship between the Dirac delta function and the Heaviside step function $\Theta(x)$?
+
+---
+
+$\frac{d}{dx}\Theta(x) = \delta(x)$, or equivalently $\Theta(x) = \int_{-\infty}^{x} \delta(t)\,dt$.
+
+---
+
+This is the distributional derivative of the step function. In electrostatics, a surface charge $\sigma$ on a plane creates a discontinuity in the electric field: $\frac{dE}{dx} \propto \sigma\,\delta(x)$, whose integral gives the step in $E$.
+
+===
+
+### derivative of $\delta(x)$
+difficulty: intermediate
+labels: dirac-delta
+
+How does the derivative of the Dirac delta function $\delta'(x)$ act under an integral?
+
+---
+
+$\int_{-\infty}^{\infty} f(x)\,\delta'(x - a)\,dx = -f'(a)$.
+
+More generally, $\int f(x)\,\delta^{(n)}(x - a)\,dx = (-1)^n f^{(n)}(a)$.
+
+---
+
+Obtained by integration by parts, with boundary terms vanishing. The minus sign is crucial. The dipole layer in electrostatics (derivative of a surface charge) is described by $\delta'(x)$, reflecting that it measures the gradient of the field rather than the field itself.
+
+===
+
+### $\nabla^2(1/r) = -4\pi\delta^3(\vec{r})$
+difficulty: intermediate
+labels: dirac-delta, greens-functions
+
+What is the Laplacian of $1/r$ in three dimensions?
+
+---
+
+$\nabla^2 \left(\frac{1}{r}\right) = -4\pi\,\delta^3(\vec{r})$.
+
+---
+
+Away from the origin, $1/r$ is harmonic ($\nabla^2(1/r) = 0$), but the singularity at $r = 0$ contributes a delta function. This identity is the statement that $-1/(4\pi r)$ is the Green's function of the Laplacian, i.e., the electrostatic potential of a unit point charge. It follows from applying the divergence theorem to $\nabla \cdot (\hat{r}/r^2)$ over a sphere enclosing the origin.
+
+===
+
+### completeness relation as $\delta$
+difficulty: intermediate
+labels: dirac-delta, sturm-liouville
+
+How is the Dirac delta function related to the completeness of an orthonormal set of eigenfunctions?
+
+---
+
+For a complete orthonormal set $\{\psi_n(x)\}$:
+
+$\sum_n \psi_n^*(x')\,\psi_n(x) = \delta(x - x')$.
+
+For continuous spectra: $\int \psi_k^*(x')\,\psi_k(x)\,dk = \delta(x - x')$.
+
+---
+
+This is the completeness relation (resolution of the identity). In quantum mechanics, inserting $\mathbf{1} = \sum_n |n\rangle\langle n|$ in the position basis gives exactly this identity. The plane-wave case $\int \frac{e^{ik(x-x')}}{2\pi}\,dk = \delta(x-x')$ is the Fourier representation of the delta function.
+
+===
+
+### $x\,\delta(x) = 0$
+difficulty: basic
+labels: dirac-delta
+
+What is $x\,\delta(x)$?
+
+---
+
+$x\,\delta(x) = 0$ (as a distribution).
+
+More generally, if $f(a) = 0$, then $f(x)\,\delta(x - a) = 0$.
+
+---
+
+Follows from the sifting property: $\int g(x)\,[x\,\delta(x)]\,dx = 0 \cdot g(0) = 0$ for all test functions $g$. This identity is useful for simplifying expressions in scattering theory and Fourier analysis. A practical consequence: $\delta(x^2 - a^2) = \frac{1}{2|a|}[\delta(x-a) + \delta(x+a)]$ uses $x\,\delta(x) = 0$ in its derivation.
+
+===
+
 ### Airy function
 difficulty: intermediate
 labels: special-functions
