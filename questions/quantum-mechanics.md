@@ -46,6 +46,26 @@ For a single particle in a potential, $\hat{H} = -\frac{\hbar^2}{2m} \nabla^2 + 
 
 ===
 
+### periodic boundary conditions in a 3D box
+difficulty: basic
+labels: particle-in-a-box, boundary-conditions
+
+For a free particle in a 3D cubic box of side length $L$, what is the periodicity condition on the wavefunction, and what are the allowed momenta?
+
+---
+
+Periodic boundary conditions: $\psi(\vec{r} + L\hat{x}) = \psi(\vec{r})$, and similarly for $\hat{y}$ and $\hat{z}$.
+
+For plane-wave eigenstates $\psi_{\vec{k}} = e^{i\vec{k} \cdot \vec{r}}$, this requires $e^{i k_x L} = 1$, so $k_x = \frac{2\pi n_x}{L}$ (and likewise for $k_y$, $k_z$) with $n_x, n_y, n_z \in \mathbb{Z}$.
+
+Allowed momenta: $p_x = \hbar k_x = \frac{2\pi\hbar n_x}{L}$, etc.
+
+---
+
+should know
+
+===
+
 ### quantum harmonic oscillator energies
 difficulty: basic
 labels: harmonic-oscillator

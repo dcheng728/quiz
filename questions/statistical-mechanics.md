@@ -159,7 +159,7 @@ The Gibbs free energy $G = U - TS + PV$ is minimized at constant $T$ and $P$ ins
 ===
 
 ### Fermi gas ground-state energy
-difficulty: basic
+difficulty: inetermediate
 labels: fermi-gas
 
 What is the total ground-state energy of $N$ non-interacting fermions in 3D, in terms of the Fermi energy $E_F$?
@@ -171,6 +171,25 @@ $E = \frac{3}{5} N E_F$
 ---
 
 The 3D density of states is $g(E) = C E^{1/2}$ where $C = \frac{V}{2\pi^2}\left(\frac{2m}{\hbar^2}\right)^{3/2}$. At $T=0$, all states up to $E_F$ are filled, so $N = \int_0^{E_F} g(E)\,dE = C \cdot \frac{2}{3} E_F^{3/2}$. The total energy is $E_{\text{tot}} = \int_0^{E_F} E\,g(E)\,dE = C \int_0^{E_F} E^{3/2}\,dE = C \cdot \frac{2}{5} E_F^{5/2}$. Dividing: $E_{\text{tot}}/N = \frac{C \cdot \frac{2}{5} E_F^{5/2}}{C \cdot \frac{2}{3} E_F^{3/2}} = \frac{3}{5} E_F$. The factor $3/5$ (not $1/2$) arises because $g(E) \propto E^{1/2}$ weights higher energies more heavily -- there are more states near $E_F$ than near $E = 0$.
+
+===
+
+### density of states for 3D noninteracting fermions
+difficulty: intermediate
+labels: fermi-gas, density-of-states
+
+What is the density of states $g(E)$ for $N$ noninteracting fermions confined to a box of volume $V$ in 3D?
+If you don't know the exact form give its scaling with respect to $E$.
+
+---
+
+$g(E) = \frac{V}{2\pi^2}\left(\frac{2m}{\hbar^2}\right)^{3/2} \sqrt{E}$, or more compactly $g(E) = C E^{1/2}$.
+
+---
+
+- a state $|\vec{k}\rangle$ has energy $E = \frac{\hbar^2 |k|^2}{2m}$. 
+- the total number of state scales like $\frac{4\pi}{3}k^3 \sim E^{3/2}$
+- the density of state scales like the derivative which is like $E^{1/2}$
 
 ===
 
