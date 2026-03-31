@@ -162,15 +162,35 @@ QCD becomes weakly coupled at high energies, enabling perturbative calculations 
 difficulty: advanced
 labels: cross-sections
 
-How is a differential cross-section related to the matrix element $\mathcal{M}$ for a $2 \to 2$ process?
+How is a differential cross-section in the COM frame related to the matrix element $\mathcal{M}$ for a $2 \to 2$ process?
 
 ---
 
-$$\frac{d\sigma}{d\Omega} = \frac{|\mathcal{M}|^2}{64\pi^2 s}$$in the center-of-mass frame for massless or equal-mass particles, where $s$ is the Mandelstam variable. More generally, $d\sigma$ involves a flux factor and Lorentz-invariant phase space.
+$$\frac{d\sigma}{d\Omega} = \frac{|\mathcal{M}|^2}{64\pi^2 s}$$
+
+in the center-of-mass (COM) frame for massless or equal-mass particles, where $s$ is the Mandelstam variable. More generally, $d\sigma$ involves a flux factor and Lorentz-invariant phase space.
 
 ---
 
-The full formula is $d\sigma = \frac{1}{2E_A 2E_B |v_A - v_B|}|\mathcal{M}|^2 d\Pi_{\text{LIPS}}$, where the prefactor is the flux factor (accounting for beam densities and relative velocity) and $d\Pi_{\text{LIPS}}$ is the Lorentz-invariant phase space measure that enforces 4-momentum conservation. For $2 \to 2$ scattering in the CM frame, integrating over the constrained final-state momenta reduces $d\Pi_{\text{LIPS}}$ to $\frac{|\mathbf{p}_f|}{16\pi^2 \sqrt{s}} d\Omega$, and combining with the flux factor $4|\mathbf{p}_i|\sqrt{s}$ yields $d\sigma/d\Omega = |\mathcal{M}|^2/(64\pi^2 s)$ when $|\mathbf{p}_f| = |\mathbf{p}_i|$ (equal-mass or massless case). The matrix element $\mathcal{M}$ is read off from Feynman diagrams: draw all contributing diagrams, write down the amplitude using Feynman rules, then square it. For unpolarized scattering, average over initial spins (factor of $1/(2s_i+1)$ per particle) and sum over final spins. In QCD, also average over initial colors and sum over final colors. The total cross-section $\sigma = \int d\sigma$ is directly proportional to event rates measured in colliders: $R = \mathcal{L}\sigma$, where $\mathcal{L}$ is the luminosity. References: Peskin & Schroeder, Section 4.5 (cross sections and the S-matrix) and Section 4.6 (worked example: $e^+e^- \to \mu^+\mu^-$); Schwartz, Quantum Field Theory and the Standard Model, Chapter 5; Griffiths, Introduction to Elementary Particles, Section 6.2 (Fermi's Golden Rule to cross-sections).
+The general Lorentz-invariant formula is
+
+$$d\sigma = \frac{1}{2E_A\,2E_B\,|v_A - v_B|} |\mathcal{M}|^2 \, d\Pi_{\text{LIPS}},$$
+
+where the prefactor is the flux factor and $d\Pi_{\text{LIPS}}$ is the Lorentz-invariant phase-space measure, including 4-momentum conservation.
+
+For $2 \to 2$ scattering in the COM frame, the phase space reduces to
+
+$$d\Pi_{\text{LIPS}} = \frac{|\mathbf{p}_f|}{16\pi^2 \sqrt{s}} \, d\Omega,$$
+
+and the flux factor becomes $4|\mathbf{p}_i|\sqrt{s}$. If $|\mathbf{p}_f| = |\mathbf{p}_i|$ as in the equal-mass or massless case, this gives
+
+$$\frac{d\sigma}{d\Omega} = \frac{|\mathcal{M}|^2}{64\pi^2 s}.$$
+
+To compute $\mathcal{M}$, sum the contributing Feynman diagrams, write the amplitude from the Feynman rules, then square it. For unpolarized scattering, average over initial spins and sum over final spins; in QCD, do the same for colors.
+
+The total cross-section is $\sigma = \int d\sigma$, and collider event rates satisfy $R = \mathcal{L}\sigma$.
+
+References: Peskin & Schroeder, Section 4.5 and Section 4.6; Schwartz, Quantum Field Theory and the Standard Model, Chapter 5; Griffiths, Introduction to Elementary Particles, Section 6.2.
 
 ===
 

@@ -647,6 +647,74 @@ const ALL_QUESTIONS = [
     ]
   },
   {
+    "name": "sifting property of $\\delta(x)$",
+    "question": "What is the sifting (sampling) property of the Dirac delta function?",
+    "answer": "$\\int_{-\\infty}^{\\infty} f(x)\\,\\delta(x - a)\\,dx = f(a)$, provided $f$ is continuous at $x = a$.",
+    "explanation": "This is the defining property of $\\delta(x)$ as a distribution: it \"picks out\" the value of $f$ at the point $a$. In quantum mechanics, $\\langle x | \\psi \\rangle = \\int \\delta(x - x')\\psi(x')\\,dx'$ is precisely this property applied to wavefunctions.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "dirac-delta"
+    ]
+  },
+  {
+    "name": "$\\delta(x)$ and $\\theta(x)$",
+    "question": "What is the relationship between the Dirac delta function and the Heaviside step function $\\Theta(x)$?",
+    "answer": "$\\frac{d}{dx}\\Theta(x) = \\delta(x)$, or equivalently $\\Theta(x) = \\int_{-\\infty}^{x} \\delta(t)\\,dt$.",
+    "explanation": "This is the distributional derivative of the step function. In electrostatics, a surface charge $\\sigma$ on a plane creates a discontinuity in the electric field: $\\frac{dE}{dx} \\propto \\sigma\\,\\delta(x)$, whose integral gives the step in $E$.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "dirac-delta"
+    ]
+  },
+  {
+    "name": "derivative of $\\delta(x)$",
+    "question": "How does the derivative of the Dirac delta function $\\delta'(x)$ act under an integral?",
+    "answer": "$\\int_{-\\infty}^{\\infty} f(x)\\,\\delta'(x - a)\\,dx = -f'(a)$.\n\nMore generally, $\\int f(x)\\,\\delta^{(n)}(x - a)\\,dx = (-1)^n f^{(n)}(a)$.",
+    "explanation": "Obtained by integration by parts, with boundary terms vanishing. The minus sign is crucial. The dipole layer in electrostatics (derivative of a surface charge) is described by $\\delta'(x)$, reflecting that it measures the gradient of the field rather than the field itself.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "dirac-delta"
+    ]
+  },
+  {
+    "name": "$\\nabla^2(1/r) = -4\\pi\\delta^3(\\vec{r})$",
+    "question": "What is the Laplacian of $1/r$ in three dimensions?",
+    "answer": "$\\nabla^2 \\left(\\frac{1}{r}\\right) = -4\\pi\\,\\delta^3(\\vec{r})$.",
+    "explanation": "Away from the origin, $1/r$ is harmonic ($\\nabla^2(1/r) = 0$), but the singularity at $r = 0$ contributes a delta function. This identity is the statement that $-1/(4\\pi r)$ is the Green's function of the Laplacian, i.e., the electrostatic potential of a unit point charge. It follows from applying the divergence theorem to $\\nabla \\cdot (\\hat{r}/r^2)$ over a sphere enclosing the origin.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "dirac-delta",
+      "greens-functions"
+    ]
+  },
+  {
+    "name": "completeness relation as $\\delta$",
+    "question": "How is the Dirac delta function related to the completeness of an orthonormal set of eigenfunctions?",
+    "answer": "For a complete orthonormal set $\\{\\psi_n(x)\\}$:\n\n$\\sum_n \\psi_n^*(x')\\,\\psi_n(x) = \\delta(x - x')$.\n\nFor continuous spectra: $\\int \\psi_k^*(x')\\,\\psi_k(x)\\,dk = \\delta(x - x')$.",
+    "explanation": "This is the completeness relation (resolution of the identity). In quantum mechanics, inserting $\\mathbf{1} = \\sum_n |n\\rangle\\langle n|$ in the position basis gives exactly this identity. The plane-wave case $\\int \\frac{e^{ik(x-x')}}{2\\pi}\\,dk = \\delta(x-x')$ is the Fourier representation of the delta function.",
+    "subject": "math-differential-equations",
+    "difficulty": "intermediate",
+    "labels": [
+      "dirac-delta",
+      "sturm-liouville"
+    ]
+  },
+  {
+    "name": "$x\\,\\delta(x) = 0$",
+    "question": "What is $x\\,\\delta(x)$?",
+    "answer": "$x\\,\\delta(x) = 0$ (as a distribution).\n\nMore generally, if $f(a) = 0$, then $f(x)\\,\\delta(x - a) = 0$.",
+    "explanation": "Follows from the sifting property: $\\int g(x)\\,[x\\,\\delta(x)]\\,dx = 0 \\cdot g(0) = 0$ for all test functions $g$. This identity is useful for simplifying expressions in scattering theory and Fourier analysis. A practical consequence: $\\delta(x^2 - a^2) = \\frac{1}{2|a|}[\\delta(x-a) + \\delta(x+a)]$ uses $x\\,\\delta(x) = 0$ in its derivation.",
+    "subject": "math-differential-equations",
+    "difficulty": "basic",
+    "labels": [
+      "dirac-delta"
+    ]
+  },
+  {
     "name": "Airy function",
     "question": "The Airy function $\\mathrm{Ai}(x)$ solves which ODE, and what is its qualitative behavior?",
     "answer": "$\\frac{d^2y}{dx^2} - xy = 0$. It oscillates for $x < 0$ and decays exponentially $\\sim e^{-\\frac{2}{3}x^{3/2}}$ for $x > 0$.",
@@ -1572,6 +1640,18 @@ const ALL_QUESTIONS = [
     ]
   },
   {
+    "name": "periodic boundary conditions in a 3D box",
+    "question": "For a free particle in a 3D cubic box of side length $L$, what is the periodicity condition on the wavefunction, and what are the allowed momenta?",
+    "answer": "Periodic boundary conditions: $\\psi(\\vec{r} + L\\hat{x}) = \\psi(\\vec{r})$, and similarly for $\\hat{y}$ and $\\hat{z}$.\n\nFor plane-wave eigenstates $\\psi_{\\vec{k}} = e^{i\\vec{k} \\cdot \\vec{r}}$, this requires $e^{i k_x L} = 1$, so $k_x = \\frac{2\\pi n_x}{L}$ (and likewise for $k_y$, $k_z$) with $n_x, n_y, n_z \\in \\mathbb{Z}$.\n\nAllowed momenta: $p_x = \\hbar k_x = \\frac{2\\pi\\hbar n_x}{L}$, etc.",
+    "explanation": "should know",
+    "subject": "quantum-mechanics",
+    "difficulty": "basic",
+    "labels": [
+      "particle-in-a-box",
+      "boundary-conditions"
+    ]
+  },
+  {
     "name": "quantum harmonic oscillator energies",
     "question": "What are the energy eigenvalues of the quantum harmonic oscillator?",
     "answer": "$E_n = \\hbar\\omega\\left(n + \\frac{1}{2}\\right)$, for $n = 0, 1, 2, \\ldots$",
@@ -1852,9 +1932,21 @@ const ALL_QUESTIONS = [
     "answer": "$E = \\frac{3}{5} N E_F$",
     "explanation": "The 3D density of states is $g(E) = C E^{1/2}$ where $C = \\frac{V}{2\\pi^2}\\left(\\frac{2m}{\\hbar^2}\\right)^{3/2}$. At $T=0$, all states up to $E_F$ are filled, so $N = \\int_0^{E_F} g(E)\\,dE = C \\cdot \\frac{2}{3} E_F^{3/2}$. The total energy is $E_{\\text{tot}} = \\int_0^{E_F} E\\,g(E)\\,dE = C \\int_0^{E_F} E^{3/2}\\,dE = C \\cdot \\frac{2}{5} E_F^{5/2}$. Dividing: $E_{\\text{tot}}/N = \\frac{C \\cdot \\frac{2}{5} E_F^{5/2}}{C \\cdot \\frac{2}{3} E_F^{3/2}} = \\frac{3}{5} E_F$. The factor $3/5$ (not $1/2$) arises because $g(E) \\propto E^{1/2}$ weights higher energies more heavily -- there are more states near $E_F$ than near $E = 0$.",
     "subject": "statistical-mechanics",
-    "difficulty": "basic",
+    "difficulty": "inetermediate",
     "labels": [
       "fermi-gas"
+    ]
+  },
+  {
+    "name": "density of states for 3D noninteracting fermions",
+    "question": "What is the density of states $g(E)$ for $N$ noninteracting fermions confined to a box of volume $V$ in 3D?\nIf you don't know the exact form give its scaling with respect to $E$.",
+    "answer": "$g(E) = \\frac{V}{2\\pi^2}\\left(\\frac{2m}{\\hbar^2}\\right)^{3/2} \\sqrt{E}$, or more compactly $g(E) = C E^{1/2}$.",
+    "explanation": "- a state $|\\vec{k}\\rangle$ has energy $E = \\frac{\\hbar^2 |k|^2}{2m}$. \n- the total number of state scales like $\\frac{4\\pi}{3}k^3 \\sim E^{3/2}$\n- the density of state scales like the derivative which is like $E^{1/2}$",
+    "subject": "statistical-mechanics",
+    "difficulty": "intermediate",
+    "labels": [
+      "fermi-gas",
+      "density-of-states"
     ]
   },
   {
@@ -1981,6 +2073,18 @@ const ALL_QUESTIONS = [
     ]
   },
   {
+    "name": "action of a relativistic particle",
+    "question": "What is the covariant action for a free relativistic point particle of mass $m$, and how does it generalize to a particle coupled to an electromagnetic field $A_\\mu$?",
+    "answer": "Free particle: $S = -mc \\int ds = -mc^2 \\int d\\tau$, where $ds = c\\,d\\tau = c\\sqrt{-g_{\\mu\\nu}\\,dx^\\mu\\,dx^\\nu / c^2}$ is the proper-time interval.\n\nWith electromagnetic coupling: $S = -mc \\int ds - \\frac{e}{c}\\int A_\\mu \\, dx^\\mu$, or equivalently $S = \\int \\left(-mc^2\\sqrt{1 - v^2/c^2} - e\\phi + \\frac{e}{c}\\vec{A}\\cdot\\vec{v}\\right) dt$.",
+    "explanation": "The free action $S = -mc\\int ds$ is manifestly Lorentz invariant: it is proportional to the proper time elapsed along the worldline, which all observers agree on. Extremizing it yields geodesics (straight lines in flat spacetime). The minus sign ensures that timelike paths (physical trajectories) are stationary points. The electromagnetic coupling $-\\frac{e}{c}\\int A_\\mu\\,dx^\\mu$ is the unique Lorentz-invariant, gauge-invariant (up to boundary terms) coupling of a charged particle to the gauge field. Varying the full action gives the Lorentz force law: $m\\frac{du^\\mu}{d\\tau} = \\frac{e}{c}F^{\\mu\\nu}u_\\nu$. In curved spacetime, $ds^2 = g_{\\mu\\nu}dx^\\mu dx^\\nu$ and the free action yields the geodesic equation. This action is also the starting point for deriving the worldline path integral in quantum field theory.",
+    "subject": "relativity",
+    "difficulty": "intermediate",
+    "labels": [
+      "action",
+      "lagrangian-mechanics"
+    ]
+  },
+  {
     "name": "gravitational time dilation",
     "question": "What is gravitational time dilation in the Schwarzschild geometry?",
     "answer": "A clock at radial coordinate $r$ runs slower than a clock at infinity by a factor $\\sqrt{1 - \\frac{2GM}{c^2 r}}$. That is, $d\\tau = \\sqrt{1 - \\frac{2GM}{c^2 r}} \\, dt$.",
@@ -1989,6 +2093,18 @@ const ALL_QUESTIONS = [
     "difficulty": "intermediate",
     "labels": [
       "schwarzschild-solution"
+    ]
+  },
+  {
+    "name": "Cherenkov radiation",
+    "question": "What is Cherenkov radiation, and at what angle is it emitted?",
+    "answer": "Cherenkov radiation is electromagnetic radiation emitted when a charged particle travels through a dielectric medium at a speed $v$ exceeding the phase velocity of light in that medium, $c/n$ (where $n$ is the refractive index). The radiation is emitted in a cone at the Cherenkov angle:\n\n$\\cos\\theta = \\frac{1}{\\beta n}$, where $\\beta = v/c$.\n\nThe threshold condition is $\\beta > 1/n$, i.e., $v > c/n$.",
+    "explanation": "The physics is the electromagnetic analogue of a sonic boom: the particle outruns its own radiation field, and the wavefronts pile up into a coherent shock cone. The emitted power per unit frequency is given by the Frank-Tamm formula: $\\frac{dE}{dx\\,d\\omega} = \\frac{e^2}{c^2}\\omega\\left(1 - \\frac{1}{\\beta^2 n^2(\\omega)}\\right)$ for frequencies where $\\beta n(\\omega) > 1$. The spectrum is weighted toward higher frequencies (blue/UV), which gives Cherenkov light its characteristic blue glow. In particle physics, Cherenkov detectors (e.g., RICH detectors) measure $\\theta$ to determine $\\beta$, and combined with a momentum measurement this identifies the particle mass. Neutrino observatories like IceCube and Super-Kamiokande detect Cherenkov light from secondary charged leptons produced by neutrino interactions.",
+    "subject": "relativity",
+    "difficulty": "intermediate",
+    "labels": [
+      "electrodynamics",
+      "radiation"
     ]
   },
   {
@@ -2103,9 +2219,9 @@ const ALL_QUESTIONS = [
   },
   {
     "name": "differential cross-section from $\\mathcal{M}$",
-    "question": "How is a differential cross-section related to the matrix element $\\mathcal{M}$ for a $2 \\to 2$ process?",
-    "answer": "$$\\frac{d\\sigma}{d\\Omega} = \\frac{|\\mathcal{M}|^2}{64\\pi^2 s}$$in the center-of-mass frame for massless or equal-mass particles, where $s$ is the Mandelstam variable. More generally, $d\\sigma$ involves a flux factor and Lorentz-invariant phase space.",
-    "explanation": "The full formula is $d\\sigma = \\frac{1}{2E_A 2E_B |v_A - v_B|}|\\mathcal{M}|^2 d\\Pi_{\\text{LIPS}}$, where the prefactor is the flux factor (accounting for beam densities and relative velocity) and $d\\Pi_{\\text{LIPS}}$ is the Lorentz-invariant phase space measure that enforces 4-momentum conservation. For $2 \\to 2$ scattering in the CM frame, integrating over the constrained final-state momenta reduces $d\\Pi_{\\text{LIPS}}$ to $\\frac{|\\mathbf{p}_f|}{16\\pi^2 \\sqrt{s}} d\\Omega$, and combining with the flux factor $4|\\mathbf{p}_i|\\sqrt{s}$ yields $d\\sigma/d\\Omega = |\\mathcal{M}|^2/(64\\pi^2 s)$ when $|\\mathbf{p}_f| = |\\mathbf{p}_i|$ (equal-mass or massless case). The matrix element $\\mathcal{M}$ is read off from Feynman diagrams: draw all contributing diagrams, write down the amplitude using Feynman rules, then square it. For unpolarized scattering, average over initial spins (factor of $1/(2s_i+1)$ per particle) and sum over final spins. In QCD, also average over initial colors and sum over final colors. The total cross-section $\\sigma = \\int d\\sigma$ is directly proportional to event rates measured in colliders: $R = \\mathcal{L}\\sigma$, where $\\mathcal{L}$ is the luminosity. References: Peskin & Schroeder, Section 4.5 (cross sections and the S-matrix) and Section 4.6 (worked example: $e^+e^- \\to \\mu^+\\mu^-$); Schwartz, Quantum Field Theory and the Standard Model, Chapter 5; Griffiths, Introduction to Elementary Particles, Section 6.2 (Fermi's Golden Rule to cross-sections).",
+    "question": "How is a differential cross-section in the COM frame related to the matrix element $\\mathcal{M}$ for a $2 \\to 2$ process?",
+    "answer": "$$\\frac{d\\sigma}{d\\Omega} = \\frac{|\\mathcal{M}|^2}{64\\pi^2 s}$$\n\nin the center-of-mass (COM) frame for massless or equal-mass particles, where $s$ is the Mandelstam variable. More generally, $d\\sigma$ involves a flux factor and Lorentz-invariant phase space.",
+    "explanation": "The general Lorentz-invariant formula is\n\n$$d\\sigma = \\frac{1}{2E_A\\,2E_B\\,|v_A - v_B|} |\\mathcal{M}|^2 \\, d\\Pi_{\\text{LIPS}},$$\n\nwhere the prefactor is the flux factor and $d\\Pi_{\\text{LIPS}}$ is the Lorentz-invariant phase-space measure, including 4-momentum conservation.\n\nFor $2 \\to 2$ scattering in the COM frame, the phase space reduces to\n\n$$d\\Pi_{\\text{LIPS}} = \\frac{|\\mathbf{p}_f|}{16\\pi^2 \\sqrt{s}} \\, d\\Omega,$$\n\nand the flux factor becomes $4|\\mathbf{p}_i|\\sqrt{s}$. If $|\\mathbf{p}_f| = |\\mathbf{p}_i|$ as in the equal-mass or massless case, this gives\n\n$$\\frac{d\\sigma}{d\\Omega} = \\frac{|\\mathcal{M}|^2}{64\\pi^2 s}.$$\n\nTo compute $\\mathcal{M}$, sum the contributing Feynman diagrams, write the amplitude from the Feynman rules, then square it. For unpolarized scattering, average over initial spins and sum over final spins; in QCD, do the same for colors.\n\nThe total cross-section is $\\sigma = \\int d\\sigma$, and collider event rates satisfy $R = \\mathcal{L}\\sigma$.\n\nReferences: Peskin & Schroeder, Section 4.5 and Section 4.6; Schwartz, Quantum Field Theory and the Standard Model, Chapter 5; Griffiths, Introduction to Elementary Particles, Section 6.2.",
     "subject": "quantum-field-theory",
     "difficulty": "advanced",
     "labels": [
