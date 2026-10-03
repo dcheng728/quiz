@@ -17,6 +17,22 @@ Sound waves in the pre-recombination photon-baryon fluid imprint the scale on ma
 
 ===
 
+### surface of last scattering
+difficulty: basic
+labels: cmb, recombination, surface-of-last-scattering
+
+What is the surface of last scattering, and what does it have to do with the cosmic microwave background?
+
+---
+
+The set of points, at $z\approx1100$ (recombination, $\sim380{,}000$ years after the Big Bang), where CMB photons last Thomson-scattered before free-streaming to us — when electrons and protons combined into neutral hydrogen, making the Universe transparent.
+
+---
+
+The CMB is an image of this surface: its anisotropies encode the photon-baryon plasma's density fluctuations at that moment, from the same acoustic physics that sets the BAO sound horizon.
+
+===
+
 ### strong-lensing time delays
 difficulty: intermediate
 labels: strong-lensing, time-delays, hubble-constant

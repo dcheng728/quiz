@@ -36,6 +36,22 @@ Densities reach $\rho\sim10^{17}$ kg/m³, comparable to nuclear density — a ne
 
 ===
 
+### mass of the Sun
+difficulty: basic
+labels: solar-mass, stellar-properties
+
+What is the mass of the Sun, and why is it used as a reference unit?
+
+---
+
+$M_\odot\approx1.989\times10^{30}$ kg. Stellar and galactic masses are usually quoted in solar masses — e.g. neutron stars are $\approx1.4$–$2\,M_\odot$.
+
+---
+
+Measured via Kepler's third law from Earth's orbit: $M_\odot=\dfrac{4\pi^2a^3}{GT^2}$, using semi-major axis $a=1$ AU and period $T=1$ yr.
+
+===
+
 ### luminosity
 difficulty: basic
 labels: luminosity, stellar-properties, photometry
